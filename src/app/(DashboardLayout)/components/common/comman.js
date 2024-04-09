@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import * as yup from 'yup'; 
-import { storage } from "@/component/Firebase/firebase";
+import { storage } from "../firebase/firebase";
 import { getStorage,ref,uploadBytes,getDownloadURL } from 'firebase/storage';
 export const options = [
     { value: 'chocolate', label: 'Chocolate' },
@@ -43,7 +43,7 @@ export const handleNumberChange = (e,setFormData,index) => {
 
 export const handleSubmit = async (e,formData,router) => {
       e.preventDefault();
-      let result = await fetch("api/users", {
+      let result = await fetch("api/products", {
         method: "POST",
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -53,7 +53,7 @@ export const handleSubmit = async (e,formData,router) => {
       result = await result.json();
       if (result.success) {
         toast.success('Record Add successful!');
-        router.push('/user-list');
+        router.push('/product-list');
       }
   }
 
