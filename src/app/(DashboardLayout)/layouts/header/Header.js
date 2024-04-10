@@ -16,14 +16,22 @@ import {
 } from "reactstrap";
 import LogoWhite from "public/images/logos/xtremelogowhite.svg";
 import user1 from "public/images/users/user1.jpg";
+import { useRouter } from 'next/navigation'
 
 const Header = ({ showMobmenu }) => {
+  const router = useRouter()
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   const Handletoggle = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('jwt');
+    // setIsAuth(false); // Update the authentication status when the user logs out
+    router.push('/auth/login')
   };
 
   return (
@@ -94,7 +102,7 @@ const Header = ({ showMobmenu }) => {
             <DropdownItem divider />
             <DropdownItem>My Balance</DropdownItem>
             <DropdownItem>Inbox</DropdownItem>
-            <DropdownItem>Logout</DropdownItem>
+            <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </Collapse>
