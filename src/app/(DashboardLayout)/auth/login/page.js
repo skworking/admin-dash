@@ -5,7 +5,7 @@ import Breadcrumb from "@/app/(DashboardLayout)/components/reuseable/breadcrums"
 import { Metadata } from "next";
 
 
-export const metadata = {
+const metadata = {
   title: "Next.js SignIn Page | TailAdmin - Next.js Dashboard Template",
   description: "This is Next.js Signin Page TailAdmin Dashboard Template",
 };
