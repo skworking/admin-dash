@@ -30,7 +30,7 @@ export async function GET(request,{params}){
     // check the connection
     await mongoose.connect(con)
 
-    const result=await User.findOne(record);
+    const result=await Product.findOne(record);
     return NextResponse.json({result,success:true})
 }
 
@@ -55,7 +55,7 @@ export async function DELETE(request,content){
     // check the connection
     await mongoose.connect(con)
 
-    const result=await User.deleteOne(record);
+    const result=await Product.deleteOne(record);
     return NextResponse.json({result,success:true})
 }
 // export async function DELETE(content){

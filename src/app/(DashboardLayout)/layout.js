@@ -5,7 +5,7 @@ import Header from "./layouts/header/Header";
 import Sidebar from "./layouts/sidebars/vertical/Sidebar";
 import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
-import SignIn from "../auth/login/page";
+import SignIn from "./auth/login/page";
 
 const FullLayout = ({ children }) => {
   const pathname = usePathname()
@@ -40,9 +40,9 @@ const FullLayout = ({ children }) => {
           </Container>
         </div>
       </div>
-      :
-        <SignIn />
-        }
+       :
+         <SignIn />
+      }
       {/* {!isAuth && pathname !== '/auth/register' && <SignIn />} */}
     </main>
   );
