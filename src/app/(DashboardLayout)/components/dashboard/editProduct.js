@@ -59,8 +59,7 @@ const EditProduct = (props) => {
 
   //////////model /////////
   const handleConfirmUpdate = async () => {
-    // Call your update function with formData
-    // console.log(id);
+
     const _id = data._id;
     onUpdate(formData, _id)
 
@@ -70,27 +69,6 @@ const EditProduct = (props) => {
   const handleCancelUpdate = () => {
     setIsConfirmationOpen(false);
   };
-
-  /// this value add manualy now thake come from redux latter
-  // const options = [
-  //     { value: 'chocolate', label: 'Chocolate' },
-  //     { value: 'strawberry', label: 'Strawberry' },
-  //     { value: 'vanilla', label: 'Vanilla' }
-  //   ]
-
-  // const attributetab = [
-  //     { value: '12oz', label: '12oz', id: "3" },
-  //     { value: '24oz', label: '24oz', id: "3" },
-  //     { value: '36oz', label: '36oz', id: "3" },
-
-  //   ]
-
-  // const tags = [
-  //     { value: 'Phone', label: 'phone' },
-  //     { value: 'Apple', label: 'apple' },
-  //     { value: 'Cilantro', label: 'cilantro' },
-  //     { value: 'Smart TV', label: 'smart-tv' }
-  //   ];
 
 
 
@@ -145,65 +123,11 @@ const EditProduct = (props) => {
     } catch (error) {
       console.error('Error uploading image:', error);
     }
-    // try {
-    //   const data = new FormData()
-    //   data.append("file", file)
-    //   const res = await fetch('/api/upload', { method: 'PUT', body: data })
-    //   if (res.ok) {
-    //     console.log(res);
-    //     const updatedImages = [...formData.images];
-    //     updatedImages[index] = {
-    //       thumbnail: file.name,
-    //       original: file.name
-    //     };
-    //     setFormData(prevState => ({
-    //       ...prevState,
-    //       images:updatedImages
-    //     }));
-    //   } else {
-    //     console.error("Failed to upload image. Status:", res);
-    //     // Handle error as needed
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
+   
   }
 
   console.log(formData);
-  // const handleGalleryImage = async (e) => {
-  //   e.preventDefault();
-  //   const files = e.target.files;
-  //   const newGalleryImages = [];
 
-  //   for (let i = 0; i < files.length; i++) {
-  //     const file = files[i];
-  //     const data = new FormData();
-  //     data.append("file", file);
-
-  //     try {
-  //       const res = await fetch('/api/upload', { method: 'PUT', body: data });
-  //       if (res.ok) {
-  //         newGalleryImages.push({
-  //           thumbnail: file.name,
-  //           original: file.name
-  //         });
-  //       } else {
-  //         console.error("Failed to upload image:", file.name);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error uploading image:", error);
-  //     }
-  //   }
-
-  //   // After all uploads are complete, update the state with new gallery images
-  //   setFormData(prevState => ({
-  //     ...prevState,
-  //     gallery: [
-  //       ...prevState.gallery,
-  //       ...newGalleryImages
-  //     ]
-  //   }));
-  // };
   const handleImageRemove = (index) => {
 
     let updated = [...formData.gallery]

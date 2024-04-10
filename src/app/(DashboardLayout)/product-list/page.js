@@ -76,6 +76,9 @@ const ProductList = () => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false)
   const [operation,setOperation]=useState(false)
 
+// import file feature
+  // const [filename, setFileName] = useState()
+
   const fetchData = async () => {
     try {
       const result = await fetch("api/products");
@@ -143,7 +146,7 @@ const ProductList = () => {
        setShow(!show)
    }
    const handleUpdate=async(data,id)=>{
-     let result=await fetch(`api/users/${id}`,{
+     let result=await fetch(`api/products/${id}`,{
        method:"PUT",
        headers:{
          "Content-Type": "application/json"
@@ -265,10 +268,10 @@ const ProductList = () => {
             <div className='flex w-full justify-between  p-2 '>
             
             <div className='flex   items-center border-2  bg-white'>
-                <input type='text' placeholder='Search User List ' name='search' onChange={(e)=>handleSearch(e)} className='outline-none p-2' />
+                <input type='text' placeholder='Search Product List ' name='search' onChange={(e)=>handleSearch(e)} className='outline-none p-2' />
                 <CiSearch className='flex text-center mr-2' onClick={searchCall}/>
             </div>
-            <button className='bg-green-300 hover:bg-green-400 text-white font-bold px-2 rounded' onClick={()=>{handleExport(users)}}>Export data</button>
+            <button className='bg-green-300 hover:bg-green-400 text-white font-bold px-2 rounded' onClick={()=>{handleExport(products)}}>Export data</button>
             </div>
             <div className="table-responsive">
               <Table className="text-nowrap mt-3 align-middle" borderless>
@@ -288,13 +291,19 @@ const ProductList = () => {
                     <tr key={index} className="border-top">
                       <td>
                         <div className="d-flex align-items-center p-2">
-                          {/* <Image
-                            src={"https://firebasestorage.googleapis.com/v0/b/curious-mender-320213.appspot.com/o/images%2FAll%20specifications%20%40%20features%20(1).png?alt=media&token=9499cb98-60ec-4ce5-8472-bc4bb8f83dd3"}
+                          <Image
+                            src={user1}
                             className="rounded-circle"
                             alt="avatar"
                             width="45"
                             height="45"
-                          /> */}
+                          />
+                          {/* <img src={"https://firebasestorage.googleapis.com/v0/b/curious-mender-320213.appspot.com/o/images%2FAll%20specifications%20%40%20features%20(1).png?alt=media&token=9499cb98-60ec-4ce5-8472-bc4bb8f83dd3"}
+                           className="rounded-circle"
+                           alt="avatar"
+                           width="45"
+                           height="45"
+                         /> */}
                           <div className="ms-3">
                             <h6 className="mb-0">{tdata.name}</h6>
                             <span className="text-muted">{tdata.description}</span>
