@@ -16,6 +16,11 @@ const navigation = [
     icon: "bi bi-textarea-resize",
   },
   {
+    title: "Product List",
+    href: "/product-list",
+    icon: "bi bi-textarea-resize",
+  },
+  {
     title: "Alert",
     href: "/ui/alerts",
     icon: "bi bi-bell",
