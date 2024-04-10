@@ -21,6 +21,11 @@ const navigation = [
     icon: "bi bi-textarea-resize",
   },
   {
+    title: "Import File",
+    href: "/product-import",
+    icon: "bi bi-textarea-resize",
+  },
+  {
     title: "Alert",
     href: "/ui/alerts",
     icon: "bi bi-bell",

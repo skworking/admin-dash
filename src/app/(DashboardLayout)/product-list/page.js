@@ -10,6 +10,7 @@ import { saveAs } from "file-saver";
 import {  toast } from 'react-toastify';
 import CustomConfirmation from '../components/reuseable/confirm';
 import { AiOutlineMenu } from "react-icons/ai";
+import { FaFileAlt } from "react-icons/fa";
 
 import Image from "next/image";
 import user1 from "public/images/users/user1.jpg";
@@ -76,9 +77,7 @@ const ProductList = () => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false)
   const [operation,setOperation]=useState(false)
 
-// import file feature
-  // const [filename, setFileName] = useState()
-
+  // ////////////
   const fetchData = async () => {
     try {
       const result = await fetch("api/products");
@@ -271,7 +270,12 @@ const ProductList = () => {
                 <input type='text' placeholder='Search Product List ' name='search' onChange={(e)=>handleSearch(e)} className='outline-none p-2' />
                 <CiSearch className='flex text-center mr-2' onClick={searchCall}/>
             </div>
+           
+          
+              
             <button className='bg-green-300 hover:bg-green-400 text-white font-bold px-2 rounded' onClick={()=>{handleExport(products)}}>Export data</button>
+           
+          
             </div>
             <div className="table-responsive">
               <Table className="text-nowrap mt-3 align-middle" borderless>
@@ -284,6 +288,7 @@ const ProductList = () => {
                   </tr>
                 </thead>
                 <tbody>
+                  
                   {products.length>0 ?products.map((tdata, index) => {
                     
                     console.log(tdata)
@@ -341,6 +346,7 @@ const ProductList = () => {
                   :
                   'No Data Found'
                   }
+                
                 </tbody>
               </Table>
             </div>
