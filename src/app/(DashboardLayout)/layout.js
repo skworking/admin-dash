@@ -22,7 +22,7 @@ const FullLayout = ({ children }) => {
     <main>
 
       {!isAuth && pathname !== '/auth/login' ? (
-        pathname === '/' ? (
+        pathname !== '/auth/login' && pathname !== '/auth/signup' ? (
           <div className="pageWrapper d-md-block d-lg-flex">
             {/******** Sidebar **********/}
             <aside

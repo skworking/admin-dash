@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -157,7 +158,7 @@ const handleSignIn=(e)=>{
                 Sign In to Dashboard
               </h2>
 
-              <form >
+              <form method="POST" onSubmit={handleSignIn}>
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Email
