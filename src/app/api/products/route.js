@@ -11,6 +11,7 @@ export async function GET(){
         await mongoose.connect(con)
         data =await Product.find();
     }catch(err){
+        console.log(err);
         data={Success:false}
     }
 
