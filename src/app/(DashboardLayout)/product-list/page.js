@@ -289,7 +289,7 @@ const ProductList = () => {
                 </thead>
                 <tbody>
                   
-                  {products.length>0 ?products.map((tdata, index) => {
+                  {products?.length>0 ?products?.map((tdata, index) => {
                     
                     console.log(tdata)
                    return (
