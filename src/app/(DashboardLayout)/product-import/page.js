@@ -174,7 +174,7 @@ const ImportFile = () => {
                                             </thead>
                                             <tbody>
 
-                                                {dataset.length > 0 ? dataset.map((tdata, index) => {
+                                                {dataset?.length > 0 ? dataset.map((tdata, index) => {
 
                                                     console.log(tdata)
                                                     return (

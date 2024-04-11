@@ -139,7 +139,7 @@ const Product = () => {
           Product
         </CardTitle>
         <form className={`${styles.formstyle}`} method="post" >
-          <div className="bg-white shadow rounded">
+          <div className="bg-white shadow rounded mt-2">
             {/* <h5 className={ `m-2 text-blue-400 font-bold sm:text-2xl `}>User Registration</h5> */}
             <div class="container">
               <div class="row p-2">
@@ -208,7 +208,7 @@ const Product = () => {
                     <File text={'gallery'} onChange={(e) => handleGalleryImage(e, setFormData)} typeinput="file" option={true} stylediv={styles.containerdivright} inputstyle={styles.containerdivinput} images={formData.gallery.length} gallery={formData.gallery} onClick={(index) => handleImageRemove(index, formData, setFormData)} errors={validationErrors.gallery} />
                   </div>
                 </div>
-                <div class="col-xl-5 m-auto mt-4 ">
+                <div class="col-xl-6 m-auto mt-4 ">
                   <div className="d-grid grid-cols-1" >
                     <Select
                       isMulti={true}
@@ -240,7 +240,7 @@ const Product = () => {
                           errors={validationErrors?.images && validationErrors?.images[index]}
                         />
                         <Button onClick={(e) => removeFields(e, index, formData, setFormData)}
-                          styles={`col-sm-6 mx-auto p-2 ml-5 bg-light ${formData.images.length > 0 ? 'bg-secondary font-weight-bold' : 'opacity-50  cursor-not-allowed'}`}
+                          styles={`col-sm-6 mx-auto  p-2 ml-5  ${formData.images.length > 0 ? 'hover:bg-red-400 hover:text-white outline outline-1 font-weight-bold' : 'opacity-50  cursor-not-allowed'}`}
                           disabled={formData.variations.length <= 1}
                           text={"Remove"}
 
@@ -250,7 +250,7 @@ const Product = () => {
                   })}
                   <Button
                     onClick={handleAddImage}
-                    styles={"col-sm-6 mx-auto p-2 ml-5 bg-light "}
+                    styles={"col-sm-6 mx-auto p-2  mt-2 outline outline-1 hover:bg-blue-400 "}
                     text="Add Images"
                   />
 
@@ -297,7 +297,7 @@ const Product = () => {
                         />
                       </div>
                     </div>
-                    <div class="col-xl-5 m-auto  mt-4">
+                    <div class="col-xl-6 m-auto  mt-4">
                       <div className="d-grid grid-cols-1" >
                         <Select
                           isMulti={true}
@@ -305,7 +305,7 @@ const Product = () => {
                           onChange={(selectedOptions) => handleSelectAttribute(selectedOptions, index, setFormData)}
                           placeholder="Selected Attribute"
                           options={attributetab}
-                        // className="md:grid   lg:grid-cols-1 grid-cols-1 gap-4 sm:flex  flex-col sm:w-[400px] w-[300px] mt-5  items-center"
+                          className="md:grid   lg:grid-cols-1 grid-cols-2 gap-4 sm:flex  flex-col  items-center"
 
                         />
                         <span className="text-red-500">{validationErrors?.[`variations[${index}].attribute.values`]}</span>
@@ -315,14 +315,14 @@ const Product = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex sm:w-full w-[300px] justify-around sm:p-10 p-2">
+                <div className="d-grid grid-cols-2  sm:p-10 p-2">
                   <Button onClick={(e) => removeFormFields(e, index, formData, setFormData)}
-                    styles={`col-sm-6 mx-auto p-2 ml-5 bg-light ${formData.variations.length > 1 ? 'bg-red opacity-100 text-bold' : ' opacity-50 bg-red cursor-not-allowed'}`}
+                    styles={`col-sm-6 mx-auto p-2 ml-5 outline outline-1 ${formData.variations.length > 1 ? 'hover:bg-red-400 hover:text-white  opacity-100 text-bold' : ' opacity-50 bg-red cursor-not-allowed'}`}
                     disabled={formData.variations.length <= 1}
                     text={"Remove"}
                   />
 
-                  <Button onClick={(e) => handleAddVariation(e, formData, setFormData)} styles={"w-[400px] m-auto bg-gray-300 p-2"} text="Add More" />
+                  <Button onClick={(e) => handleAddVariation(e, formData, setFormData)} styles={"col-sm-6 m-auto hover:bg-blue-300 outline outline-1 p-2"} text="Add More" />
 
                 </div>
               </div>
@@ -379,7 +379,7 @@ const Product = () => {
                         />
                       </div>
                     </div>
-                    <div class="col-xl-5 m-auto  mt-4">
+                    <div class="col-xl-6 m-auto  mt-4">
                       <div className="d-grid grid-cols-1" >
                         <Select
                           isMulti={true}
@@ -397,22 +397,22 @@ const Product = () => {
                   </div>
                 </div>              
 
-                <div className="flex sm:w-full w-[300px] justify-around sm:p-10 p-2">
+                <div className="d-grid grid-cols-2  sm:p-10 p-2">
 
                   <Button onClick={(e) => handleRemoveVariationOption(e, index, formData, setFormData)}
-                    styles={`col-sm-6 mx-auto p-2 ml-5 bg-light  ${formData.variation_options.length > 1 ? 'bg-red opacity-100 text-bold' : ' opacity-50 bg-red cursor-not-allowed'}`}
+                    styles={`col-sm-6 mx-auto p-2 ml-5 outline outline-1  ${formData.variation_options.length > 1 ? 'hover:bg-red-400 hover:text-white  opacity-100 text-bold' : ' opacity-50 bg-red cursor-not-allowed'}`}
                     disabled={formData.variation_options.length <= 1}
                     text="Remove"
                   />
-                  <Button onClick={(e) => handleAddVariationOption(e, formData, setFormData)} styles="w-[400px]  p-2 bg-gray-300 " text="Add More" />
+                  <Button onClick={(e) => handleAddVariationOption(e, formData, setFormData)} styles="col-sm-6 m-auto  p-2 hover:bg-blue-300 outline outline-1 " text="Add More" />
                 </div>
 
               </div>
             ))}
           </div>
-          <div className="d-flex justify-end  sm:w-full w-[300px] sm:p-10 p-2">
+          <div className="d-flex justify-end w-full  sm:p-10 p-2">
         
-            <Button styles='col-6  border-2 text-green  p-2' type="submit" onClick={(e) => handleformSubmit(e)} text={"Save"}></Button>
+            <Button styles='col-6  border-2 text-green hover:bg-blue-300 outline outline-1 p-2' type="submit" onClick={(e) => handleformSubmit(e)} text={"Save"}></Button>
           </div>
         </form>
       </Card>

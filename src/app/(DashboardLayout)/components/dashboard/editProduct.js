@@ -572,7 +572,7 @@ const EditProduct = (props) => {
           <section className={`${styles.containerdivright} flex  flex-col text-start `}>
             Select Image:
             
-            <div className="flex flex-col md:flex-row p-2 gap-2 flex-wrap">
+            <div className="col-xl-6 p-2 gap-2 flex-wrap">
               {formData.images.length > 0 &&
                 formData.images.map((item, index) => {
                   return (
@@ -602,14 +602,14 @@ const EditProduct = (props) => {
             </div>
             <Button
               onClick={handleAddImage}
-              styles={"w-full w-full rounded outline outline-1 hover:bg-green-400 "}
+              styles={"col-sm-6  p-2 ml-5  outline outline-1 hover:bg-blue-400 "}
               text="Add Images"
             />
           </section>
         </div>
         {formData?.variations?.map((option, index) => (
           <form className="mt-10" key={index}>
-            <h1 className="text-lg text-center text-black ">Variations Form </h1>
+            <h1 className="text-lg text-start text-black ">Variations Form </h1>
             <div className={`md:grid gap-5 p-2 lg:grid-cols-2 grid-cols-1 md:gap-4 flex flex-col `}>
               <label className={`${styles.containerdivright} text-start`}>
                 Attribute_id:
@@ -670,17 +670,16 @@ const EditProduct = (props) => {
                 <span className="text-red-500">{validationErrors?.[`variations[${index}].attribute.values`]}</span>
               </label>
             </div>
-            <div className="flex  w-full justify-around p-10">
+             <div className="d-grid grid-cols-2  sm:p-10 p-2">
+                  <Button onClick={(e) => removeFormFields(index)}
+                    styles={`col-sm-6 mx-auto p-2 ml-5 outline outline-1 ${formData.variations.length > 1 ? 'hover:bg-red-400 hover:text-white  opacity-100 text-bold' : ' opacity-50 bg-red cursor-not-allowed'}`}
+                    disabled={formData.variations.length <= 1}
+                    text={"Remove"}
+                  />
 
-              <button onClick={handleAddVariation} className="w-[400px] p-2 m-auto bg-gray-300 ">Add More</button>
+                  <Button onClick={ handleAddVariation} styles={"col-sm-6 m-auto hover:bg-blue-300 outline outline-1 p-2"} text="Add More" />
 
-              <button onClick={() => removeFormFields(index)}
-                className={`w-[400px] p-2 m-auto bg-gray-300 ${formData.variations.length > 1 ? 'bg-red-500 opacity-100 text-bold' : ' opacity-50 bg-red-500 cursor-not-allowed'}`}
-                disabled={formData.variations.length <= 1}
-              >
-                Remove
-              </button>
-            </div>
+                </div>
           </form>
         ))}
 
@@ -690,7 +689,7 @@ const EditProduct = (props) => {
           {/* {JSON.stringify(formData.variation_options.length)} */}
           {formData.variation_options.map((option, index) => (
             <div key={index}>
-              <h1 className="text-lg text-center  ">Variation_Options Form </h1>
+              <h1 className="text-lg ">Variation_Options Form </h1>
               <div className={`md:grid gap-5 p-2 lg:grid-cols-2 grid-cols-1 md:gap-4 flex flex-col `}>
 
                 <label className={`${styles.containerdivright} text-start`}>
@@ -774,23 +773,23 @@ const EditProduct = (props) => {
 
                 </label>
               </div>
-              <div className="flex  w-full justify-around p-10">
-                <button onClick={handleAddVariationOption} className="w-[400px]  p-2 bg-gray-300 ">Add More</button>
+             
+              <div className="d-grid grid-cols-2  sm:p-10 p-2">
 
-                <button onClick={() => handleRemoveVariationOption(index)}
-                  className={`w-[400px] p-2  bg-gray-300 ${formData.variation_options.length > 1 ? 'bg-red-500 opacity-100 text-bold' : ' opacity-50 bg-red-500 cursor-not-allowed'}`}
-                  disabled={formData.variation_options.length <= 1}
-                >
-                  Remove
-                </button>
+              <Button onClick={() => handleRemoveVariationOption(index)}
+                styles={`col-sm-6 mx-auto p-2 ml-5 outline outline-1  ${formData.variation_options.length > 1 ? 'hover:bg-red-400 hover:text-white  opacity-100 text-bold' : ' opacity-50 bg-red cursor-not-allowed'}`}
+                disabled={formData.variation_options.length <= 1}
+                text="Remove"
+              />
+              <Button onClick={handleAddVariationOption} styles="col-sm-6 m-auto  p-2 hover:bg-blue-300 outline outline-1 " text="Add More" />
               </div>
             </div>
 
           ))}
         </div>
         <div className="flex w-full justify-around p-10">
-          <button className={'bg-red-300 sm:w-[400px] p-2 hover:bg-red-500'} onClick={oncancel}>Cancel</button>
-          <button className={'bg-green-300 sm:w-[400px] p-2 hover:bg-green-500'} onClick={handleUpdate}>Update</button>
+          <button className={'outline outline-1 sm:w-[400px] p-2 hover:bg-red-500'} onClick={oncancel}>Cancel</button>
+          <button className={'outline outline-1 sm:w-[400px] p-2 hover:bg-green-500'} onClick={handleUpdate}>Update</button>
         </div>
       </div>
 

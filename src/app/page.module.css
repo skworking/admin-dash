@@ -16,7 +16,7 @@
     flex-direction: column;
     /* padding: 20px; */
     gap: 20px;
-    background-color: rgb(205, 221, 221);
+
   }
   
   
@@ -28,24 +28,20 @@
     text-align: start;
   }
   .containerdivleft{
-    width: 400px;
+    /* width: 400px; */
     margin: auto;
     font-size: 20px;
   }
   
   .containerdivinput{
-    width: 400px;    
+    width: 100%;    
     border: 1px solid gray;
     padding: 10px;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     font-size: 16PX;
   }
   
   .containerdivright{
-    width: 400px;
-   
-    margin: auto;
-   
     font-size: 20px;
   }
   
@@ -86,7 +82,7 @@
       flex-direction: column;
       padding: 0 !important;
       gap: 10px !important;
-      background-color: rgb(205, 221, 221);
+     
     }
     
   }
@@ -118,7 +114,7 @@
       flex-direction: column;
       padding: 0 !important;
       gap: 10px !important;
-      background-color: rgb(205, 221, 221);
+      
     }
     
   }
@@ -149,7 +145,7 @@
       flex-direction: column;
       padding: 0 !important;
       gap: 10px !important;
-      background-color: rgb(205, 221, 221);
+     
     }
     
   }
