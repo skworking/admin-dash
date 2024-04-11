@@ -127,7 +127,7 @@ const Product = () => {
     }));
   };
 
-  console.log(formData);
+
   const data = {
     'variations[0].attribute.name': "Attribute name is required",
 
