@@ -1,4 +1,4 @@
-import { con } from "@/app/lib/db";
+// import { con } from "@/app/lib/db";
 import { Product } from "@/app/lib/model/products";
 
 import mongoose from "mongoose";
@@ -8,7 +8,15 @@ export async function GET(){
     
     let data=[]
     try{
-        await mongoose.connect(con)
+        const { username, password } = process.env;
+        const MONGO_URI = `mongodb+srv://satish:${password}@cluster0.7stdrez.mongodb.net/UserInfo?retryWrites=true&w=majority&appName=Cluster0`;
+        console.log("MongoDB URI:", MONGO_URI);
+
+
+        const res= await mongoose.connect(MONGO_URI,{
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        })
         data =await Product.find();
     }catch(err){
         console.log(err);
