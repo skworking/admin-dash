@@ -193,7 +193,7 @@ const ProductList = () => {
    }
  
  
-   const flattenData = products?.map(item => {
+   const flattenData = products.map(item => {
      // here we can modify which colums data we want to add 
      const flattenedItem = { ...item };
  

@@ -12,7 +12,7 @@ export async function GET(){
         data =await Product.find();
     }catch(err){
         console.log(err);
-        data={Success:false}
+        data={Success:false,err}
     }
 
     return NextResponse.json({result:data,success:true})
