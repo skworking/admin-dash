@@ -8,12 +8,12 @@ export async function GET(){
     
     let data=[]
     try{
-        const { username, password } = process.env;
-        const MONGO_URI = `mongodb+srv://satish:${password}@cluster0.7stdrez.mongodb.net/UserInfo?retryWrites=true&w=majority&appName=Cluster0`;
-        console.log("MongoDB URI:", MONGO_URI);
+        // const { username, password } = process.env;
+        // const MONGO_URI = `mongodb+srv://satish:${password}@cluster0.7stdrez.mongodb.net/UserInfo?retryWrites=true&w=majority&appName=Cluster0`;
+        // console.log("MongoDB URI:", MONGO_URI);
 
 
-        const res= await mongoose.connect(MONGO_URI,{
+        const res= await mongoose.connect(process.env.MONGODB,{
             useNewUrlParser: true,
             useUnifiedTopology: true
         })

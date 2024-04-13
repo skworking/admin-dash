@@ -13,7 +13,7 @@ export async function PUT(request,{params}){
     // get data json from user
     const payload=await request.json();
   
-    await mongoose.connect(con)
+    await mongoose.connect(process.env.MONGODB)
 
     const result=await Product.findOneAndUpdate(filter,payload,{ new: true });
     return NextResponse.json({result,success:true})
