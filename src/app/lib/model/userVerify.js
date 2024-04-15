@@ -7,5 +7,4 @@ const UserVerifySchema=new Schema({
     createdAt:Date,
     expiresAt:Boolean
 })
-const UserVarification=mongoose.model('user',UserVerifySchema);
-module.exports= UserVarification;
+export const UserVarification=mongoose.models.user || mongoose.model("user",UserVerifySchema);

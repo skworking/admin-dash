@@ -29,7 +29,7 @@ const handleRoleChange = (event) => {
         role:role,
         email:email
       }
-      let result = await fetch("/api/register", {
+      let result = await fetch("/api/user", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
