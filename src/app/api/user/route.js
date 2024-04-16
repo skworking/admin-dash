@@ -41,12 +41,12 @@ const sendVarifiactionEmail=async({_id,email},res)=>{
     html: `<p>Varify Your Email Address to complete the signup or login your account.</p> <p>This link is expires in 6 hours<br />.</p>
     <p>Press <a href=${url+"user/verify/"+_id+"/"+uniqueString}>here </a> to proceed.</p>`,   
   }
-
+  const expirationTime = new Date(Date.now() + 21600000);
   const newVerification= await UserVarification.create({
     userId:_id,
     uniqueString: uniqueString,
     createdAt:Date.now(),
-    expiresAt:Date.now()+21600000,
+    expiresAt:expirationTime,
   })
   try{
     await newVerification.save(); 

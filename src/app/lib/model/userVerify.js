@@ -5,6 +5,6 @@ const UserVerifySchema=new Schema({
     userId:String,
     uniqueString:String,
     createdAt:Date,
-    expiresAt:Boolean
+    expiresAt:String
 })
-export const UserVarification=mongoose.models.user || mongoose.model("user",UserVerifySchema);
+export const UserVarification=mongoose.models.userVar || mongoose.model("userVar",UserVerifySchema);
