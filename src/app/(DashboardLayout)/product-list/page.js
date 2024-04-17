@@ -108,7 +108,11 @@ const ProductList = () => {
   const handleConfirmDelete = async() => {
    
     let response =await fetch("api/users/"+deleteItemId,{
-       method:"DELETE"
+       method:"DELETE",
+       headers: {
+        "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
+        "Content-Type": "application/json"
+      }
      });
      response=await response.json();
      if(response.success){
@@ -155,9 +159,10 @@ const ProductList = () => {
    const handleUpdate=async(data,id)=>{
      let result=await fetch(`api/products/${id}`,{
        method:"PUT",
-       headers:{
-         "Content-Type": "application/json"
-       },
+       headers: {
+        "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
+        "Content-Type": "application/json"
+      },
        body:JSON.stringify(data)
      })
      result=await result.json();
