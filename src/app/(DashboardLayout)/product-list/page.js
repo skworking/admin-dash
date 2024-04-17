@@ -76,11 +76,19 @@ const ProductList = () => {
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false)
   const [operation,setOperation]=useState(false)
+  const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
 
   // ////////////
   const fetchData = async () => {
     try {
-      const result = await fetch("api/products");
+      const result = await fetch("api/products", {
+        method: "GET", // or any other HTTP method you're using
+        headers: {
+          "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
+          "Content-Type": "application/json"
+        }
+      });
+      // const result = await fetch("api/products");
       const data = await result.json();
       if (data.success) {
         setProducts(data.result);
