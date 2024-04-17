@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Breadcrumb from "@/app/(DashboardLayout)/components/reuseable/breadcrums";
+import Breadcrumb from "../../components/reuseable/breadcrums";
 import { Metadata } from "next";
 
 

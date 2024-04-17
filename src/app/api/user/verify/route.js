@@ -12,7 +12,7 @@ export async function GET(request,res){
         const userId = searchParams.get('_id')||'';
         const uniqueSting = searchParams.get('uniqueSting')||'';
         console.log("---",userId,uniqueSting);
-        await mongoose.connect(con)
+        await mongoose.connect(process.env.MONGODB)
         const result=await UserVarification.find({userId})
         console.log("res",result);
         let message;

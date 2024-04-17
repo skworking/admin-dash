@@ -1,10 +1,13 @@
 'use client'
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Breadcrumb from "@/app/(DashboardLayout)/components/reuseable/breadcrums";
-import { Metadata } from "next";
 
+import { Metadata } from "next";
+import Breadcrumb from "../../components/reuseable/breadcrums";
+import { toast } from "react-toastify";
+
+import { useRouter } from 'next/navigation'
 
 const metadata = {
   title: "Next.js SignIn Page | TailAdmin - Next.js Dashboard Template",
@@ -12,12 +15,39 @@ const metadata = {
 };
 
 const SignIn= () => {
-const handleSignIn=(e)=>{
+  const router = useRouter()
+const [email,setEmail]=useState('')
+  const handleSignIn=async(e)=>{
   e.preventDefault();
-  console.log("call");
+  console.log("call",email);
   // const formData = new FormData(e.currentTarget)
   // const email = formData.get('email')
   // console.log(email,formData);
+  const data={
+    // role:role,
+    email:email
+  }
+  let result = await fetch("/api/login", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+result = await result.json();
+console.log("res",result);
+if(result.success === true){
+  sessionStorage.setItem('jwt',result?.token)
+  toast.success("user Login Success")
+  router.push('/');
+}else{
+  alert(result.message)
+}
+
+
+}
+const handleChange=(e)=>{
+  setEmail(e.target.value)
 }
   return (
     <div className="m-5">
@@ -166,6 +196,8 @@ const handleSignIn=(e)=>{
                   <div className="relative">
                     <input
                       type="email"
+                      value={email}
+                      onChange={handleChange}
                       placeholder="Enter your email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
