@@ -2,6 +2,7 @@
 import Head from "next/head";
 import "@/styles/style.scss";
 import { useEffect } from "react";
+
 export default function RootLayout({
   // Layouts must accept a children prop.
   // This will be populated with nested layouts or pages

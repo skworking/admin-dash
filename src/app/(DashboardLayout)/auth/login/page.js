@@ -16,6 +16,7 @@ const metadata = {
 
 const SignIn= () => {
   const router = useRouter()
+  const [key, setKey] = useState(0);
 const [email,setEmail]=useState('')
   const handleSignIn=async(e)=>{
   e.preventDefault();
@@ -40,6 +41,7 @@ if(result.success === true){
   sessionStorage.setItem('jwt',result?.token)
   toast.success("user Login Success")
   router.push('/');
+  setKey(prevKey => prevKey + 1);
 }else{
   alert(result.message)
 }

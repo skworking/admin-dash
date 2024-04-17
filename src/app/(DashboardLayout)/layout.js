@@ -20,7 +20,7 @@ const FullLayout = ({ children }) => {
   console.log(pathname);
   useEffect(()=>{
     console.log("call");
-  },[])
+  },[isAuth])
   return (
     <main>
 
