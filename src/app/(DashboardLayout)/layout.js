@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container } from "reactstrap";
 import Header from "./layouts/header/Header";
 import Sidebar from "./layouts/sidebars/vertical/Sidebar";
@@ -18,6 +18,9 @@ const FullLayout = ({ children }) => {
   const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
   const router = useRouter()
   console.log(pathname);
+  useEffect(()=>{
+    console.log("call");
+  },[])
   return (
     <main>
 
