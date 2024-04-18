@@ -32,7 +32,7 @@ const FullLayout = ({ children}) => {
     <main>
 
       {isAuth && pathname !== '/auth/login' ? (
-        pathname !== '/auth/login' && pathname !== '/auth/signup' && pathname === '/' ? (
+        pathname !== '/auth/login' && pathname !== '/auth/signup'  ? (
           <div className="pageWrapper d-md-block d-lg-flex">
             {/******** Sidebar **********/}
             <aside
@@ -58,8 +58,9 @@ const FullLayout = ({ children}) => {
           <SignUp />
         )
       ) : (
-        pathname === '/auth/login'  || pathname === '/'    ? <SignIn />:<SignUp />
-   
+
+        pathname === '/auth/login'  || pathname !== '/'    ? <SignIn />:<SignUp />
+    
       )
     }
 
