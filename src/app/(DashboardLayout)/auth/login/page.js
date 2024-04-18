@@ -39,13 +39,13 @@ const [authenticated, setAuthenticated] = useState(false);
 result = await result.json();
 console.log("res",result);
 if(result.success === true){
-  toast.success("user Login Success")
   sessionStorage.setItem('jwt',result?.token)
+  sessionStorage.setItem("user",result?.tokenObject)
   // router.push('/');
   setAuthenticated(true);
 }else{
-  toast.fail(result.message)
-  // alert(result.message)
+  // toast.info(result.message)
+  alert(result.message)
 }
 
 }

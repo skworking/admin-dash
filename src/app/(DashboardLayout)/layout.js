@@ -16,7 +16,7 @@ const FullLayout = ({ children}) => {
   const showMobilemenu = () => {
     setOpen(!open);
   };
-
+  const router=useRouter()
   const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
   const [key, setKey] = useState(0); 
   console.log(pathname);
@@ -27,7 +27,16 @@ const FullLayout = ({ children}) => {
     // Update the key whenever the authentication state changes
     setKey(prevKey => prevKey + 1);
   }, [isAuth]);
-
+  console.log("is-auth",isAuth);
+  useEffect(() => {
+    if (!isAuth && pathname !== '/auth/signup') {
+      router.push('/auth/login');
+    }else if(!isAuth && pathname !== '/auth/login'){
+      router.push('/auth/signup');
+    }else{
+      router.push(pathname);
+    }
+  }, [isAuth]);
   return (
     <main>
 
@@ -55,11 +64,13 @@ const FullLayout = ({ children}) => {
             </div>
           </div>
         ) : (
-          <SignUp />
+          
+         <SignUp />
+          
         )
       ) : (
 
-        pathname === '/auth/login'     ? <SignIn />:<SignUp />
+        pathname === '/auth/login'  ?  <SignIn />: <SignUp />
     
       )
     }
