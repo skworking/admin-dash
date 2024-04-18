@@ -7,8 +7,10 @@ import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
 import SignIn from "./auth/login/page";
 import SignUp from "./auth/signup/page";
+import RootLayout from "../layout";
 
-const FullLayout = ({ children }) => {
+const FullLayout = ({ children}) => {
+
   const pathname = usePathname()
   const [open, setOpen] = React.useState(false);
   const showMobilemenu = () => {
@@ -16,16 +18,21 @@ const FullLayout = ({ children }) => {
   };
 
   const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
-  const router = useRouter()
+  const [key, setKey] = useState(0); 
   console.log(pathname);
-  useEffect(()=>{
-    console.log("call");
-  },[isAuth])
+  useEffect(() => {
+    setIsAuth(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
+  }, [pathname]);
+  useEffect(() => {
+    // Update the key whenever the authentication state changes
+    setKey(prevKey => prevKey + 1);
+  }, [isAuth]);
+
   return (
     <main>
 
       {isAuth && pathname !== '/auth/login' ? (
-        pathname !== '/auth/login' && pathname !== '/auth/signup' ? (
+        pathname !== '/auth/login' && pathname !== '/auth/signup' && pathname === '/' ? (
           <div className="pageWrapper d-md-block d-lg-flex">
             {/******** Sidebar **********/}
             <aside
@@ -42,7 +49,8 @@ const FullLayout = ({ children }) => {
 
               {/********Middle Content**********/}
               <Container className="p-4 wrapper" fluid>
-                <div>{children}</div>
+                {/* <div>{children}</div> */}
+                {React.cloneElement(children, { key })} 
               </Container>
             </div>
           </div>
@@ -55,10 +63,10 @@ const FullLayout = ({ children }) => {
       )
     }
 
-
-      {/* {!isAuth && pathname !== '/auth/signup' && <SignIn />} */}
     </main>
   );
 };
 
+
 export default FullLayout;
+

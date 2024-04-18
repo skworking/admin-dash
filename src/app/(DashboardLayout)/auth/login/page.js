@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -15,9 +15,10 @@ const metadata = {
 };
 
 const SignIn= () => {
+ 
   const router = useRouter()
-  const [key, setKey] = useState(0);
 const [email,setEmail]=useState('')
+const [authenticated, setAuthenticated] = useState(false);
   const handleSignIn=async(e)=>{
   e.preventDefault();
   console.log("call",email);
@@ -40,14 +41,18 @@ console.log("res",result);
 if(result.success === true){
   sessionStorage.setItem('jwt',result?.token)
   toast.success("user Login Success")
-  router.push('/');
-  setKey(prevKey => prevKey + 1);
+  // router.push('/');
+  setAuthenticated(true);
 }else{
   alert(result.message)
 }
 
-
 }
+useEffect(() => {
+  if (authenticated) {
+    router.push('/');
+  }
+}, [authenticated]);
 const handleChange=(e)=>{
   setEmail(e.target.value)
 }
