@@ -59,7 +59,7 @@ const FullLayout = ({ children}) => {
         )
       ) : (
 
-        pathname === '/auth/login'  || pathname !== '/'    ? <SignIn />:<SignUp />
+        pathname === '/auth/login'     ? <SignIn />:<SignUp />
     
       )
     }
