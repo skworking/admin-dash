@@ -25,7 +25,7 @@ const handleRoleChange = (event) => {
     console.log("Selected role:", event.target.value);
 };
   const handleSignIn = async(e) => {
-    e.preventDefault();
+    // e.preventDefault();
     try{
       const data={
         role:role,
