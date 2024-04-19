@@ -107,7 +107,7 @@ const ProductList = () => {
   
   const handleConfirmDelete = async() => {
    
-    let response =await fetch("api/users/"+deleteItemId,{
+    let response =await fetch("api/products/"+deleteItemId,{
        method:"DELETE",
        headers: {
         "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
@@ -255,9 +255,9 @@ const ProductList = () => {
      saveAs(blob, "users.xlsx");
      toast.success('File download successfully')
    };
-   const handle=()=>{
+   const handleOperation=(id)=>{
     console.log("call");
-    setOperation(!operation)
+    setOperation(operation === id ? null : id);
    }
   return (
     <Row>
@@ -304,7 +304,6 @@ const ProductList = () => {
                   
                   {products?.length>0 ?products?.map((tdata, index) => {
                     
-                    console.log(tdata)
                    return (
                     <tr key={index} className="border-top">
                       <td>
@@ -331,8 +330,8 @@ const ProductList = () => {
                       <td>{tdata.slug}</td>
                       <td>{tdata.brand}</td>
                       <td className='' onClick={()=>{operation? setOperation(false):''}}>
-                      <AiOutlineMenu onClick={handle} className='cursor-pointer' />  
-                        {operation  &&
+                      <AiOutlineMenu onClick={() => handleOperation(tdata._id)} className='cursor-pointer' />  
+                        {operation === tdata._id &&
                         (<div className='absolute flex flex-col bg-sky-200 mt-2 '>
                           <button className=" hover:bg-green-500 w-full text-black font-bold py-2 px-4 rounded mr-2" onClick={()=>handleEdit(tdata)}>Edit</button>
                           <button className=" hover:bg-red-700 text-black font-bold py-2 px-4 rounded " onClick={()=>{handleDelete(tdata._id)}}>Delete</button>          

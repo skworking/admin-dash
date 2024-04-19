@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import * as yup from 'yup'; 
 import { storage } from "../firebase/firebase";
 import { getStorage,ref,uploadBytes,getDownloadURL } from 'firebase/storage';
+import { redirect } from 'next/navigation'
 export const options = [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
@@ -41,11 +42,12 @@ export const handleNumberChange = (e,setFormData,index) => {
     }));
   };
 
-export const handleSubmit = async (e,formData,router) => {
+export const handleSubmit = async (e,formData,router,isAuth) => {
       e.preventDefault();
       let result = await fetch("api/products", {
         method: "POST",
         headers: {
+          "Authorization": `Bearer ${isAuth}`,
           'Content-Type': 'multipart/form-data'
         },
         body: JSON.stringify(formData)
@@ -54,6 +56,7 @@ export const handleSubmit = async (e,formData,router) => {
       if (result.success) {
         toast.success('Record Add successful!');
         router.push('/product-list');
+    
       }
   }
 

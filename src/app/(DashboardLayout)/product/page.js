@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Container, Col, Row, Card, CardBody, CardTitle } from "reactstrap";
 import styles from '../../page.module.css'
-import { useRouter } from 'next/navigation'
+import { useRouter,redirect } from 'next/navigation'
 import Select from 'react-select'
 import { options, tags, attributetab, handleChange, handleNumberChange, handleSubmit, handleSelectOption, handleSelectAttribute, handleVariationChange, handleVariationNumberChange, handleVariationAttributeChange, handleAddVariation, handleAddVariationOption, handleImage, handleGalleryImage, handleVariationOptionBoolean, handleVariationOptionNumberChange, removeFormFields, handleRemoveVariationOption, handleImageRemove, handleVariationOptionChange, removeFields } from "../components/common/comman";
 import Input from '../components/reuseable/input';
@@ -16,11 +16,13 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 
 
+
 const Product = () => {
 
   const router = useRouter()
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
+  const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
   const initialVariationOption = {
     title: '',
     price: '',
@@ -68,7 +70,7 @@ const Product = () => {
       // console.log("form validation failed",errors);
     } else {
       // console.log('Form validation successful. Submitting form...');
-      await handleSubmit(e, formData, router)
+      await handleSubmit(e, formData, router,isAuth)
     }
   }
 

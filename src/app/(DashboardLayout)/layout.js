@@ -9,16 +9,16 @@ import SignIn from "./auth/login/page";
 import SignUp from "./auth/signup/page";
 import RootLayout from "../layout";
 
-const FullLayout = ({ children}) => {
+const FullLayout = ({ children }) => {
 
   const pathname = usePathname()
   const [open, setOpen] = React.useState(false);
   const showMobilemenu = () => {
     setOpen(!open);
   };
-  const router=useRouter()
+  const router = useRouter()
   const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
-  const [key, setKey] = useState(0); 
+  const [key, setKey] = useState(0);
   console.log(pathname);
   useEffect(() => {
     setIsAuth(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
@@ -27,13 +27,13 @@ const FullLayout = ({ children}) => {
     // Update the key whenever the authentication state changes
     setKey(prevKey => prevKey + 1);
   }, [isAuth]);
-  console.log("is-auth",isAuth);
+  console.log("is-auth", isAuth);
   useEffect(() => {
     if (!isAuth && pathname !== '/auth/signup') {
       router.push('/auth/login');
-    }else if(!isAuth && pathname !== '/auth/login'){
+    } else if (!isAuth && pathname !== '/auth/login') {
       router.push('/auth/signup');
-    }else{
+    } else {
       router.push(pathname);
     }
   }, [isAuth]);
@@ -41,7 +41,7 @@ const FullLayout = ({ children}) => {
     <main>
 
       {isAuth && pathname !== '/auth/login' ? (
-        pathname !== '/auth/login' && pathname !== '/auth/signup'  ? (
+        pathname !== '/auth/login' && pathname !== '/auth/signup' ? (
           <div className="pageWrapper d-md-block d-lg-flex">
             {/******** Sidebar **********/}
             <aside
@@ -59,21 +59,21 @@ const FullLayout = ({ children}) => {
               {/********Middle Content**********/}
               <Container className="p-4 wrapper" fluid>
                 {/* <div>{children}</div> */}
-                {React.cloneElement(children, { key })} 
+                {React.cloneElement(children, { key })}
               </Container>
             </div>
           </div>
         ) : (
-          
-         <SignUp />
-          
+
+          <SignUp />
+
         )
       ) : (
 
-        pathname === '/auth/login'  ?  <SignIn />: <SignUp />
-    
+        pathname === '/auth/login' ? <SignIn /> : <SignUp />
+
       )
-    }
+      }
 
     </main>
   );
