@@ -277,16 +277,16 @@ const ProductList = () => {
               Overview of the projects
             </CardSubtitle>
             
-            <div className='flex w-full justify-between  p-2 '>
+            <div className='sm:flex   w-full justify-between  p-2 '>
             
-            <div className='flex   items-center border-2  bg-white'>
-                <input type='text' placeholder='Search Product List ' name='search' onChange={(e)=>handleSearch(e)} className='outline-none p-2' />
+            <div className='flex  items-center border-2  bg-white'>
+                <input type='text' placeholder='Search Product List ' name='search' onChange={(e)=>handleSearch(e)} className='outline-none p-2 flex-grow '  />
                 <CiSearch className='flex text-center mr-2' onClick={searchCall}/>
             </div>
            
           
               
-            <button className='bg-green-300 hover:bg-green-400 text-white font-bold px-2 rounded' onClick={()=>{handleExport(products)}}>Export data</button>
+            <button className='bg-green-300 mt-2 sm:mt-0 hover:bg-green-400 sm:w-1/4 p-2 w-full text-white font-bold px-2 rounded' onClick={()=>{handleExport(products)}}>Export data</button>
            
           
             </div>
@@ -305,7 +305,7 @@ const ProductList = () => {
                   {products?.length>0 ?products?.map((tdata, index) => {
                     
                    return (
-                    <tr key={index} className="border-top">
+                    <tr key={index} className="border-top relative">
                       <td>
                         <div className="d-flex align-items-center p-2">
                           <Image
@@ -332,7 +332,7 @@ const ProductList = () => {
                       <td className='' onClick={()=>{operation? setOperation(false):''}}>
                       <AiOutlineMenu onClick={() => handleOperation(tdata._id)} className='cursor-pointer' />  
                         {operation === tdata._id &&
-                        (<div className='absolute flex flex-col bg-sky-200 mt-2 '>
+                        (<div className='sm:absolute static flex flex-col bg-sky-200 mt-2 '>
                           <button className=" hover:bg-green-500 w-full text-black font-bold py-2 px-4 rounded mr-2" onClick={()=>handleEdit(tdata)}>Edit</button>
                           <button className=" hover:bg-red-700 text-black font-bold py-2 px-4 rounded " onClick={()=>{handleDelete(tdata._id)}}>Delete</button>          
                          </div>

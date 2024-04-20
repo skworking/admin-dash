@@ -89,7 +89,7 @@
   
   @media(max-width:425px){
     .containerdivinput{
-      width:400px;    
+      /* width:400px;     */
       display: flex;
       font-size: smaller;
     }
