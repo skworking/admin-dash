@@ -38,16 +38,18 @@ transporter.verify(function (error, success) {
 });
 
 
-const sendVarifiactionEmail = async ({ _id, email }, res) => {
-  console.log("call", _id, email);
-  const url = "http://localhost:3000/";
+const sendVarifiactionEmail = async ({ _id, email },req, res) => {
+  
+  const {origin}=new URL(req.url)
+  console.log("-----",origin);
+  // const url = "http://localhost:3000/";
   const uniqueString = uuidv4() + _id;
   const mailOptions = {
     from: process.env.AUTH_EMAIL,
     to: email,
     subject: "Verify user Email",
     html: `<p>Varify Your Email Address to complete the signup or login your account.</p> <p>This link is expires in 6 hours<br />.</p>
-    <p>Press <a href=${url + "user/verify/" + _id + "/" + uniqueString}>here </a> to proceed.</p>`,
+    <p>Press <a href=${origin + "/user/verify/" + _id + "/" + uniqueString}>here </a> to proceed.</p>`,
   }
   const expirationTime = new Date(Date.now() + 21600000);
   const newVerification = await UserVarification.create({
@@ -101,10 +103,10 @@ export async function POST(request, res) {
     email: email,
     varified: false
   })
-
+  
   const result = await user.save();
-  console.log("result", result);
-  sendVarifiactionEmail(result, res);
+  sendVarifiactionEmail(result,request, res);
+  // await user.save();
   return NextResponse.json({ result, success: true })
   }
 }

@@ -28,7 +28,7 @@ const VerifyEmail=()=> {
   }, [_id, uniqueString]);
 
   return (
-    <div>
+    <div className='flex flex-col justify-center items-center w-full h-full absolute'>
       <h1>Email Verification Status</h1>
       <p>{verificationStatus}</p>
     </div>
