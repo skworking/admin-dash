@@ -59,7 +59,7 @@ const sendVarifiactionEmail = async ({ _id, email }, res) => {
   try {
     await newVerification.save();
     await transporter.sendMail(mailOptions)
-    Response.json({
+    return NextResponse.json({
       status: "pending",
       message: "Verification Mail Send"
     })
@@ -85,8 +85,17 @@ export async function POST(request, res) {
       message: "invalid user details"
     })
   }
-
+  if (request.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
   console.log("payload", payload);
+  const existingUser = await User.findOne({ email: payload.email });
+  if (existingUser) {
+      // return res.status(400).json({ message: 'Email already registered' });
+      return NextResponse.json({ message: 'Email already registered',success:false });
+  }
+  else{
+
   let user = new User({
     role: role,
     email: email,
@@ -97,4 +106,5 @@ export async function POST(request, res) {
   console.log("result", result);
   sendVarifiactionEmail(result, res);
   return NextResponse.json({ result, success: true })
+  }
 }

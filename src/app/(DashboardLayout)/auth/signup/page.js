@@ -40,6 +40,12 @@ const handleRoleChange = (event) => {
       });
     result = await result.json();
     console.log(result);
+    if (result.success === true) {
+      alert(result.message)
+    }else{
+      alert(result.message)
+      toast.success("success")
+    }
     }catch(err){
       console.log(err);
     }
