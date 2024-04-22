@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { User } from "@/app/lib/model/user"
 import { UserVarification } from "@/app/lib/model/userVerify";
 import { NextRequest, NextResponse } from "next/server";
-import crypto from 'crypto'
+
 
 // email varifies
 import nodemailer from 'nodemailer'

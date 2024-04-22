@@ -66,9 +66,9 @@ const Header = ({ showMobmenu }) => {
               Starter
             </Link>
           </NavItem>
-           <NavItem>
-            <Link href="/pages/about"  className="nav-link">
-             About
+          <NavItem>
+            <Link href="/pages/about" className="nav-link">
+              About
             </Link>
           </NavItem>
           {/*<UncontrolledDropdown inNavbar nav>
@@ -97,7 +97,11 @@ const Header = ({ showMobmenu }) => {
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem header>Info</DropdownItem>
-            <DropdownItem>My Account</DropdownItem>
+            <DropdownItem>
+              <Link href="/pages/profile" className="nav-link">
+                My Account
+              </Link>
+            </DropdownItem>
             <DropdownItem>Edit Profile</DropdownItem>
             <DropdownItem divider />
             <DropdownItem>My Balance</DropdownItem>
