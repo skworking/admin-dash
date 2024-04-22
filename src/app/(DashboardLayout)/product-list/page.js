@@ -332,7 +332,7 @@ const ProductList = () => {
                       <td className='' onClick={()=>{operation? setOperation(false):''}}>
                       <AiOutlineMenu onClick={() => handleOperation(tdata._id)} className='cursor-pointer' />  
                         {operation === tdata._id &&
-                        (<div className='sm:absolute static flex flex-col bg-sky-200 mt-2 '>
+                        (<div className='sm:absolute static -top-3 right-3 flex flex-col bg-sky-200 mt-2 '>
                           <button className=" hover:bg-green-500 w-full text-black font-bold py-2 px-4 rounded mr-2" onClick={()=>handleEdit(tdata)}>Edit</button>
                           <button className=" hover:bg-red-700 text-black font-bold py-2 px-4 rounded " onClick={()=>{handleDelete(tdata._id)}}>Delete</button>          
                          </div>

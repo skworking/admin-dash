@@ -133,9 +133,9 @@ const ImportFile = () => {
         }
         // fetchData()
     }
-    const handle=()=>{
+    const handleOperation=(id)=>{
         console.log("call");
-        setOperation(!operation)
+        setOperation(operation === id ? null : id);
        }
     console.log(dataset);
     return (
@@ -178,7 +178,7 @@ const ImportFile = () => {
 
                                                     console.log(tdata)
                                                     return (
-                                                        <tr key={index} className="border-top">
+                                                        <tr key={index} className="border-top relative">
                                                             <td>
                                                                 <div className="d-flex align-items-center p-2">
                                                                     <Image
@@ -198,9 +198,9 @@ const ImportFile = () => {
                                                             <td>{tdata.slug}</td>
                                                             <td>{tdata.brand}</td>
                                                             <td className='' onClick={() => { operation ? setOperation(false) : '' }}>
-                                                                <AiOutlineMenu onClick={handle} className='cursor-pointer' />
-                                                                {operation &&
-                                                                    (<div className='absolute flex flex-col bg-sky-200 mt-2 '>
+                                                                <AiOutlineMenu onClick={() => handleOperation(tdata._id)} className='cursor-pointer' />
+                                                                {operation === tdata._id &&
+                                                                    (<div className='sm:absolute static -top-3 right-3 flex flex-col bg-sky-200  mt-2  '>
                                                                         <button className=" hover:bg-green-500 w-full text-black font-bold py-2 px-4 rounded mr-2" onClick={() => handleEdit(tdata)}>Edit</button>
                                                                         <button className=" hover:bg-red-700 text-black font-bold py-2 px-4 rounded " onClick={() => { handleDelete(tdata._id) }}>Delete</button>
                                                                     </div>
