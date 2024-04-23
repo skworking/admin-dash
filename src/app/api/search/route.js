@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { Product} from '../../lib/model/products'
 import mongoose from "mongoose";
-import { con } from "@/app/lib/db";
+
 
 export async function GET(request){
     let records;
