@@ -7,7 +7,7 @@ const vehicleSchema  = new mongoose.Schema({
         yearOfPurchase: { type: Number, required: true }
     },
     rcStatus: {
-        rcStatus: String,
+        rcStatus: { type: String, required: true },
         permit: {
             type: { type: String, required: true },
             validity: { type: Date, required: true }
