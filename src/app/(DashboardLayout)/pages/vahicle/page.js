@@ -11,6 +11,7 @@ import { IoMdClose } from "react-icons/io";
 // import styles from '../../../../styles/vahicle.module.css';
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import axios from 'axios';
+import e from 'cors';
 
 
 const { Step } = Steps;
@@ -29,6 +30,24 @@ const models = {
     'Mercedes-Benz': ['C-Class', 'E-Class', 'S-Class', 'GLC', 'GLE'],
 };
 
+const states = ['Punjab', 'Sindh', 'Khyber Pakhtunkhwa'];
+const districts = {
+    Punjab: ['Lahore', 'Faisalabad', 'Rawalpindi'],
+    Sindh: ['Karachi', 'Hyderabad', 'Sukkur'],
+    'Khyber Pakhtunkhwa': ['Peshawar', 'Abbottabad', 'Swat']
+};
+const tehsils = {
+    Lahore: ['Lahore City', 'Model Town', 'Gulberg'],
+    Faisalabad: ['Faisalabad City', 'Ghulam Muhammadabad', 'Jaranwala'],
+    Rawalpindi: ['Rawalpindi City', 'Chaklala', 'Taxila'],
+    Karachi: ['Karachi Central', 'Karachi East', 'Karachi West'],
+    Hyderabad: ['Hyderabad City', 'Latifabad', 'Qasimabad'],
+    Sukkur: ['Sukkur City', 'Rohri', 'Saleh Pat'],
+    Peshawar: ['Peshawar City', 'Charsadda', 'Nowshera'],
+    Abbottabad: ['Abbottabad City', 'Havelian', 'Mansehra'],
+    Swat: ['Mingora', 'Saidu Sharif', 'Barikot']
+};
+
 const Vahicle = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [form] = Form.useForm();
@@ -37,7 +56,7 @@ const Vahicle = () => {
         brand: '',
         model: '',
         year: '',
-        totalKm: '',
+        drivenkm: '',
         price: '',
         images: [
             "https://static-asset.tractorjunction.com/tr/imagebg.webp",
@@ -53,6 +72,17 @@ const Vahicle = () => {
             fitnessValidity: '',
             insuranceValidity: '',
             taxValidity: ''
+        },
+        overview: '',
+        userDetails: {
+            username: '',
+            mno: '',
+            email: '',
+            address:{
+                state: '',
+                district:'',
+                tehshil:''
+            }
         }
     });
     console.log(vehicleDetails);
@@ -90,8 +120,8 @@ const Vahicle = () => {
     //     setVehicleDetails({ ...vehicleDetails, [field]: value });
 
     // };
-    const handleModelSelect = (value) => {
-        setVehicleDetails({ ...vehicleDetails, model: value });
+    const handleModelSelect = (key, value) => {
+        setVehicleDetails({ ...vehicleDetails, [key]: value });
         setCurrentStep(currentStep + 1)
     };
     const handleYearSelect = (value) => {
@@ -99,6 +129,14 @@ const Vahicle = () => {
         setCurrentStep(currentStep + 1)
     };
 
+    const handleChangeNumber = (key, e) => {
+        const newValue = !isNaN(e.target.value) && e.target.value !== '' ? parseFloat(e.target.value) : '';
+        setVehicleDetails({ ...vehicleDetails, [key]: newValue })
+    }
+    const handleChangeText = (key, e) => {
+
+        setVehicleDetails({ ...vehicleDetails, [key]: e.target.value })
+    }
     // const handleImageChange = (fileList) => {
     //     setVehicleDetails({ ...vehicleDetails, images: fileList });
     // };
@@ -112,13 +150,43 @@ const Vahicle = () => {
             }
         });
     };
-    const handleChange = (event) => {
+    const handleChange = (event, key) => {
         // setAge(event.target.value);
         setVehicleDetails({
             ...vehicleDetails,
             rcStatus: {
                 ...vehicleDetails.rcStatus,
-                rcStatus: event.target.value
+                [key]: event.target.value
+            }
+        })
+    };
+    const handleChangeUser = (event, key) => {
+        // setAge(event.target.value);
+        // setVehicleDetails({
+        //     ...vehicleDetails,
+        //     address: {
+        //         ...vehicleDetails.address,
+        //         [key]: event.target.value
+        //     }
+        // })
+        setVehicleDetails(prevDetails => ({
+            ...prevDetails,
+            userDetails: {
+              ...prevDetails.userDetails,
+              address: {
+                ...prevDetails.userDetails.address,
+                [key]: event.target.value
+              }
+            }
+          }));
+    };
+    const handleChangeDetails = (event, key) => {
+        // setAge(event.target.value);
+        setVehicleDetails({
+            ...vehicleDetails,
+            userDetails: {
+                ...vehicleDetails.userDetails,
+                [key]: event.target.value
             }
         })
     };
@@ -132,7 +200,7 @@ const Vahicle = () => {
             }
         })
     };
-    const handleChangeFitness=(e)=>{
+    const handleChangeFitness = (e) => {
         setVehicleDetails({
             ...vehicleDetails,
             rcStatus: {
@@ -141,7 +209,7 @@ const Vahicle = () => {
             }
         })
     }
-    const handleChangeInsorence=(e)=>{
+    const handleChangeInsorence = (e) => {
         setVehicleDetails({
             ...vehicleDetails,
             rcStatus: {
@@ -150,7 +218,7 @@ const Vahicle = () => {
             }
         })
     }
-    const handleChangetaxValidity=(e)=>{
+    const handleChangetaxValidity = (e) => {
         setVehicleDetails({
             ...vehicleDetails,
             rcStatus: {
@@ -164,53 +232,39 @@ const Vahicle = () => {
         setSelectedImageIndex(index);
     };
 
-    
-  const handleImageChange =async (event, index) => {
-    const file = event.target.files[0];
-    if (!file) return;
-    const formData = new FormData();
-    formData.append('image', file);
-    try{
-        const res=await axios.post('/api/upload',formData,{
+
+    const handleImageChange = async (event, index) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('file', file);
+
+        await axios.post('/api/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
-              }
-        });
-       if(res.success){
+            }
+        }).then((res) => {
+            if (res.data.success === true) {
+                const infobuffer = res.data.result.image.data.data;
+                const base64String = Buffer.from(infobuffer).toString('base64');
+                const dataUrl = `data:image/jpeg;base64,${base64String}`;
 
-           const updatedImages = [...vehicleDetails.images];
-           updatedImages[index] =  file.name;
-           setVehicleDetails({
-               ...vehicleDetails,
-               images: updatedImages
+                const updatedImages = [...vehicleDetails.images];
+                updatedImages[index] = dataUrl;
+                setVehicleDetails({
+                    ...vehicleDetails,
+                    images: updatedImages
+                });
+            } else {
+                console.log(res);
+            }
+
+        })
+            .catch(error => {
+                console.error('Error:', error);
             });
-        }else{
-            console.error('File upload failed.');
-        }
-    }catch(error){
-        console.log(error);
-    }
+    };
 
-    // const updatedImages = [...vehicleDetails.images];
-    // updatedImages[index] = file;
-
-    // setVehicleDetails({
-    //   ...vehicleDetails,
-    //   images: updatedImages
-    // });
-  };
-  const displayImage = async (id) => {
-    try {
-      const res = await axios.get(`/api/image/${id}`, {
-        responseType: 'arraybuffer'
-      });
-      const blob = new Blob([res.data], { type: 'image/jpeg' });
-      const imageUrl = URL.createObjectURL(blob);
-      window.open(imageUrl);
-    } catch (error) {
-      console.error(error);
-    }
-  };
     const steps = [
         {
             title: "Select Brand",
@@ -226,25 +280,14 @@ const Vahicle = () => {
                         {brands.map((brand) => (
                             <li
                                 key={brand}
-                                onClick={() => handleVehicleSelect(brand)}
+                                onClick={() => handleModelSelect("brand", brand)}
                                 className={vehicleDetails?.brand === brand ? 'bg-[#1890ff]  p-2 ' : ' cursor-pointer p-2  hover:bg-[#f0f0f0]'}
                             >
                                 {brand}
                             </li>
                         ))}
                     </ul>
-                    {/* <Select
-                            placeholder="Select Brand"
-                            onChange={handleVehicleSelect}
-                            value={vehicleDetails?.brand}
-                            open={currentStep === 0}
-                        >
-                            {brands.map((brand) => (
-                                <Option key={brand} value={brand}>
-                                    {brand}
-                                </Option>
-                            ))}
-                        </Select> */}
+
                 </Form.Item>
             )
         },
@@ -260,24 +303,14 @@ const Vahicle = () => {
                         {models[vehicleDetails?.brand]?.map((model) => (
                             <li
                                 key={model}
-                                onClick={() => handleModelSelect(model)}
+                                onClick={() => handleModelSelect("model", model)}
                                 className={vehicleDetails?.model === model ? 'bg-[#1890ff] p-2' : ' cursor-pointer p-2  hover:bg-[#f0f0f0]'}
                             >
                                 {model}
                             </li>
                         ))}
                     </ul>
-                    {/* <Select
-                            placeholder="Select Model"
-                            onChange={handleModelSelect}
-                            value={vehicleDetails?.model}
-                        >
-                            {models[vehicleDetails?.brand]?.map((model) => (
-                                <Option key={model} value={model}>
-                                    {model}
-                                </Option>
-                            ))}
-                        </Select> */}
+
                 </Form.Item>
             )
         },
@@ -293,24 +326,13 @@ const Vahicle = () => {
                         {years.map((year) => (
                             <li
                                 key={year}
-                                onClick={() => handleYearSelect(year)}
+                                onClick={() => handleModelSelect("year", year)}
                                 className={vehicleDetails?.year === year ? 'bg-[#1890ff]  p-2 ' : ' cursor-pointer p-2  hover:bg-[#f0f0f0]'}
                             >
                                 {year}
                             </li>
                         ))}
                     </ul>
-                    {/* <Select
-                            placeholder="Select year"
-                            onChange={handleYearSelect}
-                            value={vehicleDetails?.year}
-                        >
-                            {years?.map((y) => (
-                                <Option key={y} value={y}>
-                                    {y}
-                                </Option>
-                            ))}
-                        </Select> */}
                 </Form.Item>
             )
         },
@@ -331,7 +353,7 @@ const Vahicle = () => {
                                         id="demo-simple-select"
                                         value={vehicleDetails.rcStatus.rcStatus}
                                         label="RC Status"
-                                        onChange={handleChange}
+                                        onChange={(e) => { handleChange(e, "rcStatus") }}
                                     >
                                         <MenuItem value={'Yes'}>Yes</MenuItem>
                                         <MenuItem value={'No'}>No</MenuItem>
@@ -343,12 +365,13 @@ const Vahicle = () => {
                                 <FormControl fullWidth>
                                     <InputLabel id="demo-simple-select-label">State Permit</InputLabel>
                                     <Select
-                                        
+
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
                                         value={vehicleDetails.rcStatus.permit}
                                         label="State Permit"
-                                        onChange={handleChangePermit}
+                                        onChange={(e) => { handleChange(e, "permit") }}
+                                    // onChange={handleChangePermit}
                                     >
                                         <MenuItem value={'State Permit'}>State Permit</MenuItem>
                                         <MenuItem value={'National Permit'}>National Permit</MenuItem>
@@ -358,200 +381,231 @@ const Vahicle = () => {
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <FormControl fullWidth>
-                                   
-                                    <TextField type='date' value={vehicleDetails.rcStatus.fitnessValidity}  onChange={handleChangeFitness} label="Fitness Validity" 
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }} />
+
+                                    <TextField type='date' value={vehicleDetails.rcStatus.fitnessValidity} onChange={(e) => { handleChange(e, "fitnessValidity") }} label="Fitness Validity"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }} />
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <FormControl fullWidth>
-                                   
-                                    <TextField type='date' value={vehicleDetails.rcStatus.insuranceValidity}  onChange={handleChangeInsorence} label="Insorence Validity" 
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }} />
+
+                                    <TextField type='date' value={vehicleDetails.rcStatus.insuranceValidity} onChange={(e) => { handleChange(e, "insuranceValidity") }} label="Insorence Validity"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }} />
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <FormControl fullWidth>
-                                   
-                                    <TextField type='date' value={vehicleDetails.rcStatus.taxValidity}  onChange={handleChangetaxValidity} label="Tax Validity" 
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }} />
+
+                                    <TextField type='date' value={vehicleDetails.rcStatus.taxValidity} onChange={(e) => { handleChange(e, 'taxValidity') }} label="Tax Validity"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }} />
                                 </FormControl>
                             </Grid>
                         </Grid>
                     </Box>
-                    {/* <Form.Item
-                        name="rc status"
-                        // label="year"
-                        rules={[{ required: true, message: 'Please select the year!' }]}
-                    >
-                        <Select
-                            placeholder="Select year"
-                            onChange={updateRCStatus}
-                            // value={vehicleDetails?.year}
-                        >
-                            {['Yes','No']?.map((y) => (
-                                <Option key={y} value={y}>
-                                    {y}
-                                </Option>
-                            ))}
-                        </Select> 
-                    </Form.Item>
-                    <Form.Item
-                        name="permit"
-                        label="select permit"
-                        rules={[{ required: true, message: 'Please select the year!' }]}
-                    >
-                        <Select
-                            placeholder="Select year"
-                            onChange={updateRCStatus}
-                            // value={vehicleDetails?.year}
-                        >
-                            {['Yes','No']?.map((y) => (
-                                <Option key={y} value={y}>
-                                    {y}
-                                </Option>
-                            ))}
-                        </Select> 
-                    </Form.Item> */}
+
                 </>
             )
         },
         {
             title: 'Upload Images',
             content: (
-                // <Form
-                //     form={form}
-                //     name="uploadImagesForm"
-                //     initialValues={{ remember: true }}
-                //     onFinish={handleNext}
-                // >
-                //     <Form.Item
-                //         name="images"
-                //         label="Images"
-                //         valuePropName="fileList"
-                //         getValueFromEvent={(e) => {
-                //             if (Array.isArray(e)) {
-                //                 return e;
-                //             }
-                //             return e && e.fileList;
-                //         }}
-                //         rules={[{ required: true, message: 'Please upload images!' }]}
-                //     >
-                //         <Upload
-                //             listType="picture"
-                //             multiple
-                //             maxCount={3}
-                //             accept="image/*"
-                //             onChange={(info) => {
-                //                 const { fileList } = info;
-                //                 handleImageChange(fileList);
-                //             }}
-                //         >
-                //             <Button icon={<UploadOutlined />}>Upload</Button>
-                //         </Upload>
-                //     </Form.Item>
-                // </Form>
-                // <div className="image-gallery">
-                //     {vehicleDetails?.images?.map((image, index) => (
-                //         <div className="image-item" key={index}>
-                //             <img
-                //                 src={image}
-                //                 alt={`Image ${index + 1}`}
-                //                 className='w-50 h-20'
-                //                 onError={(e) => { e.target.src = 'https://static-asset.tractorjunction.com/tr/imagebg.webp'; }}
-                //             />
-                //             <button onClick={() => replaceImageUrl(index, `https://static-asset.tractorjunction.com/tr/image${index + 1}.webp`)}>
-                //                 Change Image
-                //             </button>
-                //         </div>
-                //     ))}
-                // </div>
-                <div className='p-2'>
-                    <h1>Note - Upload minimum 2 Images</h1>
+                <div className='p-2 gap-3 flex flex-col'>
+                    <h1 className='text-xs '>Note - Upload minimum 2 Images</h1>
                     <div>
-                        {vehicleDetails?.images.map((image, index) => (
-                          <>
-                          <input
-                           key={index}
-                           type='file'
-                           onChange={(event) => handleImageChange(event, index)}
-                           />
-                         {image && (
-                             <button onClick={() => displayImage(image)}>View Image</button>
-                            )}
-                        </>
-                        ))}
+                        <Grid container spacing={2}   >
+                            {vehicleDetails?.images.map((image, index) => (
+                                <Grid item xs={12} md={4}>
+                                    <div key={index}>
+                                        <label htmlFor={`image-input-${index}`} className='text-gray-200 w-full'>|</label>
+                                        <input
+                                            id={`image-input-${index}`}
+                                            key={index}
+                                            type='file'
+                                            accept="image/*"
+                                            onChange={(event) => handleImageChange(event, index)}
+                                            style={{ display: 'none' }}
+                                        />
+
+                                    </div>
+
+                                </Grid>
+                            ))}
+                        </Grid>
                     </div>
+                    <h5 className='text-xs' >Enter Price for Tata Magic Express Bi-Fuel</h5>
+                    <p className='text-center px-2 text-xs'>Note : Please enter the price that you expect in return for selling your used vehicle. Ensure you quote the expected price based on your vehicle's condition and the price you would be willing to pay to buy a similar second-hand model.</p>
+                    <TextField
+                        id="outlined-Model"
+                        label="Enter Price"
+                        type='tel'
+                        name={vehicleDetails?.price}
+                        value={vehicleDetails?.price}
+                        className='w-full'
+                        onChange={(e) => { handleChangeNumber("price", e) }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+
+                    />
+                    <TextField
+                        id="outlined-Model"
+                        label="Enter Driven Kilometer"
+                        type='tel'
+                        name={vehicleDetails?.drivenkm}
+                        value={vehicleDetails?.drivenkm}
+                        className='w-full'
+                        onChange={(e) => { handleChangeNumber("drivenkm", e) }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+
+                    />
+                    <TextField
+                        id="outlined-Model"
+                        label="Overview"
+                        name={vehicleDetails?.overview}
+                        value={vehicleDetails?.overview}
+                        className='w-full'
+                        onChange={(e) => { handleChangeText("overview", e) }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+
+                    />
                 </div>
             ),
         },
         {
-            title: 'Additional Details',
+            title: 'User Detail',
             content: (
-                <Form
-                    form={form}
-                    name="additionalDetailsForm"
-                    initialValues={{ remember: true }}
-                    onFinish={handleFormSubmit}
-                >
-                    <Form.Item name="overview" label="Overview">
-                        <Input.TextArea />
-                    </Form.Item>
-                    <Form.Item
-                        name="userName"
-                        label="Name"
-                        rules={[{ required: true, message: 'Please input your name!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name="userMobileNo"
-                        label="Mobile Number"
-                        rules={[{ required: true, message: 'Please input your mobile number!' }]}
-                    >
-                        <Input type="tel" />
-                    </Form.Item>
-                    <Form.Item
-                        name="userEmail"
-                        label="Email"
-                        rules={[
-                            { required: true, message: 'Please input your email!' },
-                            { type: 'email', message: 'Please enter a valid email!' },
-                        ]}
-                    >
-                        <Input type="email" />
-                    </Form.Item>
-                    <Form.Item
-                        name="state"
-                        label="State"
-                        rules={[{ required: true, message: 'Please input the state!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name="district"
-                        label="District"
-                        rules={[{ required: true, message: 'Please input the district!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name="tehsil"
-                        label="Tehsil"
-                        rules={[{ required: true, message: 'Please input the tehsil!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                </Form>
+
+                <div className='p-2 gap-3 flex flex-col'>
+                    <TextField
+                        id="outlined-Model"
+                        label="Enter Your Name"
+                        name={vehicleDetails?.userDetails?.username}
+                        // value={vehicleDetails?.overview}
+                        className='w-full'
+                        onChange={(e) => { handleChangeDetails(e, "username") }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+
+                    />
+                    <Grid container spacing={2}   >
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                id="outlined-Model"
+                                type='tel'
+                                label="Enter Your Mobile No"
+                                name={vehicleDetails?.userDetails?.mno}
+                                // value={vehicleDetails?.overview}
+                                className='w-full'
+                                onChange={(e) => { handleChangeDetails(e, "mno") }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                inputProps={{
+                                    pattern: "[0-9]*",
+                                    inputMode: "numeric",
+                                    maxLength: 10,
+                                }}
+
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                id="outlined-Model"
+                                label="Enter Your Email"
+                                type='email'
+                                name={vehicleDetails?.userDetails?.email}
+                                // value={vehicleDetails?.overview}
+                                className='w-full'
+                                onChange={(e) => { handleChangeDetails(e, "email") }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+
+                            />
+                        </Grid>
+                    </Grid>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Select State</InputLabel>
+                        <Select
+
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={vehicleDetails.userDetails.address.state}
+                            label="State State"
+                            onChange={(e) => { handleChangeUser(e, "state") }}
+
+                        >
+                            {states.map((state) => {
+
+                                return (
+                                    <MenuItem key={state} value={state}>{state}</MenuItem>
+
+                                )
+                            })}
+
+                        </Select>
+                    </FormControl>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Select District</InputLabel>
+                        <Select
+
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={vehicleDetails.userDetails.address.district}
+                            label="Select District"
+                            onChange={(e) => { handleChangeUser(e, "district") }}
+
+                        >
+                            {districts[vehicleDetails.userDetails.address.state]?.map((district) => {
+
+                                return (
+                                    <MenuItem key={district} value={district}>{district}</MenuItem>
+
+                                )
+                            })}
+
+                        </Select>
+                    </FormControl>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Select tehshil</InputLabel>
+                        <Select
+
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={vehicleDetails.userDetails.address.tehshil}
+                            label="Select tehshil"
+                            onChange={(e) => { handleChangeUser(e, "tehshil") }}
+
+                        >
+                            {tehsils[vehicleDetails.userDetails.address.district]?.map((tehshil) => {
+
+                                return (
+                                    <MenuItem key={tehshil} value={tehshil}>{tehshil}</MenuItem>
+
+                                )
+                            })}
+
+                        </Select>
+                    </FormControl>
+                    <div>
+
+                    </div>
+                </div>
             ),
         },
     ];
+
 
     return (
         <div >
@@ -663,17 +717,23 @@ const Vahicle = () => {
                             <h1>UPLOAD TRUCK IMAGES</h1>
                             <div className='flex max-w-1/6 gap-1 m-auto p-2'>
 
-                                {vehicleDetails?.images?.map((image, index) => (
-                                    <div className=" outline border-b-slate-700" key={index}>
-                                        <img
-                                            onClick={openModal}
-                                            src={image}
-                                            alt={`Image ${index + 1}`}
-                                            className='w-[150px] h-[100px] object-cover '
-                                            onError={(e) => { e.target.src = 'https://static-asset.tractorjunction.com/tr/imagebg.webp'; }}
-                                        />
-                                    </div>
-                                ))}
+                                {vehicleDetails?.images?.map((image, index) => {
+                                    // const  infobuffer=image?.data?.data;
+                                    //  const base64String = Buffer.from(infobuffer && infobuffer)?.toString('base64');
+                                    //  const dataUrl = `data:image/jpeg;base64,${base64String}`;
+                                    return (
+
+                                        <div className=" outline border-b-slate-700" key={index}>
+                                            <img
+                                                onClick={openModal}
+                                                src={image}
+                                                alt={`Image ${index + 1}`}
+                                                className='w-[150px] h-[100px] object-cover '
+                                                onError={(e) => { e.target.src = 'https://static-asset.tractorjunction.com/tr/imagebg.webp'; }}
+                                            />
+                                        </div>
+                                    )
+                                })}
                             </div>
                         </div>
                         <Button variant="contained" className='w-full' onClick={openModal}>Shell Your Truck</Button>
@@ -681,44 +741,6 @@ const Vahicle = () => {
 
                     </Box>
 
-                    {/* <Modal
-                      
-                        //  title={steps[currentStep].title}
-                        visible={isModalVisible}
-                        
-                        onCancel={handleModalCancel}
-                        footer={null}
-                    >
-                       
-                      
-                        <Steps current={currentStep}>
-                            {steps.map((item) => (
-                                <Step className='px-3 py-2' key={item.title} />
-                            ))}
-                        </Steps>
-                        <div>
-                            {steps.map((i)=>{console.log(i)})}
-                        </div>
-                        <div className='w-full bg-blue-600 p-2 overflow-auto '>{steps[currentStep].title}</div>
-                        <div >{steps[currentStep].content}</div>
-                        <div >
-                            {currentStep < steps.length - 1 && (
-                                <Button type="primary" onClick={handleNext}>
-                                    Next
-                                </Button>
-                            )}
-                            {currentStep === steps.length - 1 && (
-                                <Button type="primary" onClick={() => form.submit()}>
-                                    Submit
-                                </Button>
-                            )}
-                            {currentStep > 0 && (
-                                <Button style={{ margin: '0 8px' }} onClick={handlePrev}>
-                                    Previous
-                                </Button>
-                            )}
-                        </div>
-                    </Modal> */}
                 </div>
             }
 
