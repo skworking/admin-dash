@@ -71,6 +71,11 @@ const Header = ({ showMobmenu }) => {
               About
             </Link>
           </NavItem>
+          <NavItem>
+            <Link href="/pages/vahicle" className="nav-link">
+            SELL-USED-TRUCK
+            </Link>
+          </NavItem>
           {/*<UncontrolledDropdown inNavbar nav>
             <DropdownToggle caret nav>
               DD Menu

@@ -9,8 +9,8 @@ export async function POST(request) {
 
         const payload = await request.json();
         console.log("payload", payload);
-        let product = new Product(payload)
-        const result = await Vehicle.save();
+        let vehicle = new Vehicle(payload)
+        const result = await vehicle.save();
         return NextResponse.json({ result, success: true })
 
 

@@ -1,21 +1,14 @@
 'use client'
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 
 import { useState } from 'react';
-import { Steps, Form, Input, Button, Upload, message, Modal } from 'antd';
-import { CloseCircleOutlined, UploadOutlined } from '@ant-design/icons';
+import { Steps, Form, Input, Button, Upload, Modal, message } from 'antd';
 import { IoMdClose } from "react-icons/io";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import axios from 'axios';
 import { FaLongArrowAltLeft } from "react-icons/fa";
-import Image from 'next/image';
 
-
-
-const { Step } = Steps;
-const { Option } = Select;
 
 const brands = ['Toyota', 'Ford', 'Chevrolet', 'Nissan', 'Honda', 'Volkswagen', 'Hyundai', 'Mercedes-Benz'];
 const years = ['2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024']
@@ -47,8 +40,17 @@ const tehsils = {
     Abbottabad: ['Abbottabad City', 'Havelian', 'Mansehra'],
     Swat: ['Mingora', 'Saidu Sharif', 'Barikot']
 };
-
 const Vahicle = () => {
+    const [dummy, SetDummy] = useState({
+        images: [
+            "https://static-asset.tractorjunction.com/tr/imagebg.webp",
+            "https://static-asset.tractorjunction.com/tr/imagebg.webp",
+            "https://static-asset.tractorjunction.com/tr/imagebg.webp",
+            "https://static-asset.tractorjunction.com/tr/imagebg.webp",
+            "https://static-asset.tractorjunction.com/tr/imagebg.webp",
+            "https://static-asset.tractorjunction.com/tr/imagebg.webp"
+        ]
+    })
     const [currentStep, setCurrentStep] = useState(0);
     const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -59,12 +61,6 @@ const Vahicle = () => {
         drivenkm: '',
         price: '',
         images: [
-            "https://static-asset.tractorjunction.com/tr/imagebg.webp",
-            "https://static-asset.tractorjunction.com/tr/imagebg.webp",
-            "https://static-asset.tractorjunction.com/tr/imagebg.webp",
-            "https://static-asset.tractorjunction.com/tr/imagebg.webp",
-            "https://static-asset.tractorjunction.com/tr/imagebg.webp",
-            "https://static-asset.tractorjunction.com/tr/imagebg.webp"
         ],
         rcStatus: {
             rcStatus: '',
@@ -85,23 +81,80 @@ const Vahicle = () => {
             }
         }
     });
-    console.log(vehicleDetails);
-    const replaceImageUrl = (index, newUrl) => {
-        setVehicleDetails(setVehicleDetails.images?.map((image, i) => (i === index ? newUrl : image)));
-    };
 
+
+
+    const [errors, setErrors] = useState({});
+
+
+    const validateForm = () => {
+        // Validation logic goes here
+
+        const errors = {};
+        console.log(currentStep);
+        switch (currentStep) {
+            case 4: // Image upload step
+                if (vehicleDetails.images.length < 2) {
+                    errors.images = 'Upload minimum 2 Images';
+                    message.error({ content: errors.images, duration: 2 });
+                }
+                if (!vehicleDetails.price) {
+                    errors.price = 'Price is required';
+                    message.error({ content: errors.price, duration: 2 })
+                }
+                if (!vehicleDetails.drivenkm) {
+                    errors.drivenkm = 'Driven Kilometer is required';
+                    message.error({
+                        content: errors.drivenkm,
+                        duration: 2,
+
+                    })
+                }
+                break;
+            case 5:
+                if (!vehicleDetails.userDetails.username) {
+                    message.error({ content: "Please Enter UserName", duration: 2 })
+
+                }
+                if (!vehicleDetails.userDetails.email) {
+                    message.error({ content: "Enter valid Email", duration: 2 })
+                }
+                if (!vehicleDetails.userDetails.mno) {
+                    message.error({ content: "Enter Mobile Number", duration: 2 })
+                }
+                if (!vehicleDetails.userDetails.address.state) {
+                    message.error({ content: "Please Select state", duration: 2 })
+                }
+                if (!vehicleDetails.userDetails.address.district) {
+                    message.error({ content: "Please Select district", duration: 2 })
+                }
+                if (!vehicleDetails.userDetails.address.tehshil) {
+                    message.error({ content: "Please Select tehshil", duration: 2 })
+                }
+                break;
+            default:
+                break;
+        }
+        // Update errors state
+        setErrors(errors);
+
+        // Check if there are any errors
+        return Object.keys(errors).length === 0;
+    };
     const handleNext = () => {
-        setCurrentStep(currentStep + 1);
+        const isValid = validateForm();
+        if (isValid) {
+            setCurrentStep(currentStep + 1);
+        } else {
+            console.log(errors);
+
+        }
     };
 
     const handlePrev = () => {
         setCurrentStep(currentStep - 1);
     };
 
-    const handleFormSubmit = (values) => {
-        console.log('Form Values:', values);
-        message.success('Form submitted successfully!');
-    };
 
     const openModal = () => {
         console.log("call");
@@ -112,20 +165,9 @@ const Vahicle = () => {
         setIsModalVisible(!isModalVisible);
     };
 
-    const handleVehicleSelect = (value) => {
-        setVehicleDetails({ ...vehicleDetails, brand: value });
-        setCurrentStep(currentStep + 1)
-    };
-    // const handleVehicleSelect = (value, field) => {
-    //     setVehicleDetails({ ...vehicleDetails, [field]: value });
 
-    // };
     const handleModelSelect = (key, value) => {
         setVehicleDetails({ ...vehicleDetails, [key]: value });
-        setCurrentStep(currentStep + 1)
-    };
-    const handleYearSelect = (value) => {
-        setVehicleDetails({ ...vehicleDetails, year: value });
         setCurrentStep(currentStep + 1)
     };
 
@@ -137,19 +179,7 @@ const Vahicle = () => {
 
         setVehicleDetails({ ...vehicleDetails, [key]: e.target.value })
     }
-    // const handleImageChange = (fileList) => {
-    //     setVehicleDetails({ ...vehicleDetails, images: fileList });
-    // };
 
-    const updateRCStatus = (key, value) => {
-        setVehicleDetails({
-            ...vehicleDetails,
-            rcStatus: {
-                ...vehicleDetails.rcStatus,
-                rcStatus: value
-            }
-        });
-    };
     const handleChange = (event, key) => {
         // setAge(event.target.value);
         setVehicleDetails({
@@ -161,14 +191,6 @@ const Vahicle = () => {
         })
     };
     const handleChangeUser = (event, key) => {
-        // setAge(event.target.value);
-        // setVehicleDetails({
-        //     ...vehicleDetails,
-        //     address: {
-        //         ...vehicleDetails.address,
-        //         [key]: event.target.value
-        //     }
-        // })
         setVehicleDetails(prevDetails => ({
             ...prevDetails,
             userDetails: {
@@ -190,47 +212,6 @@ const Vahicle = () => {
             }
         })
     };
-    const handleChangePermit = (event) => {
-        // setAge(event.target.value);
-        setVehicleDetails({
-            ...vehicleDetails,
-            rcStatus: {
-                ...vehicleDetails.rcStatus,
-                permit: event.target.value
-            }
-        })
-    };
-    const handleChangeFitness = (e) => {
-        setVehicleDetails({
-            ...vehicleDetails,
-            rcStatus: {
-                ...vehicleDetails.rcStatus,
-                fitnessValidity: e.target.value
-            }
-        })
-    }
-    const handleChangeInsorence = (e) => {
-        setVehicleDetails({
-            ...vehicleDetails,
-            rcStatus: {
-                ...vehicleDetails.rcStatus,
-                insuranceValidity: e.target.value
-            }
-        })
-    }
-    const handleChangetaxValidity = (e) => {
-        setVehicleDetails({
-            ...vehicleDetails,
-            rcStatus: {
-                ...vehicleDetails.rcStatus,
-                taxValidity: e.target.value
-            }
-        })
-    }
-    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-    const handleImageSelect = (index) => {
-        setSelectedImageIndex(index);
-    };
 
 
     const handleImageChange = async (event, index) => {
@@ -251,10 +232,16 @@ const Vahicle = () => {
 
                 const updatedImages = [...vehicleDetails.images];
                 updatedImages[index] = dataUrl;
+                const dummyupdate = [...dummy.images];
+                dummyupdate[index] = dataUrl;
                 setVehicleDetails({
                     ...vehicleDetails,
                     images: updatedImages
                 });
+                SetDummy({
+                    ...dummy,
+                    images: dummyupdate
+                })
             } else {
                 console.log(res);
             }
@@ -264,7 +251,7 @@ const Vahicle = () => {
                 console.error('Error:', error);
             });
     };
-
+    console.log(vehicleDetails);
     const steps = [
         {
             title: "Brand",
@@ -424,9 +411,9 @@ const Vahicle = () => {
                     <h1 className='text-xs '>Note - Upload minimum 2 Images</h1>
                     <div>
                         <Grid container spacing={2}   >
-                            {vehicleDetails?.images.map((image, index) => (
-                                <Grid item xs={12} md={4} key={index}>
-                                    
+                            {dummy?.images.map((image, index) => (
+                                <>
+                                    <Grid item xs={12} md={4} key={index}>
                                         <label htmlFor={`image-input-${index}`} className='text-gray-200 w-full'>|</label>
                                         <input
                                             id={`image-input-${index}`}
@@ -437,8 +424,10 @@ const Vahicle = () => {
                                             style={{ display: 'none' }}
                                         />
 
-                                </Grid>
+                                    </Grid>
+                                </>
                             ))}
+
                         </Grid>
                     </div>
                     <h5 className='text-xs' >Enter Price for Tata Magic Express Bi-Fuel</h5>
@@ -494,7 +483,7 @@ const Vahicle = () => {
                         id="outlined-Model"
                         label="Enter Your Name"
                         name={vehicleDetails?.userDetails?.username}
-                        // value={vehicleDetails?.overview}
+                        value={vehicleDetails?.userDetails?.username}
                         className='w-full'
                         onChange={(e) => { handleChangeDetails(e, "username") }}
                         InputLabelProps={{
@@ -509,7 +498,7 @@ const Vahicle = () => {
                                 type='tel'
                                 label="Enter Your Mobile No"
                                 name={vehicleDetails?.userDetails?.mno}
-                                // value={vehicleDetails?.overview}
+                                value={vehicleDetails?.userDetails?.mno}
                                 className='w-full'
                                 onChange={(e) => { handleChangeDetails(e, "mno") }}
                                 InputLabelProps={{
@@ -529,14 +518,12 @@ const Vahicle = () => {
                                 label="Enter Your Email"
                                 type='email'
                                 name={vehicleDetails?.userDetails?.email}
-                                // value={vehicleDetails?.overview}
+                                value={vehicleDetails?.userDetails?.email}
                                 className='w-full'
                                 onChange={(e) => { handleChangeDetails(e, "email") }}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-
-
                             />
                         </Grid>
                     </Grid>
@@ -611,8 +598,22 @@ const Vahicle = () => {
         },
     ];
 
-    const handleSubmit=(data)=>{
-        console.log(vehicleDetails);
+    const handleSubmit = async () => {
+        const isValid = validateForm();
+        if (isValid) {
+            await axios.post('/api/vehicle', vehicleDetails)
+                .then((res) => {
+                    if(res.status === 200){
+                        message.success("Register details successfully")
+                        
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+        } else {
+            console.log(errors);
+
+        }
     }
     return (
         <div >
@@ -666,18 +667,13 @@ const Vahicle = () => {
                         })} */}
 
                         </div>
-                        {/* <Steps current={currentStep}>
-                            {steps.map((item) => (
-                                
-                                <Step className='px-3 py-2 flex' key={item.title} />
-                            ))}
-                        </Steps> */}
+
                         <Button
                             onClick={handleModalCancel}
                         >
                             <IoMdClose />
                         </Button>
-                        {/* <button className='rounded my-2 p-1 bg-sky-300' onClick={handleModalCancel}><IoMdClose /></button> */}
+
                     </div>
                     <div className='w-full bg-blue-600 p-2 my-2 overflow-auto '>{steps[currentStep].label}</div>
                     <div className='h-[50vh] overflow-auto'>{steps[currentStep].content}</div>
@@ -741,7 +737,7 @@ const Vahicle = () => {
                                 <TextField
                                     id="outlined-tkd"
                                     label="Total Km Driven"
-                                    value={vehicleDetails?.totalKm}
+                                    value={vehicleDetails?.drivenkm}
                                     className='w-full rounded-none'
                                     InputProps={{
                                         readOnly: true,
@@ -772,10 +768,8 @@ const Vahicle = () => {
                             <h1>UPLOAD TRUCK IMAGES</h1>
                             <div className='flex max-w-1/6 gap-1 m-auto p-2'>
 
-                                {vehicleDetails?.images?.map((image, index) => {
-                                    // const  infobuffer=image?.data?.data;
-                                    //  const base64String = Buffer.from(infobuffer && infobuffer)?.toString('base64');
-                                    //  const dataUrl = `data:image/jpeg;base64,${base64String}`;
+                                {/* {vehicleDetails?.images?.map((image, index) => { */}
+                                {dummy?.images?.map((image, index) => {
                                     return (
 
                                         <div className=" outline border-b-slate-700" key={index}>
@@ -793,7 +787,7 @@ const Vahicle = () => {
                                 })}
                             </div>
                         </div>
-                        <Button variant="contained" className='w-full' onClick={openModal}>Shell Your Truck</Button>
+                        <Button type='primary' className='w-full' onClick={openModal}>Shell Your Truck</Button>
                         <p>By proceeding ahead you expressly agree to the Truck-Buses <span>Terms and Conditions</span></p>
 
                     </Box>
