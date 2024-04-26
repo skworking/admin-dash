@@ -10,6 +10,7 @@ import { IoMdClose } from "react-icons/io";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import axios from 'axios';
 import { FaLongArrowAltLeft } from "react-icons/fa";
+import Image from 'next/image';
 
 
 
@@ -779,6 +780,8 @@ const Vahicle = () => {
 
                                         <div className=" outline border-b-slate-700" key={index}>
                                             <img
+                                                width={50}
+                                                height={50}
                                                 onClick={openModal}
                                                 src={image}
                                                 alt={`Image ${index + 1}`}
