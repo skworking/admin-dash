@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { Image } from "@/app/lib/model/image";
 import mongoose from "mongoose";
 import { writeFile } from 'fs/promises';
-import { buffer } from 'buffer';
-
 
 
 export async function POST(request) {

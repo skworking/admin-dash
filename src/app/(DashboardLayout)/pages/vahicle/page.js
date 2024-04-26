@@ -424,8 +424,8 @@ const Vahicle = () => {
                     <div>
                         <Grid container spacing={2}   >
                             {vehicleDetails?.images.map((image, index) => (
-                                <Grid item xs={12} md={4}>
-                                    <div key={index}>
+                                <Grid item xs={12} md={4} key={index}>
+                                    
                                         <label htmlFor={`image-input-${index}`} className='text-gray-200 w-full'>|</label>
                                         <input
                                             id={`image-input-${index}`}
@@ -435,8 +435,6 @@ const Vahicle = () => {
                                             onChange={(event) => handleImageChange(event, index)}
                                             style={{ display: 'none' }}
                                         />
-
-                                    </div>
 
                                 </Grid>
                             ))}
