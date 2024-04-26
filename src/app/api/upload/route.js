@@ -24,9 +24,9 @@ export async function POST(request) {
       }
     });
     const res= await newImage.save();
-    const path = `./public/Images/${file.name}`;
+    // const path = `./public/Images/${file.name}`;
     
-    await writeFile(path, Buffer.from(bytes));
+    // await writeFile(path, Buffer.from(bytes));
     console.log("response---",res);
     return NextResponse.json ({
       status: 200,
