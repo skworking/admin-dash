@@ -2,16 +2,15 @@
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
+
 import { useState } from 'react';
-import { Steps, Form, Input, Upload, message, Modal } from 'antd';
+import { Steps, Form, Input, Button, Upload, message, Modal } from 'antd';
 import { CloseCircleOutlined, UploadOutlined } from '@ant-design/icons';
 import { IoMdClose } from "react-icons/io";
-// import 'antd/dist/antd.css';
-// import styles from '../../../../styles/vahicle.module.css';
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import axios from 'axios';
-import e from 'cors';
+import { FaLongArrowAltLeft } from "react-icons/fa";
+
 
 
 const { Step } = Steps;
@@ -78,10 +77,10 @@ const Vahicle = () => {
             username: '',
             mno: '',
             email: '',
-            address:{
+            address: {
                 state: '',
-                district:'',
-                tehshil:''
+                district: '',
+                tehshil: ''
             }
         }
     });
@@ -172,13 +171,13 @@ const Vahicle = () => {
         setVehicleDetails(prevDetails => ({
             ...prevDetails,
             userDetails: {
-              ...prevDetails.userDetails,
-              address: {
-                ...prevDetails.userDetails.address,
-                [key]: event.target.value
-              }
+                ...prevDetails.userDetails,
+                address: {
+                    ...prevDetails.userDetails.address,
+                    [key]: event.target.value
+                }
             }
-          }));
+        }));
     };
     const handleChangeDetails = (event, key) => {
         // setAge(event.target.value);
@@ -267,7 +266,8 @@ const Vahicle = () => {
 
     const steps = [
         {
-            title: "Select Brand",
+            title: "Brand",
+            label: "Select Brand",
             content: (
 
                 <Form.Item
@@ -292,7 +292,8 @@ const Vahicle = () => {
             )
         },
         {
-            title: "Select Model",
+            title: "Model",
+            label: "Select Model",
             content: (
                 <Form.Item
                     name="model"
@@ -315,14 +316,15 @@ const Vahicle = () => {
             )
         },
         {
-            title: "select Year",
+            title: "Year",
+            label: "select Year",
             content: (
                 <Form.Item
                     name="year"
                     // label="year"
                     rules={[{ required: true, message: 'Please select the year!' }]}
                 >
-                    <ul className='h-[300px] overflow-auto'>
+                    <ul >
                         {years.map((year) => (
                             <li
                                 key={year}
@@ -337,7 +339,8 @@ const Vahicle = () => {
             )
         },
         {
-            title: "RC Staus",
+            title: "rcStaus",
+            label: "RC Status",
             content: (
                 <>
                     <Box
@@ -413,7 +416,8 @@ const Vahicle = () => {
             )
         },
         {
-            title: 'Upload Images',
+            title: "image-and-price",
+            label: 'Upload Images',
             content: (
                 <div className='p-2 gap-3 flex flex-col'>
                     <h1 className='text-xs '>Note - Upload minimum 2 Images</h1>
@@ -482,7 +486,8 @@ const Vahicle = () => {
             ),
         },
         {
-            title: 'User Detail',
+            title: "Details",
+            label: 'User Detail',
             content: (
 
                 <div className='p-2 gap-3 flex flex-col'>
@@ -531,6 +536,7 @@ const Vahicle = () => {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+
 
                             />
                         </Grid>
@@ -606,49 +612,99 @@ const Vahicle = () => {
         },
     ];
 
-
+    const handleSubmit=(data)=>{
+        console.log(vehicleDetails);
+    }
     return (
         <div >
 
             {isModalVisible ?
-                <div className='sm:w-[50%] flex flex-col justify-center  m-auto  bg-white'>
-                    <div className='flex'>
-                        <Steps current={currentStep}>
+                <div className='sm:w-[50%] flex flex-col justify-start   m-auto  bg-white'>
+                    <div className='flex justify-between  overflow-auto gap-2'>
+                        {currentStep > 0 && (
+                            <Button onClick={handlePrev}>
+                                <FaLongArrowAltLeft />
+                            </Button>
+                        )}
+
+                        <div className='w-full  flex flex-nowrap gap-1 overflow-auto'>
+                            <>
+                                {!!vehicleDetails?.brand
+                                    &&
+                                    <Button onClick={() => setCurrentStep(0)}>
+                                        {vehicleDetails.brand}
+                                    </Button>
+                                }
+                                {!!vehicleDetails?.model &&
+                                    <Button onClick={() => setCurrentStep(1)}>
+                                        {vehicleDetails.model}
+                                    </Button>
+                                }
+                                {!!vehicleDetails?.year &&
+                                    <Button onClick={() => setCurrentStep(2)}>
+                                        {vehicleDetails.year}
+                                    </Button>
+                                }
+                                {!!vehicleDetails?.rcStatus?.rcStatus &&
+                                    <Button onClick={() => setCurrentStep(3)}>
+                                        {vehicleDetails?.rcStatus?.rcStatus && ':type-info'}
+                                    </Button>
+                                }
+                                {!!vehicleDetails?.images &&
+                                    <Button onClick={() => setCurrentStep(4)}>
+                                        {vehicleDetails?.images && 'images'}
+                                    </Button>
+                                }
+
+                            </>
+
+                            {/* {steps.map((item)=>{
+                            console.log(item);
+                            return(
+                                <button key={item} className='flex-nowrap w-full '>{item.title}
+                                </button>
+                            )
+                        })} */}
+
+                        </div>
+                        {/* <Steps current={currentStep}>
                             {steps.map((item) => (
-                                <Step className='px-3 py-2' key={item.title} />
+                                
+                                <Step className='px-3 py-2 flex' key={item.title} />
                             ))}
-                        </Steps>
-                        <button className='rounded my-2 p-1 bg-sky-300' onClick={handleModalCancel}><IoMdClose /></button>
+                        </Steps> */}
+                        <Button
+                            onClick={handleModalCancel}
+                        >
+                            <IoMdClose />
+                        </Button>
+                        {/* <button className='rounded my-2 p-1 bg-sky-300' onClick={handleModalCancel}><IoMdClose /></button> */}
                     </div>
-                    <div className='w-full bg-blue-600 p-2 overflow-auto '>{steps[currentStep].title}</div>
-                    <div >{steps[currentStep].content}</div>
+                    <div className='w-full bg-blue-600 p-2 my-2 overflow-auto '>{steps[currentStep].label}</div>
+                    <div className='h-[50vh] overflow-auto'>{steps[currentStep].content}</div>
                     <div >
-                        {currentStep < steps.length - 1 && (
-                            <Button type="primary" onClick={handleNext}>
+                        {currentStep > 2 && currentStep < steps.length - 1 && (
+                            <Button type="primary" onClick={handleNext} className='w-full'>
                                 Next
                             </Button>
                         )}
                         {currentStep === steps.length - 1 && (
-                            <Button type="primary" onClick={() => form.submit()}>
-                                Submit
+                            <Button type="primary" onClick={() => handleSubmit()} className='w-full '>
+                                List My Truck
                             </Button>
                         )}
-                        {currentStep > 0 && (
-                            <Button style={{ margin: '0 8px' }} onClick={handlePrev}>
-                                Previous
-                            </Button>
-                        )}
+
                     </div>
                 </div>
                 :
-                <div className='sm:w-2/3 m-auto justify-center items-center flex flex-col'>
+                <div className='sm:w-2/3 m-auto justify-center items-center flex flex-col gap-3'>
                     <div>
                         <h1>SELL YOUR USED TRUCK AT BEST PRICE</h1>
                         <p>Enjoy a hassle free Truck selling process with us.</p>
 
                     </div>
                     <Box
-                        className='flex flex-col flex-grow  max-w-1/3 bg-white p-3 gap-2'
+                        className='flex flex-col flex-grow  max-w-1/3 bg-white p-4 gap-2'
 
                     >
                         <Grid container spacing={2} columns={12} onClick={openModal}>
@@ -728,7 +784,7 @@ const Vahicle = () => {
                                                 onClick={openModal}
                                                 src={image}
                                                 alt={`Image ${index + 1}`}
-                                                className='w-[150px] h-[100px] object-cover '
+                                                className='w-[70px] h-[50px] sm:h-[70px] sm:w-[152px] object-cover '
                                                 onError={(e) => { e.target.src = 'https://static-asset.tractorjunction.com/tr/imagebg.webp'; }}
                                             />
                                         </div>
