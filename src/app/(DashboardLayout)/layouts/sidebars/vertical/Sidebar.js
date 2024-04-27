@@ -26,6 +26,11 @@ const navigation = [
     icon: "bi bi-textarea-resize",
   },
   {
+    title: "Brand Model",
+    href: "/admin/brandmodel",
+    icon: "bi bi-card-text",
+  },
+  {
     title: "Alert",
     href: "/ui/alerts",
     icon: "bi bi-bell",

@@ -10,8 +10,8 @@ import axios from 'axios';
 import { FaLongArrowAltLeft } from "react-icons/fa";
 
 
-const brands = ['Toyota', 'Ford', 'Chevrolet', 'Nissan', 'Honda', 'Volkswagen', 'Hyundai', 'Mercedes-Benz'];
 const years = ['2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024']
+const brands = ['Toyota', 'Ford', 'Chevrolet', 'Nissan', 'Honda', 'Volkswagen', 'Hyundai', 'Mercedes-Benz'];
 const models = {
     Toyota: ['Camry', 'Corolla', 'Rav4', 'Highlander', 'Sienna'],
     Ford: ['F-150', 'Escape', 'Explorer', 'Ranger', 'Expedition'],
