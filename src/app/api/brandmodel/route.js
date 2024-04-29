@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import { BModel } from "@/app/lib/model/brandmodel";
 import mongoose from "mongoose";
 
-export async function POST(request){
+export async function POST(request) {
     await mongoose.connect(process.env.MONGODB)
-    try{
+    try {
         const payload = await request.json();
         const existingBrand = await BModel.findOne({ brand: payload.brand });
         if (existingBrand) {
-              return NextResponse.json({ message: 'brand already registered',success:false });
-        }else{
+            return NextResponse.json({ message: 'brand already registered', success: false });
+        } else {
 
             let model = new BModel(payload)
             const result = await model.save();
@@ -17,17 +17,29 @@ export async function POST(request){
         }
 
 
-    }catch(error){
+    } catch (error) {
         return NextResponse.json({ error: error.message }, { status: error.status || 500 });
     }
 }
 
-export async function GET(){
-    await mongoose.connect(process.env.MONGODB)
-    try{
-        let data=await BModel.find();
-        return NextResponse.json({result:data,success:true})
-    }catch(error){
-        console.log(error);
+export async function GET() {
+    try {
+       
+        let data = []
+        try {
+
+            const res = await mongoose.connect(process.env.MONGODB, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            })
+            data = await BModel.find();
+        } catch (err) {
+            console.log(err);
+            data = { Success: false, err }
+        }
+
+        return NextResponse.json({ result: data, success: true })
+    } catch (err) {
+        console.log(err);
     }
 }
