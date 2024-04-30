@@ -9,8 +9,8 @@ import Link from 'next/link';
 
 const EditModel = () => {
   
-  const pathname=useParams();
-  console.log(pathname.id);
+  const params=useParams();
+  console.log(params.id);
   const [product, setProduct] = useState(null);
   const [brand, setBrand] = useState('');
   const [models, setModels] = useState([]);
@@ -32,10 +32,10 @@ const EditModel = () => {
         console.error('Error fetching product:', error);
       }
     };
-    if (pathname.id) {
-      fetchProduct(pathname.id);
+    if (params.id) {
+      fetchProduct(params.id);
     }
-  }, [pathname.id]);
+  }, [params.id]);
 
   const handleBrandChange = (event) => {
 
