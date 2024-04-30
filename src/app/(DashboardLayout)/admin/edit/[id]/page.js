@@ -10,18 +10,17 @@ import Link from 'next/link';
 const EditModel = () => {
   
   const pathname=useParams();
-
+  console.log(pathname.id);
   const [product, setProduct] = useState(null);
   const [brand, setBrand] = useState('');
   const [models, setModels] = useState([]);
-console.log(models);
 
   useEffect(() => {
     // Fetch product data based on the ID
     // Replace this with your actual fetch logic
-    const fetchProduct = async () => {
+    const fetchProduct = async (id) => {
       try {
-        const response = await fetch('/api/brandmodel/search?id='+pathname.id); // Assuming your API endpoint
+        const response = await fetch('/api/brandmodel/search?id='+id); // Assuming your API endpoint
         const data = await response.json();
       
         setProduct(data.record);
@@ -34,10 +33,10 @@ console.log(models);
       }
     };
     if (pathname.id) {
-      fetchProduct();
+      fetchProduct(pathname.id);
     }
-  }, []);
-  console.log(brand);
+  }, [pathname.id]);
+
   const handleBrandChange = (event) => {
 
    const newBrand = event.target.value;

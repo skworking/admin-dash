@@ -31,8 +31,8 @@ export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url)
     
-        const query = searchParams.get('id');
-        console.log(query);
+        const query = searchParams.get('id')|| '';
+     
         const q={_id:query}
         if (!query) {
             // If 'id' parameter is missing, return a response indicating that it's required
