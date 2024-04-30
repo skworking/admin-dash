@@ -76,9 +76,9 @@ const BrandModelForm=()=> {
                         />
                     <Button type="primary" className=' m-auto ' size='large' onClick={handleAddModel}>Add Model</Button>
                     </div>
+                <Button type="primary" className='w-full mt-2 items-center ' onClick={handleSubmit}> Submit</Button>
                 </div>
               
-                <Button type="Primary" className='w-full bg-blue-500' onClick={handleSubmit}> Submit</Button>
             </form>
         </div>
     );

@@ -1,12 +1,12 @@
 'use client'
 
+import { Button } from "antd";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { IoCloseCircleOutline } from "react-icons/io5";
-import { Row, Col, Table, Card, CardTitle, CardBody, CardSubtitle } from "reactstrap";
-
+import { Table,  CardTitle, } from "reactstrap";
 const BrandModelList = () => {
+  const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
   const [product, setProduct] = useState([]);
   const [data, setData] = useState()
   // const [show, setShow] = useState(false);
@@ -22,70 +22,82 @@ const BrandModelList = () => {
     fetchData()
   }, [])
 
-  const handleEdit = (data) => {
-    // setData(data)
-    // setShow(!show)
-
+  const handleDelete = async (id) => {
+    try {
+      const res = await axios.delete(`/api/brandmodel/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${isAuth}`
+        }
+      });
+      if(res.success){
+        
+        toast.success('Delete successful!');
+        // router.push('/user-list',{scroll:false})
+        fetchData()
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
     <>
-     
-        <div className="bg-white sm:w-full h-[50vh] p-1 flex flex-col   m-auto">
-          <CardTitle className='text-lg font-semibold p-2 text-center'>Brand and Model Generator List</CardTitle>
-          <>
-            <div className="table-responsive">
-              <Table className="text-nowrap mt-3 align-middle " borderless>
-                <thead>
-                  <tr>
-                    <th>Brand</th>
-                    <th>Models</th>
 
-                    <th>Operation</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {product?.length > 0 ? product?.map((tdata, index) => {
+      <div className="bg-white sm:w-full h-[50vh] p-1 flex flex-col   m-auto">
+        <CardTitle className='text-lg font-semibold p-2 text-center'>Brand and Model Generator List</CardTitle>
+        <>
+          <div className="table-responsive">
+            <Table className="text-nowrap mt-3 align-middle " borderless>
+              <thead>
+                <tr>
+                  <th>Brand</th>
+                  <th>Models</th>
 
-                    return (<>
-                      <tr key={index} className="border-top relative">
-                        <td>
-                          {tdata?.brand}
-                        </td>
+                  <th>Operation</th>
+                </tr>
+              </thead>
+              <tbody>
+                {product?.length > 0 ? product?.map((tdata, index) => {
 
-                        <td>
-                          {tdata?.models[tdata?.brand].map((item) => {
-                            return (
-                              <tr>
-                                <td>
-                                  {item}
-                                  <br />
-                                </td>
+                  return (<>
+                    <tr key={index} className="border-top relative">
+                      <td>
+                        {tdata?.brand}
+                      </td>
 
-                              </tr>
-                            )
-                          })}
+                      <td>
+                        {tdata?.models[tdata?.brand].map((item) => {
+                          return (
+                            <tr>
+                              <td>
+                                {item}
+                                <br />
+                              </td>
 
-                        </td>
-                        <td>
-                          <div className=' '>
+                            </tr>
+                          )
+                        })}
+
+                      </td>
+                      <td>
+                        <div className=' '>
                           <Link href={`/admin/edit/${tdata._id}`} className=" hover:bg-green-500  text-black font-bold py-2 px-4 rounded mr-2">Edit</Link>
-                            {/* <button className=" hover:bg-green-500  text-black font-bold py-2 px-4 rounded mr-2" onClick={() => handleEdit(tdata)}>Edit</button> */}
-                            <button className=" hover:bg-red-700 text-black font-bold py-2 px-4 rounded " onClick={() => { handleDelete(tdata._id) }}>Delete</button>
-                          </div>
-                        </td>
-                      </tr>
-                    </>)
-                  }) :
-                    'No Data Found'
-                  }
-                </tbody>
-              </Table>
-            </div>
+                          {/* <button className=" hover:bg-green-500  text-black font-bold py-2 px-4 rounded mr-2" onClick={() => handleEdit(tdata)}>Edit</button> */}
+                          <Button className="items-center font-bold   rounded " type="primary" danger onClick={() => { handleDelete(tdata._id) }}>Delete</Button>
+                        </div>
+                      </td>
+                    </tr>
+                  </>)
+                }) :
+                  'No Data Found'
+                }
+              </tbody>
+            </Table>
+          </div>
 
-          </>
-        </div>
-     
+        </>
+      </div>
+
     </>
   )
 }

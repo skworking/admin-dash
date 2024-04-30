@@ -1,7 +1,31 @@
 import { NextResponse } from "next/server";
 import { BModel } from "@/app/lib/model/brandmodel";
 import mongoose from "mongoose";
+import jwt from 'jsonwebtoken'
 
+function authenticateToken(req) {
+    return new Promise((resolve, reject) => {
+        // Get the JWT token from the Authorization header
+        const authHeader = req.headers.get('authorization');
+        // console.log(authHeader);
+        const token = authHeader && authHeader.split(' ')[1];
+
+        // If no token provided, return 401 Unauthorized
+        if (!token) {
+            reject({ status: 401, message: 'Authentication token is missing' });
+        }
+
+        // Verify the token
+        jwt.verify(token, process.env.SECRET, (err, decoded) => {
+            if (err) {
+                reject({ status: 403, message: 'Invalid token' });
+            }
+            // If token is valid, resolve with the user
+            // resolve(user);
+            resolve({ user: decoded, tokenData: decoded });
+        });
+    });
+}
 export async function POST(request) {
     await mongoose.connect(process.env.MONGODB)
     try {
@@ -43,4 +67,5 @@ export async function GET() {
         console.log(err);
     }
 }
+
 

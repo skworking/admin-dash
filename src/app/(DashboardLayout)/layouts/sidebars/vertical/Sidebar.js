@@ -31,6 +31,11 @@ const navigation = [
     icon: "bi bi-card-text",
   },
   {
+    title: "Brand Model List",
+    href: "/admin/brandmodellist",
+    icon: "bi bi-card-text",
+  },
+  {
     title: "Alert",
     href: "/ui/alerts",
     icon: "bi bi-bell",

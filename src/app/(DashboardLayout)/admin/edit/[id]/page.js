@@ -1,9 +1,10 @@
 'use client'
 
-import { Button, TextField } from '@mui/material';
+import {  TextField } from '@mui/material';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import {Button} from 'antd'
 
 const EditModel = () => {
 
@@ -51,6 +52,11 @@ console.log(models);
     e.preventDefault();
     setModels([...models, '']);
   };
+  const handleRemoveModel=(index)=>{
+    const newModels = [...models];
+    newModels.splice(index, 1);
+    setModels(newModels);
+  }
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -94,7 +100,7 @@ console.log(models);
                     />
                     <div className='py-2 flex flex-col gap-2'>
                     {models?.map((model, index) => (
-                      <div className='py-2 flex flex-col gap-2' key={index}>
+                      <div className='py-2 flex  gap-2' key={index}>
                         <TextField
                           id={`outlined-Model-${index}`}
                           label={`Enter Model Name ${index + 1}`}
@@ -105,10 +111,13 @@ console.log(models);
                             shrink: true,
                           }}
                         />
-                      </div>
+                        {models.length > 1 && (
+                          <Button type='primary' danger onClick={() => handleRemoveModel(index)}>Remove Model</Button>
+                        )}
+                        </div>
                     ))}
                   
-                    <Button type="primary" className=' m-auto ' size='large' onClick={handleAddModel}>Add Model</Button>
+                    <Button type="primary" className=' m-auto ' onClick={handleAddModel}>Add Model</Button>
                     </div>
                 </div>
               
