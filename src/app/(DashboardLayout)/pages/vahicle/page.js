@@ -2,8 +2,8 @@
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-import { useState } from 'react';
-import { Steps, Form, Input, Button, Upload, Modal, message } from 'antd';
+import { useEffect, useState } from 'react';
+import {  Form,  Button, message } from 'antd';
 import { IoMdClose } from "react-icons/io";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import axios from 'axios';
@@ -11,17 +11,17 @@ import { FaLongArrowAltLeft } from "react-icons/fa";
 
 
 const years = ['2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024']
-const brands = ['Toyota', 'Ford', 'Chevrolet', 'Nissan', 'Honda', 'Volkswagen', 'Hyundai', 'Mercedes-Benz'];
-const models = {
-    Toyota: ['Camry', 'Corolla', 'Rav4', 'Highlander', 'Sienna'],
-    Ford: ['F-150', 'Escape', 'Explorer', 'Ranger', 'Expedition'],
-    Chevrolet: ['Silverado', 'Equinox', 'Traverse', 'Tahoe', 'Malibu'],
-    Nissan: ['Altima', 'Rogue', 'Sentra', 'Pathfinder', 'Versa'],
-    Honda: ['Civic', 'Accord', 'CR-V', 'Pilot', 'Odyssey'],
-    Volkswagen: ['Jetta', 'Passat', 'Tiguan', 'Atlas', 'Golf'],
-    Hyundai: ['Elantra', 'Sonata', 'Santa Fe', 'Tucson', 'Kona'],
-    'Mercedes-Benz': ['C-Class', 'E-Class', 'S-Class', 'GLC', 'GLE'],
-};
+// const brands = ['Toyota', 'Ford', 'Chevrolet', 'Nissan', 'Honda', 'Volkswagen', 'Hyundai', 'Mercedes-Benz'];
+// const models = {
+//     Toyota: ['Camry', 'Corolla', 'Rav4', 'Highlander', 'Sienna'],
+//     Ford: ['F-150', 'Escape', 'Explorer', 'Ranger', 'Expedition'],
+//     Chevrolet: ['Silverado', 'Equinox', 'Traverse', 'Tahoe', 'Malibu'],
+//     Nissan: ['Altima', 'Rogue', 'Sentra', 'Pathfinder', 'Versa'],
+//     Honda: ['Civic', 'Accord', 'CR-V', 'Pilot', 'Odyssey'],
+//     Volkswagen: ['Jetta', 'Passat', 'Tiguan', 'Atlas', 'Golf'],
+//     Hyundai: ['Elantra', 'Sonata', 'Santa Fe', 'Tucson', 'Kona'],
+//     'Mercedes-Benz': ['C-Class', 'E-Class', 'S-Class', 'GLC', 'GLE'],
+// };
 
 const states = ['Punjab', 'Sindh', 'Khyber Pakhtunkhwa'];
 const districts = {
@@ -41,6 +41,36 @@ const tehsils = {
     Swat: ['Mingora', 'Saidu Sharif', 'Barikot']
 };
 const Vahicle = () => {
+    const [models, setModels] = useState({});
+    const [brands, setBrands] = useState([]);
+    console.log(brands);
+    const fetchbrandmodel = async () => {
+        await axios.get('/api/brandmodel')
+            .then((res) => {
+                // setProduct(res.data.result);
+                {
+                    const updatedFormattedData = {};
+                    const updatedBrands = [];
+                    res?.data?.result?.forEach(element => {
+                        const { brand, models } = element;
+
+                        if (!updatedBrands.includes(brand)) {
+                            updatedBrands.push(brand);
+                        }
+                        updatedFormattedData[brand] = models[brand];
+                    });
+                    setModels(updatedFormattedData);
+                    setBrands(updatedBrands);
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+    }
+
+    useEffect(() => {
+        fetchbrandmodel()
+    }, [])
+
     const [dummy, SetDummy] = useState({
         images: [
             "https://static-asset.tractorjunction.com/tr/imagebg.webp",
@@ -603,9 +633,9 @@ const Vahicle = () => {
         if (isValid) {
             await axios.post('/api/vehicle', vehicleDetails)
                 .then((res) => {
-                    if(res.status === 200){
+                    if (res.status === 200) {
                         message.success("Register details successfully")
-                        
+
                     }
                 }).catch((err) => {
                     console.log(err);

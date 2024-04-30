@@ -61,9 +61,8 @@ const BrandModelList = () => {
               </thead>
               <tbody>
                 {product?.length > 0 ? product?.map((tdata, index) => {
-
                   return (<>
-                    <tr key={index} className="border-top relative">
+                    <tr key={tdata._id} className="border-top relative">
                       <td>
                         {tdata?.brand}
                       </td>
@@ -71,7 +70,7 @@ const BrandModelList = () => {
                       <td>
                         {tdata?.models[tdata?.brand]?.map((item) => {
                           return (
-                            <tr>
+                            <tr key={item}>
                               <td>
                                 {item}
                                 <br />
