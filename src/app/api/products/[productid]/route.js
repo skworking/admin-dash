@@ -33,7 +33,7 @@ export async function PUT(request,{params}){
     try{
         await authenticateToken(request)
         const userId=params.productid;
-        console.log(userId);
+        console.log("id",userId);
         // id object create
         const filter={_id:userId}
         // get data json from user

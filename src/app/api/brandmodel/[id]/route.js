@@ -25,14 +25,14 @@ export async function GET(request) {
 export async function PUT(request,{params}){
     try{
         const userId=params.id;
-        console.log(userId);
+        console.log("id",userId);
         const filter={_id:userId}
         const payload=await request.json();
         
         await mongoose.connect(process.env.MONGODB)
         const result=await BModel.findOneAndUpdate(filter,payload,{ new: true });
         return NextResponse.json({result,success:true})
-    }catch(err){
+    }catch(error){
         return NextResponse.json({ error: error.message }, { status: error.status || 500 });
     }
 }

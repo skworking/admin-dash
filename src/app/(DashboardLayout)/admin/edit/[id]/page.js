@@ -56,8 +56,11 @@ console.log(models);
     e.preventDefault();
     const data={
       brand:brand,
-      models:models
+      models:{
+        [brand]:models
+      }
     }
+
     console.log(data);
     await axios.put(`/api/brandmodel/${pathname.id}`,data)
     .then((res)=>{
@@ -65,8 +68,7 @@ console.log(models);
     }).catch((err)=>{
         console.log(err);
     })
-    // Handle form submission, including brand and models data
-    // You can submit 'brand' and 'models' array to your backend
+ 
   };
 
   if (!product) {
