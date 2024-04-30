@@ -15,13 +15,15 @@ const EditModel = () => {
   const [brand, setBrand] = useState('');
   const [models, setModels] = useState([]);
 console.log(models);
+
   useEffect(() => {
     // Fetch product data based on the ID
     // Replace this with your actual fetch logic
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`/api/brandmodel/search?id=${pathname.id}`); // Assuming your API endpoint
+        const response = await fetch('/api/brandmodel/search?id='+pathname.id); // Assuming your API endpoint
         const data = await response.json();
+      
         setProduct(data.record);
         if (data.record) {
           setBrand(data.record.brand);
