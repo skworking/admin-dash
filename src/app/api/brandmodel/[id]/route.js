@@ -31,7 +31,7 @@ export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url)
         const query = searchParams.get('id') || '';
-
+        console.log(query);
         // Assuming BModel is your Mongoose model
         await mongoose.connect(process.env.MONGODB)
         const record = await BModel.findById(query);
@@ -41,9 +41,9 @@ export async function GET(request) {
         } else {
             return NextResponse.json({ message: "Record not found", status: '404' })
         }
-    } catch (err) {
+    } catch (error) {
 
-        return NextResponse.json({ message: "Internal server error", status: '500', success: false })
+        return NextResponse.json({error, message: "Internal server error", status: '500', success: false })
     }
 }
 
@@ -70,7 +70,7 @@ export async function DELETE(request,content){
         await mongoose.connect(process.env.MONGODB)
         const result=await BModel.deleteOne(record);
         return NextResponse.json({result,success:true,message:"Record deleted Successful!"})
-    }catch(err){
+    }catch(error){
         return NextResponse.json({ error: error.message }, { status: error.status || 500 });
     }
 }
