@@ -1,13 +1,15 @@
 'use client'
 import { TextField } from '@mui/material';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import axios from 'axios';
 import React, { useState } from 'react';
-
+import { useRouter } from 'next/navigation'
 const BrandModelForm=()=> {
     const [brand, setBrand] = useState('');
     const [models, setModels] = useState({});
     const [currentModel, setCurrentModel] = useState('');
+
+    const router = useRouter()
 
     const handleBrandChange = (event) => {
         setBrand(event.target.value);
@@ -37,7 +39,13 @@ const BrandModelForm=()=> {
         }
         await axios.post('/api/brandmodel',data)
         .then((res)=>{
-
+            if(res.data.success){
+                message.success({ content: res.data.message, duration: 2 });
+                router.push('/admin/brandmodellist');
+            }
+            else{
+                message.warning({ content: res.data.message, duration: 2 });
+            }
         }).catch((err)=>{
             console.log(err);
         })

@@ -2,12 +2,13 @@
 
 import {  TextField } from '@mui/material';
 import axios from 'axios';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, redirect  } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import {Button} from 'antd'
+import {Button, message} from 'antd'
+import Link from 'next/link';
 
 const EditModel = () => {
-
+  
   const pathname=useParams();
 
   const [product, setProduct] = useState(null);
@@ -59,22 +60,29 @@ console.log(models);
   }
 
   const handleSubmit = async(e) => {
-    e.preventDefault();
-    const data={
-      brand:brand,
-      models:{
-        [brand]:models
+    try{
+
+      const data={
+        brand:brand,
+        models:{
+          [brand]:models
+        }
       }
-    }
-
-    console.log(data);
-    await axios.put(`/api/brandmodel/${pathname.id}`,data)
-    .then((res)=>{
-
-    }).catch((err)=>{
+      
+      console.log(data);
+      await axios.put(`/api/brandmodel/${pathname.id}`,data)
+      .then((res)=>{
+        if(res.data.success){
+          message.success({ content: res.data.message, duration: 2 });
+        
+        }
+      }).catch((err)=>{
         console.log(err);
-    })
- 
+      })
+    }catch(err){
+      console.log(err);
+    }
+      
   };
 
   if (!product) {
@@ -84,6 +92,8 @@ console.log(models);
   
   return (
     <div className="bg-white sm:w-2/3 h-[50vh] p-1 flex flex-col justify-center  m-auto">
+            
+            <Link href={'/admin/brandmodellist'}><Button >Brand Model List</Button></Link>
             <h2 className='text-lg font-semibold p-2 text-center'>Brand and Model Edit Form</h2>
             <form >
                 <div className="sm:p-5">

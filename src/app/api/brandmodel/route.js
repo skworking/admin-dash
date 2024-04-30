@@ -37,7 +37,7 @@ export async function POST(request) {
 
             let model = new BModel(payload)
             const result = await model.save();
-            return NextResponse.json({ result, success: true })
+            return NextResponse.json({ result, success: true ,message:"Record added Successfull"})
         }
 
 

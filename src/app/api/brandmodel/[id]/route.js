@@ -56,7 +56,7 @@ export async function PUT(request,{params}){
         
         await mongoose.connect(process.env.MONGODB)
         const result=await BModel.findOneAndUpdate(filter,payload,{ new: true });
-        return NextResponse.json({result,success:true})
+        return NextResponse.json({result,success:true,message:"Record Updated Successful!"})
     }catch(error){
         return NextResponse.json({ error: error.message }, { status: error.status || 500 });
     }
@@ -69,7 +69,7 @@ export async function DELETE(request,content){
         const record={_id:Id}
         await mongoose.connect(process.env.MONGODB)
         const result=await BModel.deleteOne(record);
-        return NextResponse.json({result,success:true})
+        return NextResponse.json({result,success:true,message:"Record deleted Successful!"})
     }catch(err){
         return NextResponse.json({ error: error.message }, { status: error.status || 500 });
     }

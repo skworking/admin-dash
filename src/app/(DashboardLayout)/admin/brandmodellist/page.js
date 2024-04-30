@@ -1,14 +1,16 @@
 'use client'
 
-import { Button } from "antd";
+import { Button, message } from "antd";
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Table,  CardTitle, } from "reactstrap";
+import { useRouter } from "next/navigation";
 const BrandModelList = () => {
   const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
   const [product, setProduct] = useState([]);
   const [data, setData] = useState()
+  const router=useRouter()
   // const [show, setShow] = useState(false);
   const fetchData = async () => {
     await axios.get('/api/brandmodel')
@@ -29,10 +31,11 @@ const BrandModelList = () => {
           'Authorization': `Bearer ${isAuth}`
         }
       });
-      if(res.success){
+      if(res.data.success){
         
-        toast.success('Delete successful!');
+        message.success({ content: res.data.message, duration: 2 });
         // router.push('/user-list',{scroll:false})
+        
         fetchData()
       }
     } catch (err) {
@@ -43,7 +46,7 @@ const BrandModelList = () => {
   return (
     <>
 
-      <div className="bg-white sm:w-full h-[50vh] p-1 flex flex-col   m-auto">
+      <div className="bg-white sm:w-full h-full p-1 flex flex-col   m-auto">
         <CardTitle className='text-lg font-semibold p-2 text-center'>Brand and Model Generator List</CardTitle>
         <>
           <div className="table-responsive">
@@ -66,7 +69,7 @@ const BrandModelList = () => {
                       </td>
 
                       <td>
-                        {tdata?.models[tdata?.brand].map((item) => {
+                        {tdata?.models[tdata?.brand]?.map((item) => {
                           return (
                             <tr>
                               <td>
