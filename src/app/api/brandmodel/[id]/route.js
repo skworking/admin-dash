@@ -33,7 +33,7 @@ export async function GET(request) {
         const query = searchParams.get('id') || '';
 
         // Assuming BModel is your Mongoose model
-        await mongoose.connect(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true })
+        await mongoose.connect(process.env.MONGODB)
         const record = await BModel.findById(query);
         // Returning the found record as JSON response
         if (record) {
