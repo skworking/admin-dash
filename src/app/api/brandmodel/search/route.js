@@ -7,14 +7,9 @@ export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url)
     
-        const query = searchParams.get('_id')||'';
-        console.log("dd",query);
-        const q={_id:query}
-        if (!query) {
-            // If 'id' parameter is missing, return a response indicating that it's required
-            return NextResponse.json({ message: "ID parameter is required", status: '400', success: false });
-        }
-  
+        const q = searchParams.get('_id')||'';
+        console.log("query",q);
+        
         // Assuming BModel is your Mongoose model
         await mongoose.connect(process.env.MONGODB)
         const record = await BModel.findById(q);

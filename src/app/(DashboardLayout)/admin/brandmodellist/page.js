@@ -42,6 +42,9 @@ const BrandModelList = () => {
       console.log(err);
     }
   }
+  const handleEdit=(id)=>{
+    router.replace(`/admin/edit/${id}`)
+  }
 
   return (
     <>
@@ -83,8 +86,8 @@ const BrandModelList = () => {
                       </td>
                       <td>
                         <div className=' '>
-                          <Link href={`/admin/edit/${tdata._id}`} className=" hover:bg-green-500  text-black font-bold py-2 px-4 rounded mr-2">Edit</Link>
-                          {/* <button className=" hover:bg-green-500  text-black font-bold py-2 px-4 rounded mr-2" onClick={() => handleEdit(tdata)}>Edit</button> */}
+                          {/* <Link href={`/admin/edit/${tdata._id}`} className=" hover:bg-green-500  text-black font-bold py-2 px-4 rounded mr-2">Edit</Link> */}
+                          <button className=" hover:bg-green-500  text-black font-bold py-2 px-4 rounded mr-2" onClick={() => handleEdit(tdata._id)}>Edit</button>
                           <Button className="items-center font-bold   rounded " type="primary" danger onClick={() => { handleDelete(tdata._id) }}>Delete</Button>
                         </div>
                       </td>
