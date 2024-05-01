@@ -10,7 +10,7 @@ import Link from 'next/link';
 const EditModel = () => {
   
   const params=useParams();
-  console.log(params.id);
+
   const [product, setProduct] = useState(null);
   const [brand, setBrand] = useState('');
   const [models, setModels] = useState([]);
@@ -20,7 +20,10 @@ const EditModel = () => {
     // Replace this with your actual fetch logic
     const fetchProduct = async (id) => {
       try {
-        const response = await fetch('/api/brandmodel/search?id='+id); // Assuming your API endpoint
+        const response = await fetch(`/api/brandmodel/search?id=${id}`,{
+          method:"GET",
+          
+        }); // Assuming your API endpoint
         const data = await response.json();
       
         setProduct(data.record);
@@ -32,10 +35,11 @@ const EditModel = () => {
         console.error('Error fetching product:', error);
       }
     };
-    if (params.id) {
+ 
+    if (!!params.id) {
       fetchProduct(params.id);
     }
-  }, [params.id]);
+  }, []);
 
   const handleBrandChange = (event) => {
 
