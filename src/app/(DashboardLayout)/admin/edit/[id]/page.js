@@ -73,7 +73,7 @@ const EditModel = () => {
       }
       
       console.log(data);
-      await axios.put(`/api/brandmodel/${pathname.id}`,data)
+      await axios.put(`/api/brandmodel/${params.id}`,data)
       .then((res)=>{
         if(res.data.success){
           message.success({ content: res.data.message, duration: 2 });
