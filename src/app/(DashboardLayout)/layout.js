@@ -18,19 +18,19 @@ const FullLayout = ({ children }) => {
   };
   const router = useRouter()
   const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
-  const [role,setRole]=useState(typeof window !== 'undefined' && JSON.parse(sessionStorage.getItem('user')))
+  const [role, setRole] = useState(typeof window !== 'undefined' && JSON.parse(sessionStorage.getItem('user')))
   const [key, setKey] = useState(0);
-  console.log(pathname);
+  // console.log(pathname);
   useEffect(() => {
     setIsAuth(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
-    const updateUser=JSON.parse(sessionStorage.getItem('user'));
+    const updateUser = JSON.parse(sessionStorage.getItem('user'));
     setRole(updateUser?.role)
   }, [pathname]);
   useEffect(() => {
     // Update the key whenever the authentication state changes
     setKey(prevKey => prevKey + 1);
   }, [isAuth]);
-  console.log("is-auth", role);
+  // console.log("is-auth", role);
   useEffect(() => {
     if (!isAuth && pathname !== '/auth/signup') {
       router.push('/auth/login');
@@ -40,7 +40,7 @@ const FullLayout = ({ children }) => {
       router.push(pathname);
     }
   }, [isAuth]);
-  console.log(role);
+  // console.log(role);
   return (
     <main>
 
@@ -67,25 +67,25 @@ const FullLayout = ({ children }) => {
               </Container>
             </div>
           </div>
-        ) 
-        : pathname !== '/auth/login' && pathname !== '/auth/signup' && role === 'user'?(<>
-              <Container className="p-4 wrapper" fluid>
-                {/* <div>{children}</div> */}
-                {React.cloneElement(children, { key })}
-              </Container>
-        </>): (
-
-          <SignUp />
-
         )
+          : pathname !== '/auth/login' && pathname !== '/auth/signup' && role === 'user' ? (<>
+            <Container className="p-4 wrapper" fluid>
+              {/* <div>{children}</div> */}
+              {React.cloneElement(children, { key })}
+            </Container>
+          </>) : (
+
+            <SignUp />
+
+          )
       ) : (
 
-        !isAuth &&  pathname === '/auth/login' ? <SignIn /> : <SignUp />
+        !isAuth && pathname === '/auth/login' ? <SignIn /> : <SignUp />
 
       )
       }
 
-     
+
 
     </main>
   );

@@ -6,13 +6,12 @@ import mongoose from "mongoose";
 export async function GET(request) {
     try {
         const { searchParams } = new URL(request.url)
-    
-        const q = searchParams.get('_id')||'';
-        console.log("query",q);
+        const query = searchParams.get('_id')||'';
+        console.log(query);
         
         // Assuming BModel is your Mongoose model
         await mongoose.connect(process.env.MONGODB)
-        const record = await BModel.findById(q);
+        const record = await BModel.findById(query);
         // Returning the found record as JSON response
         if (record) {
             return NextResponse.json({ record, status: '200', success: true })
@@ -24,3 +23,5 @@ export async function GET(request) {
         return NextResponse.json({error, message: "Internal server error", status: '500', success: false })
     }
 }
+
+
