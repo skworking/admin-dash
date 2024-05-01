@@ -20,7 +20,7 @@ const EditModel = () => {
     // Replace this with your actual fetch logic
     const fetchProduct = async (id) => {
       try {
-        const response = await fetch(`/api/brandmodel/search?_id=${id}`); // Assuming your API endpoint
+        const response = await fetch(`/api/edit/search?_id=${id}`); // Assuming your API endpoint
         const data = await response.json();
       
         setProduct(data.record);
