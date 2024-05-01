@@ -36,6 +36,16 @@ const navigation = [
     icon: "bi bi-card-text",
   },
   {
+    title: "State Form",
+    href: "/admin/statemodel",
+    icon: "bi bi-card-text",
+  },
+  {
+    title: "Tehshil Form",
+    href: "/admin/statedistrict",
+    icon: "bi bi-card-text",
+  },
+  {
     title: "Alert",
     href: "/ui/alerts",
     icon: "bi bi-bell",
@@ -115,7 +125,7 @@ const Sidebar = ({ showMobilemenu }) => {
               </Link>
             </NavItem>
           ))}
-          <Button
+          {/* <Button
             color="secondary"
             tag="a"
             target="_blank"
@@ -132,7 +142,7 @@ const Sidebar = ({ showMobilemenu }) => {
             href="https://www.wrappixel.com/templates/xtreme-nextjs-admin-dashboard"
           >
             Upgrade To Pro
-          </Button>
+          </Button> */}
         </Nav>
       </div>
     </div>

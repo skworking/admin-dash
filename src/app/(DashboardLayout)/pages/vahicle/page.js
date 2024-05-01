@@ -48,7 +48,7 @@ const Vahicle = () => {
         await axios.get('/api/brandmodel')
             .then((res) => {
                 // setProduct(res.data.result);
-                {
+                
                     const updatedFormattedData = {};
                     const updatedBrands = [];
                     res?.data?.result?.forEach(element => {
@@ -61,7 +61,7 @@ const Vahicle = () => {
                     });
                     setModels(updatedFormattedData);
                     setBrands(updatedBrands);
-                }
+                
             }).catch((err) => {
                 console.log(err);
             })
