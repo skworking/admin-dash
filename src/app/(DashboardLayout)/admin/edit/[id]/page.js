@@ -34,9 +34,10 @@ const EditModel = () => {
     };
  
     if (!!params.id) {
+      console.log("call",params.id);
       fetchProduct(params.id);
     }
-  }, []);
+  }, [params.id]);
 
   const handleBrandChange = (event) => {
 
