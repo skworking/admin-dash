@@ -69,10 +69,11 @@ const FullLayout = ({ children }) => {
           </div>
         )
           : pathname !== '/auth/login' && pathname !== '/auth/signup' && role === 'user' ? (<>
-            <Container className="p-4 wrapper" fluid>
-              {/* <div>{children}</div> */}
-              {React.cloneElement(children, { key })}
-            </Container>
+            <Header showMobmenu={() => showMobilemenu()} />
+            {/* <Container  fluid> */}
+              <div fluid>{children}</div>
+              {/* {React.cloneElement(children, { key })} */}
+            {/* </Container> */}
           </>) : (
 
             <SignUp />

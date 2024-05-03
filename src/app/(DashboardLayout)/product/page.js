@@ -185,11 +185,11 @@ const Product = () => {
                     <Input text={'weight'} onChange={(e) => handleChange(e, setFormData)} typeinput="text" stylediv={styles.containerdivright} inputstyle={styles.containerdivinput} errors={validationErrors.weight} />
                   </div>
                 </div>
-                <div class="col-xl-6">
+                {/* <div class="col-xl-6">
                   <div class="d-grid grid-cols-1 gap-4">
                     <Input text={'brand'} onChange={(e) => handleChange(e, setFormData)} typeinput="text" stylediv={styles.containerdivright} inputstyle={styles.containerdivinput} errors={validationErrors.brand} />
                   </div>
-                </div>
+                </div> */}
                 <div class="col-xl-6">
                   <div class="d-grid grid-cols-1 gap-4">
                     <Input text={'product_type'} onChange={(e) => handleChange(e, setFormData)} typeinput="text" stylediv={styles.containerdivright} inputstyle={styles.containerdivinput} errors={validationErrors.product_type} />
