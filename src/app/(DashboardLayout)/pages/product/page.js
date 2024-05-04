@@ -79,12 +79,15 @@ const Product = () => {
         let sortedProducts = [...products];
         console.log("sss",sortedProducts);
         if (criteria === 'priceHighToLow') {
-            console.log("call");
             sortedProducts.sort((a, b) => b.max_price - a.max_price);
         } else if (criteria === 'priceLowToHigh') {
             sortedProducts.sort((a, b) => a.min_price - b.min_price);
         }
+        
+        {sortmodel & screenWidth < 1024 && 
 
+            setShortModel(!sortmodel)
+        }
         setSorted(sortedProducts);
     }
     const menu = (
