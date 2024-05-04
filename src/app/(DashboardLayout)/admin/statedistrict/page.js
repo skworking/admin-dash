@@ -1,8 +1,8 @@
 'use client'
+import { useState,useEffect } from "react";
 import { FormControl,InputLabel, MenuItem, Select } from "@mui/material";
 import axios from "axios";
-import { useState,useEffect } from "react";
-const stateDistrict=()=>{
+const StateDistrict=()=>{
     const [state, setState] = useState([]);
     const [district, setDistrict] = useState({});
     const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
@@ -87,4 +87,4 @@ const stateDistrict=()=>{
         </>
     )
 }
-export default stateDistrict;
+export default StateDistrict;
