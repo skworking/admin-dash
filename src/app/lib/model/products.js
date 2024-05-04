@@ -53,7 +53,7 @@ const ProductSchema=new mongoose.Schema({
     images:[ImageSchema],
     gallery:[GalleryItemSchema],
     quantity:Number,
-    price:String,
+    price:Number,
     sale_price:String,
     brand:String,
     weight:String,

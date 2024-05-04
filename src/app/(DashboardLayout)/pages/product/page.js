@@ -176,7 +176,7 @@ const Product = () => {
                                     onChange={() => handlePriceFilterChange(...option.value)}
 
                                 >
-                                    {option.label}
+                                    {option.label}  
                                 </Radio>
                             ))}
                         </>

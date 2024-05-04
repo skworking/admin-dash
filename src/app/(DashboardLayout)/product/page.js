@@ -52,7 +52,7 @@ const Product = () => {
     tag: [],
     product_type: '',
     quantity: 0,
-    price: '',
+    price: 0,
     sale_price: '',
     brand: '',
     weight: '',
@@ -167,7 +167,7 @@ const Product = () => {
                 </div>
                 <div class="col-xl-6">
                   <div class="d-grid grid-cols-1 gap-4">
-                    <Input text={'price'} onChange={(e) => handleChange(e, setFormData)} typeinput="text" stylediv={styles.containerdivright} inputstyle={styles.containerdivinput} errors={validationErrors.price} />
+                    <Input text={'price'} onChange={(e) => handleNumberChange(e, setFormData)} typeinput="tel" stylediv={styles.containerdivright} inputstyle={styles.containerdivinput} val={formData.price} errors={validationErrors.price} />
                   </div>
                 </div>
                 <div class="col-xl-6">

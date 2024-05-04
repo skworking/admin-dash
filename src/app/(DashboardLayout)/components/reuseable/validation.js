@@ -31,13 +31,15 @@ const formSchema = yup.object().shape({
   description: yup.string().required('Description is required'),
 
   quantity: yup.number().required("Number is required").moreThan(0, 'Quantity must be greater then 0'),
-  price: yup.string()
-    .required('Price is required')
-    .test('is-positive', 'Price should be a positive number greater than 100', value => {
-      if (!value) return false; // Return false if value is empty
-      const numericValue = Number(value);
-      return !isNaN(numericValue) && numericValue > 100; // Check if numeric value is greater than 100
-    }),
+  price: yup.number().required("Price is required").moreThan(0, 'Price must be greater then 0'),
+
+  // price: yup.number()
+  //   .required('Price is required')
+  //   .test('is-positive', 'Price should be a positive number greater than 100', value => {
+  //     if (!value) return false; // Return false if value is empty
+  //     const numericValue = Number(value);
+  //     return !isNaN(numericValue) && numericValue > 100; // Check if numeric value is greater than 100
+  //   }),
   sale_price: yup.string()
     .test('is-positive', 'Sale_price should be a positive number greater than 100', value => {
       if (!value) {

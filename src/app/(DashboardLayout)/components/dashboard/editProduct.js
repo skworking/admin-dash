@@ -455,10 +455,10 @@ const EditProduct = (props) => {
           <label className={`${styles.containerdivright} text-start`}>
             Price:
             <input className={styles.containerdivinput}
-              type="text"
+              type="tel"
               name="price"
               value={formData.price}
-              onChange={(e) => handleChange(e, setFormData)}
+              onChange={(e) => handleNumberChange(e, setFormData)}
             />
             <span className='text-red-600'>{validationErrors.price}</span>
           </label>
