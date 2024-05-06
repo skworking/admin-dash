@@ -48,7 +48,7 @@ export async function GET(request) {
             query.brand = { $in: brand.split(',') }; // Assuming multiple brands can be comma-separated
         }
         // Add min_price and max_price filters to the query if both are provided
-        if (min && max) {
+        if (!isNaN(min) && !isNaN(max)) {
             query.min_price = { $gte: parseInt(min) };
             query.max_price = { $lte: parseInt(max) };
         }

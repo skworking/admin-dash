@@ -7,7 +7,7 @@ import { Grid } from "@mui/material";
 
 const Product = () => {
     const [products, setProducts] = useState([]);
-    const [sorted,setSorted]=useState([])
+    const [sorted, setSorted] = useState([])
     const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
     const [show, setShow] = useState(false);
     const [showTagFilter, setShowTagFilter] = useState(false);
@@ -20,7 +20,7 @@ const Product = () => {
     const [sortmodel, setShortModel] = useState(false)
     const [filtermodel, setFilterModel] = useState(false)
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-    console.log(screenWidth);
+    console.log(filters);
 
     useEffect(() => {
         const handleResize = () => {
@@ -62,7 +62,7 @@ const Product = () => {
     const uniqueBrands = [...new Set(products.map(product => product.brand))];
     const uniqueTags = Array.from(new Set(products?.flatMap(product => product.tag.map(tag => tag.name))));
 
-    console.log(uniqueTags);
+    // console.log(uniqueTags);
     const { Panel } = Collapse;
 
     const toggleTagFilter = () => {
@@ -74,20 +74,21 @@ const Product = () => {
     const handlePriceFilterChange = (min, max) => {
         setSelectedPriceOption([min, max]);
     }
-   
+    console.log(selectedPriceOption);
     const handleSortBy = (criteria) => {
-   
+
         let sortedProducts = [...products];
-        console.log("sss",sortedProducts);
+        console.log("sss", sortedProducts);
         if (criteria === 'priceHighToLow') {
             sortedProducts.sort((a, b) => b.max_price - a.max_price);
         } else if (criteria === 'priceLowToHigh') {
             sortedProducts.sort((a, b) => a.min_price - b.min_price);
         }
-        
-        {sortmodel & screenWidth < 1024 && 
 
-            setShortModel(!sortmodel)
+        {
+            sortmodel & screenWidth < 1024 &&
+
+                setShortModel(!sortmodel)
         }
         setSorted(sortedProducts);
     }
@@ -98,15 +99,52 @@ const Product = () => {
         </Menu>
     );
 
-    console.log(products);
+    // console.log(products);
+    const filtercall = async () => {
+        if(screenWidth <1024){
+            setFilterModel(!filtermodel)
+        }
+        const data = {
+            brand: filters.brand,
+            min_price: selectedPriceOption && selectedPriceOption[0],
+            max_price: selectedPriceOption && selectedPriceOption[1],
+            tag: filters.tag,
+        }
+        console.log(data);
+        const queryParams = new URLSearchParams(data);
+        const result = await fetch(`/api/product/search?${queryParams}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
+                "Content-Type": "application/json"
+            }
+        });
+        const response = await result.json();
+        if (response.success) {
+            setProducts(response.result)
+            setSorted(response.result)
+        }
+    }
+    const handleReset = () => {
+        if (screenWidth < 1024) {
+            setFilterModel(!filtermodel)
+        }
+        setFilters({
+            brand: [],
+            tag: []
+        })
+        setSelectedPriceOption(null)
+
+        fetchData()
+    }
 
     return (
         <>
             <div className="d-flex w-full ">
                 <div className="w-1/5 text-justify lg:flex flex-col hidden outline-1 ">
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 ">
-                        <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded">Reset</button>
-                        <button className="hover:bg-blue-500 bg-blue-400 p-2 grow text-white rounded">Apply filter</button>
+                        <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>Reset</button>
+                        <button className="hover:bg-blue-500 bg-blue-400 p-2 grow text-white rounded" onClick={filtercall}>Apply filter</button>
                     </div>
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShow(!show) }}>
                         <h1>Brand Type</h1>
@@ -120,6 +158,7 @@ const Product = () => {
                                         className="w-full"
                                         key={product}
                                         value={product}
+                                        checked={filters.brand.includes(product)}
                                         onChange={(e) => setFilters(prevFilters => ({
                                             ...prevFilters,
                                             brand: e.target.checked
@@ -148,6 +187,7 @@ const Product = () => {
                                         className="p-1 flex gap-2 "
                                         key={tag}
                                         value={tag}
+                                        checked={filters.tag.includes(tag)}
                                         onChange={(e) => setFilters(prevFilters => ({
                                             ...prevFilters,
                                             tag: e.target.checked
@@ -168,7 +208,7 @@ const Product = () => {
                     </div>
                     {showPriceFilter &&
                         <>
-                            {[{ label: '0 - 100', value: [0, 100] }, { label: '101 - 200', value: [101, 200] }, { label: '201 - 300', value: [201, 300] }].map((option, index) => (
+                            {[{ label: '0 - 1000', value: [0, 1000] }, { label: '1001 - 2000', value: [1001, 2000] }, { label: '2001 - 3000', value: [2001, 3000] }].map((option, index) => (
                                 <Radio
                                     key={index}
                                     className="p-1 flex gap-2"
@@ -176,9 +216,17 @@ const Product = () => {
                                     onChange={() => handlePriceFilterChange(...option.value)}
 
                                 >
-                                    {option.label}  
+                                    {option.label}
                                 </Radio>
                             ))}
+                            <Radio
+                                key="none"
+                                className="p-1 flex gap-2"
+                                checked={selectedPriceOption === null}
+                                onChange={() => setSelectedPriceOption(null)}
+                            >
+                                None
+                            </Radio>
                         </>
                     }
                 </div>
@@ -198,8 +246,8 @@ const Product = () => {
                                             <img className="object-scale-down w-full h-[70px]" src={product.gallery[0].original} alt="logo" />
                                             <hr />
                                             <div className="items-center justify-center flex flex-col ">
-                                            <p>{product.brand}</p>
-                                            <p>₹ {product.min_price}-₹ {product.max_price}</p>
+                                                <p>{product.brand}</p>
+                                                <p>₹ {product.min_price}-₹ {product.max_price}</p>
                                             </div>
                                         </div>
                                     </Grid>
@@ -228,21 +276,22 @@ const Product = () => {
             {filtermodel & screenWidth < 1024 ? (
                 <div className="w-full text-justify h-screen bg-white lg:flex flex-col absolute top-0  outline-1  ">
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 ">
-                        <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={() => { setFilterModel(!filtermodel) }}>Cancel</button>
-                        <button className="hover:bg-blue-500 bg-blue-400 p-2 grow text-white rounded">Apply filter</button>
+                        <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>Cancel</button>
+                        <button className="hover:bg-blue-500 bg-blue-400 p-2 grow text-white rounded" onClick={filtercall}>Apply filter</button>
                     </div>
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShow(!show) }}>
                         <h1>Brand Type</h1>
                         {show ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
                     {show && <>
-                        {products.map((product) => {
+                        {uniqueBrands.map((product) => {
                             return (
-                                <Menu key={product._id} className="p-1 flex gap-2 ">
+                                <Menu key={product} className="p-1 flex gap-2 ">
                                     <Checkbox
                                         className="w-full"
-                                        key={product._id}
-                                        value={product.brand}
+                                        key={product}
+                                        value={product}
+                                        checked={filters.brand.includes(product)}
                                         onChange={(e) => setFilters(prevFilters => ({
                                             ...prevFilters,
                                             brand: e.target.checked
@@ -250,7 +299,7 @@ const Product = () => {
                                                 : prevFilters.brand.filter(item => item !== e.target.value)
                                         }))}
                                     >
-                                        {product.brand}
+                                        {product}
                                     </Checkbox>
 
                                 </Menu>
@@ -272,6 +321,7 @@ const Product = () => {
                                             className="p-1 flex gap-2 "
                                             key={tag}
                                             value={tag}
+                                            checked={filters.tag.includes(tag)}
                                             onChange={(e) => setFilters(prevFilters => ({
                                                 ...prevFilters,
                                                 tag: e.target.checked
@@ -293,7 +343,7 @@ const Product = () => {
                     </div>
                     {showPriceFilter &&
                         <>
-                            {[{ label: '0 - 100', value: [0, 100] }, { label: '101 - 200', value: [101, 200] }, { label: '201 - 300', value: [201, 300] }].map((option, index) => (
+                            {[{ label: '0 - 1000', value: [0, 1000] }, { label: '1001 - 2000', value: [1001, 2000] }, { label: '2001 - 3000', value: [2001, 3000] }].map((option, index) => (
                                 <Menu key={index} className="p-1 flex gap-2 ">
                                     <Radio
                                         key={index}
@@ -306,6 +356,17 @@ const Product = () => {
                                     </Radio>
                                 </Menu>
                             ))}
+                            <Menu  className="p-1 flex gap-2">
+
+                            <Radio
+                                key="none"
+                                className="p-1 flex gap-2"
+                                checked={selectedPriceOption === null}
+                                onChange={() => setSelectedPriceOption(null)}
+                                >
+                                None
+                            </Radio>
+                            </Menu>
                         </>
                     }
                 </div>
