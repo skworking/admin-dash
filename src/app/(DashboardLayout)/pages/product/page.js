@@ -13,8 +13,11 @@ const Product = () => {
     const [show, setShow] = useState(false);
     const [showTagFilter, setShowTagFilter] = useState(false);
     const [showPriceFilter, setShowPriceFilter] = useState(false);
+    const [showProductType, setShowProductType] = useState(false);
+
     const [selectedPriceOption, setSelectedPriceOption] = useState(null);
     const [filters, setFilters] = useState({
+        body:[],
         brand: [],
         tag: []
     });
@@ -62,8 +65,8 @@ const Product = () => {
     }, []);
     const uniqueBrands = [...new Set(products.map(product => product.brand))];
     const uniqueTags = Array.from(new Set(products?.flatMap(product => product.tag.map(tag => tag.name))));
-
-    // console.log(uniqueTags);
+    const productType=[...new Set(products.map(product => product.product_type))];
+    console.log(productType);
     const { Panel } = Collapse;
 
     const toggleTagFilter = () => {
@@ -116,6 +119,7 @@ const Product = () => {
             setFilterModel(!filtermodel)
         }
         const data = {
+            product_type:filters.body,
             brand: filters.brand,
             min_price: selectedPriceOption && selectedPriceOption[0],
             max_price: selectedPriceOption && selectedPriceOption[1],
@@ -146,6 +150,7 @@ const Product = () => {
             setFilterModel(!filtermodel)
         }
         setFilters({
+            body:[],
             brand: [],
             tag: []
         })
@@ -163,6 +168,35 @@ const Product = () => {
                         <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>Reset</button>
                         <button className="hover:bg-blue-500 bg-blue-400 p-2 grow text-white rounded" onClick={filtercall}>Apply filter</button>
                     </div>
+
+                    <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShowProductType(!showProductType) }}>
+                        <h1>Product Type</h1>
+                        {showProductType ? <MinusOutlined /> : <PlusOutlined />}
+                    </div>
+                    {showProductType && <>
+                        {productType.map((product)=>{
+                             return (
+                                <div key={product} className="p-1 flex gap-2 ">
+                                    <Checkbox
+                                        className="w-full"
+                                        key={product}
+                                        value={product}
+                                        checked={filters.body.includes(product)}
+                                        onChange={(e) => setFilters(prevFilters => ({
+                                            ...prevFilters,
+                                            body: e.target.checked
+                                                ? [...prevFilters.body, e.target.value]
+                                                : prevFilters.body.filter(item => item !== e.target.value)
+                                        }))}
+                                    >
+                                        {product}
+                                    </Checkbox>
+
+                                </div>
+                            )
+                        })}
+                    </>
+                    }
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShow(!show) }}>
                         <h1>Brand Type</h1>
                         {show ? <MinusOutlined /> : <PlusOutlined />}
@@ -327,6 +361,34 @@ const Product = () => {
                         <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>Cancel</button>
                         <button className="hover:bg-blue-500 bg-blue-400 p-2 grow text-white rounded" onClick={filtercall}>Apply filter</button>
                     </div>
+                    <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShowProductType(!showProductType) }}>
+                        <h1>Product Type</h1>
+                        {showProductType ? <MinusOutlined /> : <PlusOutlined />}
+                    </div>
+                    {showProductType && <>
+                        {productType.map((product)=>{
+                             return (
+                                <div key={product} className="p-1 flex gap-2 ">
+                                    <Checkbox
+                                        className="w-full"
+                                        key={product}
+                                        value={product}
+                                        checked={filters.body.includes(product)}
+                                        onChange={(e) => setFilters(prevFilters => ({
+                                            ...prevFilters,
+                                            body: e.target.checked
+                                                ? [...prevFilters.body, e.target.value]
+                                                : prevFilters.body.filter(item => item !== e.target.value)
+                                        }))}
+                                    >
+                                        {product}
+                                    </Checkbox>
+
+                                </div>
+                            )
+                        })}
+                    </>
+                    }
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShow(!show) }}>
                         <h1>Brand Type</h1>
                         {show ? <MinusOutlined /> : <PlusOutlined />}

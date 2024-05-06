@@ -33,6 +33,7 @@ export async function GET(request) {
         await authenticateToken(request)
 
         const { searchParams } = new URL(request.url)
+        const body=searchParams.get('product_type')
         const brand = searchParams.get('brand');
         const min = searchParams.get('min_price')
         const max = searchParams.get('max_price')
@@ -43,7 +44,11 @@ export async function GET(request) {
             useUnifiedTopology: true
         })
         let query = {};
+        if(body){
+            query.product_type={$in:body.split(',')};
+        }
         // Add brand filter to the query if brand is provided
+
         if (brand) {
             query.brand = { $in: brand.split(',') }; // Assuming multiple brands can be comma-separated
         }
