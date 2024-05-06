@@ -2,12 +2,13 @@
 
 import { CloseCircleOutlined, DownOutlined, MinusOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
-import { Checkbox, Collapse, Dropdown, Radio, Select, Menu, Button, Tooltip } from 'antd';
+import { Checkbox, Collapse, Dropdown, Radio, Select, Menu, Button, Tooltip, message } from 'antd';
 import { Grid } from "@mui/material";
 
 const Product = () => {
     const [products, setProducts] = useState([]);
-    const [sorted, setSorted] = useState([])
+    const [sorted, setSorted] = useState([]);
+    const [filterdata,setFilterData]=useState([]);
     const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
     const [show, setShow] = useState(false);
     const [showTagFilter, setShowTagFilter] = useState(false);
@@ -76,8 +77,13 @@ const Product = () => {
     }
     console.log(selectedPriceOption);
     const handleSortBy = (criteria) => {
-
-        let sortedProducts = [...products];
+        let sortedProducts;
+        if(filterdata.length> 0){
+            sortedProducts=[...filterdata]
+        }else{
+            sortedProducts=[...products]
+        }
+        // let sortedProducts = [...products];
         console.log("sss", sortedProducts);
         if (criteria === 'priceHighToLow') {
             sortedProducts.sort((a, b) => b.max_price - a.max_price);
@@ -90,7 +96,12 @@ const Product = () => {
 
                 setShortModel(!sortmodel)
         }
-        setSorted(sortedProducts);
+        if(filterdata.length > 0){
+            setFilterData(sortedProducts)
+        }else{
+
+            setSorted(sortedProducts);
+        }
     }
     const menu = (
         <Menu onClick={({ key }) => handleSortBy(key)}>
@@ -121,11 +132,16 @@ const Product = () => {
         });
         const response = await result.json();
         if (response.success) {
-            setProducts(response.result)
-            setSorted(response.result)
+            setFilterData(response.result)
+            // setSorted(response.result)
+            console.log(response);
+            message.success({ content: response.message, duration: 2 });
+        }else{
+            message.warning({content:response.message})
         }
     }
     const handleReset = () => {
+        setFilterData([])
         if (screenWidth < 1024) {
             setFilterModel(!filtermodel)
         }
@@ -137,6 +153,7 @@ const Product = () => {
 
         fetchData()
     }
+    console.log(filterdata,sorted);
 
     return (
         <>
@@ -239,7 +256,38 @@ const Product = () => {
                     </div>
                     <div className="w-full ">
                         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                            {sorted.map((product, index) => {
+                            {filterdata.length > 0? 
+                                filterdata.map((product,index)=>{
+                                 return (
+                                    <Grid item xs={12} sm={4} md={4} key={index}>
+                                        <div className="border-2">
+                                            <img className="object-scale-down w-full h-[70px]" src={product.gallery[0].original} alt="logo" />
+                                            <hr />
+                                            <div className="items-center justify-center flex flex-col ">
+                                                <p>{product.brand}</p>
+                                                <p>₹ {product.min_price}-₹ {product.max_price}</p>
+                                            </div>
+                                        </div>
+                                    </Grid>
+                                )
+                                })
+                                :
+                                sorted.map((product, index) => {
+                                    return (
+                                        <Grid item xs={12} sm={4} md={4} key={index}>
+                                            <div className="border-2">
+                                                <img className="object-scale-down w-full h-[70px]" src={product.gallery[0].original} alt="logo" />
+                                                <hr />
+                                                <div className="items-center justify-center flex flex-col ">
+                                                    <p>{product.brand}</p>
+                                                    <p>₹ {product.min_price}-₹ {product.max_price}</p>
+                                                </div>
+                                            </div>
+                                        </Grid>
+                                    )
+                                })
+                            }
+                            {/* {sorted.map((product, index) => {
                                 return (
                                     <Grid item xs={12} sm={4} md={4} key={index}>
                                         <div className="border-2">
@@ -252,7 +300,7 @@ const Product = () => {
                                         </div>
                                     </Grid>
                                 )
-                            })}
+                            })} */}
                         </Grid>
                     </div>
                 </div>
