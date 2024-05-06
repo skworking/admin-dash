@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { Product } from "@/app/lib/model/products";
 import mongoose from "mongoose";
-import { con } from "@/app/lib/db";
 import jwt from 'jsonwebtoken'
+import { message } from "antd";
 
 function authenticateToken(req) {
     return new Promise((resolve, reject) => {
@@ -28,37 +28,48 @@ function authenticateToken(req) {
     });
 }
 
-export async function GET(request){
-    try{
+export async function GET(request) {
+    try {
         await authenticateToken(request)
-      
+
         const { searchParams } = new URL(request.url)
-        const brand=searchParams.get('brand');
-        const tag=searchParams.get('tag');
-        const min_price=searchParams.get('min_price')
-        const max_price=searchParams.get('max_price')
-        console.log(brand,tag,min_price,max_price);
+        const brand = searchParams.get('brand');
+        const min = searchParams.get('min_price')
+        const max = searchParams.get('max_price')
+        const tag = searchParams.get('tag');
+        console.log(brand, tag, min, max);
         const res = await mongoose.connect(process.env.MONGODB, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
         let query = {};
-        if(brand){
-            query.brand = brand;
+        // Add brand filter to the query if brand is provided
+        if (brand) {
+            query.brand = { $in: brand.split(',') }; // Assuming multiple brands can be comma-separated
         }
-        if(min_price & max_price){
-            query.min_price={$gte:min_price};
-            query.max_price={$lte:max_price};
+        // Add min_price and max_price filters to the query if both are provided
+        if (min && max) {
+            query.min_price = { $gte: parseInt(min) };
+            query.max_price = { $lte: parseInt(max) };
         }
-        if(tag?.length>0){
-            query.tag={$in:[tag]};
+        // Add tag filter to the query if tag is provided
+        if (tag) {
+            query['tag.name'] = { $in: tag.split(',') }; // Assuming multiple tags can be comma-separated
         }
+        // console.log("dtaa",query);
+        try {
+            const result = await Product.find(query)
+            if(result.length > 0){
 
-        const result = await Product.find(query);
-        console.log("data fetched",result);
-        return NextResponse.json("hii finding records",result)
+                return NextResponse.json({ result: result, success: true, message: "Record found successfull" })
+            }else{
+                return NextResponse.json({ result: result, success: true, message: "Record Not  Found" })
+            }
 
-    }catch(err){
-        console.log(err);
+        } catch (err) {
+            return NextResponse.json({ success: FaLessThanEqual, message: err })
+        }
+    } catch (err) {
+        return NextResponse.json({ message: err, success: false })
     }
 }

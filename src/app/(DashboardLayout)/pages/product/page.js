@@ -59,8 +59,9 @@ const Product = () => {
 
         fetchData();
     }, []);
-
+    const uniqueBrands = [...new Set(products.map(product => product.brand))];
     const uniqueTags = Array.from(new Set(products?.flatMap(product => product.tag.map(tag => tag.name))));
+
     console.log(uniqueTags);
     const { Panel } = Collapse;
 
@@ -94,7 +95,6 @@ const Product = () => {
         <Menu onClick={({ key }) => handleSortBy(key)}>
             <Menu.Item key="priceHighToLow">Price: High to Low</Menu.Item>
             <Menu.Item key="priceLowToHigh">Price: Low to High</Menu.Item>
-            {/* Add more sorting criteria as needed */}
         </Menu>
     );
 
@@ -113,13 +113,13 @@ const Product = () => {
                         {show ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
                     {show && <>
-                        {products.map((product) => {
+                        {uniqueBrands.map((product) => {
                             return (
-                                <div key={product._id} className="p-1 flex gap-2 ">
+                                <div key={product} className="p-1 flex gap-2 ">
                                     <Checkbox
                                         className="w-full"
-                                        key={product._id}
-                                        value={product.brand}
+                                        key={product}
+                                        value={product}
                                         onChange={(e) => setFilters(prevFilters => ({
                                             ...prevFilters,
                                             brand: e.target.checked
@@ -127,7 +127,7 @@ const Product = () => {
                                                 : prevFilters.brand.filter(item => item !== e.target.value)
                                         }))}
                                     >
-                                        {product.brand}
+                                        {product}
                                     </Checkbox>
 
                                 </div>
