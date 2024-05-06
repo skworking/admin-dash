@@ -276,7 +276,7 @@ const Product = () => {
                                     return (
                                         <Grid item xs={12} sm={4} md={4} key={index}>
                                             <div className="border-2">
-                                                <img className="object-scale-down w-full h-[70px]" src={product.gallery[0].original} alt="logo" />
+                                                <img className="object-contain w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
                                                 <hr />
                                                 <div className="items-center justify-center flex flex-col ">
                                                     <p>{product.brand}</p>
