@@ -64,10 +64,16 @@ const Product = () => {
         fetchData();
     }, []);
     // const uniqueBrands = [...new Set(products.map(product => product.brand))];
-    const uniqueTags = Array.from(new Set(products?.flatMap(product => product.tag.map(tag => tag.name))));
-    const productType=[...new Set(products.map(product => product.product_type))];
+    // const uniqueTags = Array.from(new Set(products?.flatMap(product => product.tag.map(tag => tag.name))));
+    // const productType=[...new Set(products.map(product => product.product_type))];
     // console.log(productType);
     const { Panel } = Collapse;
+   
+    const priceCount=products.reduce((acc,product)=>{
+        acc[product.price]=(acc[product.price]||0)+1;
+        return acc
+    },{})
+    console.log(priceCount);
     const brandCounts = products.reduce((acc, product) => {
         acc[product.brand] = (acc[product.brand] || 0) + 1;
         return acc;
@@ -78,7 +84,11 @@ const Product = () => {
         });
         return acc
     },{})
-      console.log(tagConts);
+    const typeCount=products.reduce((acc,product)=>{
+        acc[product.product_type]=(acc[product.product_type]||0)+1;
+        return acc
+    },{})
+     
 
     const toggleTagFilter = () => {
         setShowTagFilter(!showTagFilter);
@@ -86,9 +96,10 @@ const Product = () => {
     const togglePriceFilter = () => {
         setShowPriceFilter(!showPriceFilter);
     }
-    const handlePriceFilterChange = (min, max) => {
-        setSelectedPriceOption([min, max]);
+    const handlePriceFilterChange = (max) => {
+        setSelectedPriceOption( max);
     }
+
     console.log(selectedPriceOption);
     const handleSortBy = (criteria) => {
         let sortedProducts;
@@ -132,11 +143,11 @@ const Product = () => {
         const data = {
             product_type:filters.body,
             brand: filters.brand,
-            min_price: selectedPriceOption && selectedPriceOption[0],
-            max_price: selectedPriceOption && selectedPriceOption[1],
+            min_price: selectedPriceOption && 0,
+            max_price: selectedPriceOption,
             tag: filters.tag,
         }
-        console.log(data);
+      
         const queryParams = new URLSearchParams(data);
         const result = await fetch(`/api/product/search?${queryParams}`, {
             method: "GET",
@@ -169,8 +180,10 @@ const Product = () => {
 
         fetchData()
     }
-    console.log(filterdata,sorted);
+  
 
+
+    
     return (
         <>
             <div className="d-flex w-full ">
@@ -185,7 +198,7 @@ const Product = () => {
                         {showProductType ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
                     {showProductType && <>
-                        {productType.map((product)=>{
+                        {Object.entries(typeCount).map(([product,count])=>{
                              return (
                                 <div key={product} className="p-1 flex gap-2 ">
                                     <Checkbox
@@ -200,7 +213,7 @@ const Product = () => {
                                                 : prevFilters.body.filter(item => item !== e.target.value)
                                         }))}
                                     >
-                                        {product}
+                                        {`${product} (${count})`}
                                     </Checkbox>
 
                                 </div>
@@ -269,17 +282,44 @@ const Product = () => {
                         <h1>Price Range</h1>
                         {showPriceFilter ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
-                    {showPriceFilter &&
+                    {showPriceFilter && (
+                <>
+                    {Object.entries(priceCount).map(([price, count]) => (
+                        <Radio
+                            key={price}
+                            className="p-1 flex gap-2"
+                            checked={
+                                selectedPriceOption !== null &&
+                                selectedPriceOption === price
+                            }
+                            onChange={() => handlePriceFilterChange( price)}
+                        >
+                            
+                            {`Under ${price} Lakh (${count})`}
+                        </Radio>
+                    ))}
+                    <Radio
+                        key="none"
+                        className="p-1 flex gap-2"
+                        checked={selectedPriceOption === null}
+                        onChange={() => handlePriceFilterChange(null)}
+                    >
+                        None
+                    </Radio>
+                </>
+            )}
+                    {/* {showPriceFilter &&
                         <>
-                            {[{ label: '0 - 1000', value: [0, 1000] }, { label: '1001 - 2000', value: [1001, 2000] }, { label: '2001 - 3000', value: [2001, 3000] }].map((option, index) => (
+                            {Object.entries(priceCount).map(([price, count]) => (
                                 <Radio
-                                    key={index}
+                                    key={price}
                                     className="p-1 flex gap-2"
-                                    checked={selectedPriceOption !== null && selectedPriceOption[0] === option.value[0] && selectedPriceOption[1] === option.value[1]}
-                                    onChange={() => handlePriceFilterChange(...option.value)}
+                                    checked={selectedPriceOption !== null && selectedPriceOption[0] === 0  && selectedPriceOption[1] === String(price)}
+                                    onChange={() => handlePriceFilterChange([0,price])}
 
                                 >
-                                    {option.label}
+                                   
+                                    {`Under ${price} Lakh (${count})`}
                                 </Radio>
                             ))}
                             <Radio
@@ -291,7 +331,7 @@ const Product = () => {
                                 None
                             </Radio>
                         </>
-                    }
+                    } */}
                 </div>
                 <div className="flex grow flex-col lg:w-4/5 h-screen bg-white">
                     <div className=" p-2 lg:flex flex-col items-end hidden">
@@ -378,7 +418,7 @@ const Product = () => {
                         {showProductType ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
                     {showProductType && <>
-                        {productType.map((product)=>{
+                        {Object.entries(typeCount).map(([product,count])=>{
                              return (
                                 <div key={product} className="p-1 flex gap-2 ">
                                     <Checkbox
@@ -393,7 +433,7 @@ const Product = () => {
                                                 : prevFilters.body.filter(item => item !== e.target.value)
                                         }))}
                                     >
-                                        {product}
+                                       {`${product} (${count})`}
                                     </Checkbox>
 
                                 </div>
@@ -406,7 +446,7 @@ const Product = () => {
                         {show ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
                     {show && <>
-                        {uniqueBrands.map((product) => {
+                        {Object.entries(brandCounts).map(([product,count]) => {
                             return (
                                 <Menu key={product} className="p-1 flex gap-2 ">
                                     <Checkbox
@@ -421,7 +461,7 @@ const Product = () => {
                                                 : prevFilters.brand.filter(item => item !== e.target.value)
                                         }))}
                                     >
-                                        {product}
+                                        {`${product} (${count})`}
                                     </Checkbox>
 
                                 </Menu>
@@ -436,7 +476,7 @@ const Product = () => {
                     </div>
                     {showTagFilter && (
                         <>
-                            {uniqueTags?.map((tag) => {
+                            {Object.entries(tagConts)?.map(([tag,count]) => {
                                 return (
                                     <Menu key={tag._id} className="p-1 flex gap-2 ">
                                         <Checkbox
@@ -451,7 +491,7 @@ const Product = () => {
                                                     : prevFilters.tag.filter(item => item !== e.target.value)
                                             }))}
                                         >
-                                            {tag}
+                                            {`${tag} (${count})`}
                                         </Checkbox>
                                     </Menu>
                                 )
@@ -465,16 +505,15 @@ const Product = () => {
                     </div>
                     {showPriceFilter &&
                         <>
-                            {[{ label: '0 - 1000', value: [0, 1000] }, { label: '1001 - 2000', value: [1001, 2000] }, { label: '2001 - 3000', value: [2001, 3000] }].map((option, index) => (
-                                <Menu key={index} className="p-1 flex gap-2 ">
+                            {Object.entries(priceCount).map(([price,count]) => (
+                                <Menu key={price} className="p-1 flex gap-2 ">
                                     <Radio
-                                        key={index}
                                         className="p-1 flex gap-2"
-                                        checked={selectedPriceOption !== null && selectedPriceOption[0] === option.value[0] && selectedPriceOption[1] === option.value[1]}
-                                        onChange={() => handlePriceFilterChange(...option.value)}
+                                        checked={selectedPriceOption !== null  && selectedPriceOption === price}
+                                        onChange={() => handlePriceFilterChange(price)}
 
                                     >
-                                        {option.label}
+                                       {`Under ${price} Lakh (${count})`}
                                     </Radio>
                                 </Menu>
                             ))}

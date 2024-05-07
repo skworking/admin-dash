@@ -41,26 +41,26 @@ const formSchema = yup.object().shape({
   //     return !isNaN(numericValue) && numericValue > 100; // Check if numeric value is greater than 100
   //   }),
   sale_price: yup.string()
-    .test('is-positive', 'Sale_price should be a positive number greater than 100', value => {
+    .test('is-positive', 'Sale_price should be a positive number greater than 0', value => {
       if (!value) {
         return false;
       }
 
       const numericValue = Number(value);
-      return !isNaN(numericValue) && numericValue > 100; // Check if numeric value is greater than 100
+      return !isNaN(numericValue) && numericValue > 0; // Check if numeric value is greater than 100
     }),
   brand: yup.string().required("Brand name is required"),
   weight: yup.string().required("Weight is required"),
   product_type: yup.string().required("Category type of product is required"),
-  min_price: yup.string().required("Min_price is required").test('is-positive', 'Min_price should be a positive number greater than 100', value => {
+  min_price: yup.string().required("Min_price is required").test('is-positive', 'Min_price should be a positive number greater than 0', value => {
     if (!value) return false; // Return false if value is empty
     const numericValue = Number(value);
-    return !isNaN(numericValue) && numericValue > 100; // Check if numeric value is greater than 100
+    return !isNaN(numericValue) && numericValue > 0; // Check if numeric value is greater than 100
   }),
-  max_price: yup.string().required("Max_price is required").test('is-positive', 'Max_price should be a positive number less than 10000 and greter then 100', value => {
+  max_price: yup.string().required("Max_price is required").test('is-positive', 'Max_price should be a positive number less than 1000000 and greter then 0', value => {
     if (!value) return false; // Return false if value is empty
     const numericValue = Number(value);
-    return !isNaN(numericValue) && numericValue < 10000 && numericValue > 100; // Check if numeric value is greater than 100
+    return !isNaN(numericValue) && numericValue < 1000000 && numericValue > 0; // Check if numeric value is greater than 100
   }),
   // gallery: yup.array().min(1, 'Gallery should contain at least one image'),
 
