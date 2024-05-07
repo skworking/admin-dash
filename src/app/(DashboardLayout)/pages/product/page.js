@@ -63,11 +63,22 @@ const Product = () => {
 
         fetchData();
     }, []);
-    const uniqueBrands = [...new Set(products.map(product => product.brand))];
+    // const uniqueBrands = [...new Set(products.map(product => product.brand))];
     const uniqueTags = Array.from(new Set(products?.flatMap(product => product.tag.map(tag => tag.name))));
     const productType=[...new Set(products.map(product => product.product_type))];
-    console.log(productType);
+    // console.log(productType);
     const { Panel } = Collapse;
+    const brandCounts = products.reduce((acc, product) => {
+        acc[product.brand] = (acc[product.brand] || 0) + 1;
+        return acc;
+      }, {});
+    const tagConts=products?.reduce((acc,product)=>{
+        product.tag.forEach(tag => {
+            acc[tag.name]=(acc[tag.name]||0)+1;
+        });
+        return acc
+    },{})
+      console.log(tagConts);
 
     const toggleTagFilter = () => {
         setShowTagFilter(!showTagFilter);
@@ -202,7 +213,8 @@ const Product = () => {
                         {show ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
                     {show && <>
-                        {uniqueBrands.map((product) => {
+                        {Object.entries(brandCounts).map(([product,count]) => {
+                          
                             return (
                                 <div key={product} className="p-1 flex gap-2 ">
                                     <Checkbox
@@ -217,7 +229,7 @@ const Product = () => {
                                                 : prevFilters.brand.filter(item => item !== e.target.value)
                                         }))}
                                     >
-                                        {product}
+                                        {`${product} (${count})`}
                                     </Checkbox>
 
                                 </div>
@@ -232,7 +244,7 @@ const Product = () => {
                     </div>
                     {showTagFilter && (
                         <>
-                            {uniqueTags?.map((tag) => {
+                            {Object.entries(tagConts)?.map(([tag,count]) => {
                                 return (
                                     <Checkbox
                                         className="p-1 flex gap-2 "
@@ -246,7 +258,7 @@ const Product = () => {
                                                 : prevFilters.tag.filter(item => item !== e.target.value)
                                         }))}
                                     >
-                                        {tag}
+                                        {`${tag} (${count})`}
                                     </Checkbox>
                                 )
                             })}
@@ -295,7 +307,7 @@ const Product = () => {
                                  return (
                                     <Grid item xs={12} sm={4} md={4} key={index}>
                                         <div className="border-2">
-                                            <img className="object-scale-down w-full h-[70px]" src={product.gallery[0].original} alt="logo" />
+                                            <img className="object-container w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
                                             <hr />
                                             <div className="items-center justify-center flex flex-col ">
                                                 <p>{product.brand}</p>

@@ -414,7 +414,7 @@ const EditProduct = (props) => {
         <div className='md:grid gap-5 p-2  lg:grid-cols-2  grid-cols-1 flex  flex-col'>
 
           <Input
-            type="text"
+            typeinput="text"
             text="name"
             val={formData?.name}
             onChange={(e) => handleChange(e, setFormData)}
@@ -507,7 +507,7 @@ const EditProduct = (props) => {
           <label className={`${styles.containerdivright} text-start`}>
             Minimun Price:
             <input className={styles.containerdivinput}
-              type="text"
+              type="number"
               name="min_price"
               value={formData.min_price}
               onChange={(e) => handleNumberChange(e, setFormData)}
