@@ -5,15 +5,15 @@ import { storage } from "../firebase/firebase";
 import { getStorage,ref,uploadBytes,getDownloadURL } from 'firebase/storage';
 import { redirect } from 'next/navigation'
 export const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
+    { value: 'Electric', label: 'Electric' },
+    { value: 'Diesel', label: 'Diesel' },
+    { value: 'CNG', label: 'CNG' }
   ]
 export const tags = [
-    { value: 'Phone', label: 'phone' },
-    { value: 'Apple', label: 'apple' },
-    { value: 'Cilantro', label: 'cilantro' },
-    { value: 'Smart TV', label: 'smart-tv' }
+    { value: '1 HP', label: '1 HP' },
+    { value: '200 HP', label: '200 HP' },
+    { value: '250 HP', label: '250 HP' },
+    { value: '300 HP', label: '300 HP' }
   ];
 export const attributetab = [
     { value: '12oz', label: '12oz', id: "3" },
