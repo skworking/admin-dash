@@ -24,6 +24,7 @@ const Product = () => {
     const [sortmodel, setShortModel] = useState(false)
     const [filtermodel, setFilterModel] = useState(false)
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [variation,setVariation]=useState(false)
     console.log(filters);
 
     useEffect(() => {
@@ -181,7 +182,9 @@ const Product = () => {
         fetchData()
     }
 
-
+    const toggleVariation = (index) => {
+        setVariation(index === variation ? null : index);
+    };
 
 
     return (
@@ -329,12 +332,13 @@ const Product = () => {
                                         <Grid item xs={12} sm={4} md={4} key={index}>
                                             <div className="border-2  flex flex-col gap-2 bg-sky-100">
                                                 <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
-                                                <hr />
+                                               
                                                 <div className="items-center justify-center flex flex-col ">
                                                     <p>{product.slug}</p>
                                                     <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
                                                 </div>
                                                 <Button type="primary" className="w-full ">Check Offers</Button>
+
                                             </div>
                                         </Grid>
                                     )
@@ -343,7 +347,7 @@ const Product = () => {
                                 sorted.map((product, index) => {
                                     return (
                                         <Grid item xs={12} sm={4} md={4} key={index}>
-                                            <div className="border-2 flex flex-col gap-2 bg-sky-100">
+                                            <div className=" border-2 flex flex-col gap-2 bg-slate-50">
                                                 <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
                                                 
                                                 <div className="items-center justify-center flex flex-col ">
@@ -351,6 +355,26 @@ const Product = () => {
                                                     <p>₹ {product.min_price} - ₹{product.max_price} Lakh</p>
                                                 </div>
                                                 <Button type="primary" className="w-full ">Check Offers</Button>
+                                                <hr />
+                                                <div className="relative flex w-full justify-between p-1  cursor-pointer" onClick={()=>{toggleVariation(index)}}>
+                                                    <p>
+                                                        No variation Found
+                                                    </p>
+                                                    {variation === index?<PlusOutlined className="rotate-45 transition delay-300 duration-300"/>:<PlusOutlined className="rotate-0 transition delay-300 duration-300"/>}
+                                                    {/* {variation === index &&
+                                                    <div className={`absolute top-8 left-0 w-full p-1 border-2 transition delay-300 duration-300 translate-y-0 ease-in-out `}
+                                                      
+                                                    >
+                                                        No Data Found
+                                                    </div>
+                                                    } */}
+                                                    {variation === index && (
+                                                        <div className={`absolute top-8 left-0 w-full p-1 border-2  opacity-100 bg-slate-50 delay-1000 transition duration-500`}  >
+                                                            No Data Found
+                                                        </div>
+                                                    )}
+                                                    
+                                                </div>
                                             </div>
                                         </Grid>
                                     )

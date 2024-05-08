@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { Product } from "@/app/lib/model/products";
 import mongoose from "mongoose";
 import jwt from 'jsonwebtoken'
-import { message } from "antd";
+
 
 function authenticateToken(req) {
     return new Promise((resolve, reject) => {
