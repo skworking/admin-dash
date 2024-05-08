@@ -185,7 +185,7 @@ const Product = () => {
     const toggleVariation = (index) => {
         setVariation(index === variation ? null : index);
     };
-
+    console.log(products);
 
     return (
         <>
@@ -338,7 +338,19 @@ const Product = () => {
                                                     <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
                                                 </div>
                                                 <Button type="primary" className="w-full ">Check Offers</Button>
-
+                                                <div className="relative flex w-full justify-between p-1  cursor-pointer" onClick={()=>{toggleVariation(index)}}>
+                                                    <p>
+                                                        No variation Found
+                                                    </p>
+                                                    {variation === index?<PlusOutlined className="rotate-45 transition delay-300 duration-300"/>:<PlusOutlined className="rotate-0 transition delay-300 duration-300"/>}
+                                                    
+                                                    {variation === index && (
+                                                        <div className={`absolute top-8 left-0 w-full p-1 border-2  opacity-100 bg-slate-50 delay-1000 transition duration-500`}  >
+                                                            No Data Found
+                                                        </div>
+                                                    )}
+                                                    
+                                                </div>
                                             </div>
                                         </Grid>
                                     )
@@ -361,13 +373,7 @@ const Product = () => {
                                                         No variation Found
                                                     </p>
                                                     {variation === index?<PlusOutlined className="rotate-45 transition delay-300 duration-300"/>:<PlusOutlined className="rotate-0 transition delay-300 duration-300"/>}
-                                                    {/* {variation === index &&
-                                                    <div className={`absolute top-8 left-0 w-full p-1 border-2 transition delay-300 duration-300 translate-y-0 ease-in-out `}
-                                                      
-                                                    >
-                                                        No Data Found
-                                                    </div>
-                                                    } */}
+                                                    
                                                     {variation === index && (
                                                         <div className={`absolute top-8 left-0 w-full p-1 border-2  opacity-100 bg-slate-50 delay-1000 transition duration-500`}  >
                                                             No Data Found
