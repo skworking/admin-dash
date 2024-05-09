@@ -1,7 +1,7 @@
 'use client'
 
 import { CloseCircleOutlined, DownOutlined, MinusOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Checkbox, Collapse, Dropdown, Radio, Select, Menu, Button, Tooltip, message } from 'antd';
 import { Grid } from "@mui/material";
 
@@ -24,8 +24,10 @@ const Product = () => {
     const [sortmodel, setShortModel] = useState(false)
     const [filtermodel, setFilterModel] = useState(false)
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-    const [variation,setVariation]=useState(false)
-    console.log(filters);
+    const [variation, setVariation] = useState(false)
+    const [currentPage, setcurrentPage] = useState(1)
+    const [totalPages, setTotalPage] = useState(null)
+
 
     useEffect(() => {
         const handleResize = () => {
@@ -51,6 +53,8 @@ const Product = () => {
             // const result = await fetch("api/products");
             const data = await result.json();
             if (data.success) {
+
+                setTotalPage(data.totalPages)
                 setProducts(data.result);
                 setSorted(data.result)
             } else {
@@ -67,14 +71,14 @@ const Product = () => {
     // const uniqueBrands = [...new Set(products.map(product => product.brand))];
     // const uniqueTags = Array.from(new Set(products?.flatMap(product => product.tag.map(tag => tag.name))));
     // const productType=[...new Set(products.map(product => product.product_type))];
-    // console.log(productType);
+
     const { Panel } = Collapse;
 
     const priceCount = products.reduce((acc, product) => {
         acc[product.price] = (acc[product.price] || 0) + 1;
         return acc
     }, {})
-    console.log(priceCount);
+
     const brandCounts = products.reduce((acc, product) => {
         acc[product.brand] = (acc[product.brand] || 0) + 1;
         return acc;
@@ -101,7 +105,7 @@ const Product = () => {
         setSelectedPriceOption(max);
     }
 
-    console.log(selectedPriceOption);
+
     const handleSortBy = (criteria) => {
         let sortedProducts;
         if (filterdata.length > 0) {
@@ -110,7 +114,7 @@ const Product = () => {
             sortedProducts = [...products]
         }
         // let sortedProducts = [...products];
-        console.log("sss", sortedProducts);
+
         if (criteria === 'priceHighToLow') {
             sortedProducts.sort((a, b) => b.max_price - a.max_price);
         } else if (criteria === 'priceLowToHigh') {
@@ -136,8 +140,9 @@ const Product = () => {
         </Menu>
     );
 
-    // console.log(products);
+
     const filtercall = async () => {
+
         if (screenWidth < 1024) {
             setFilterModel(!filtermodel)
         }
@@ -146,11 +151,13 @@ const Product = () => {
             brand: filters.brand,
             min_price: selectedPriceOption && 0,
             max_price: selectedPriceOption,
-            tag: filters.tag,
+            page: currentPage || 1,
+            tag: filters.tag
         }
 
         const queryParams = new URLSearchParams(data);
-        const result = await fetch(`/api/product/search?${queryParams}`, {
+        // const result = await fetch(`/api/product/search?${queryParams}`, {
+        const result = await fetch(`/api/filter/search?${queryParams}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
@@ -160,15 +167,19 @@ const Product = () => {
         const response = await result.json();
         if (response.success) {
             setFilterData(response.result)
+            // setcurrentPage(response.currentPage)
+            setTotalPage(response.totalPages)
             // setSorted(response.result)
-            console.log(response);
+
             message.success({ content: response.message, duration: 2 });
         } else {
             message.warning({ content: response.message })
         }
     }
+
     const handleReset = () => {
         setFilterData([])
+        setcurrentPage(1)
         if (screenWidth < 1024) {
             setFilterModel(!filtermodel)
         }
@@ -178,14 +189,36 @@ const Product = () => {
             tag: []
         })
         setSelectedPriceOption(null)
-
-        fetchData()
+        filtercall()
+        // fetchData()
     }
 
     const toggleVariation = (index) => {
         setVariation(index === variation ? null : index);
     };
-    console.log(products);
+    const loadMore = () => {
+        let count = currentPage + 1
+        setcurrentPage(count)
+        // setcurrentPage(prevPage => prevPage + 1);
+        // filtercall()
+    };
+    useMemo(() => {
+        filtercall()
+    }, [currentPage])
+    const handleNextPage = () => {
+        if (totalPages > currentPage) {
+            setcurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setcurrentPage(currentPage - 1);
+        }
+    };
+    const handlePageClick = (pageNumber) => {
+        setcurrentPage(pageNumber);
+    };
 
     return (
         <>
@@ -314,16 +347,16 @@ const Product = () => {
                 </div>
                 <div className="flex grow flex-col lg:w-4/5 h-screen bg-white">
                     <div className=" p-2 lg:flex  justify-between hidden">
-                        <div>{filterdata.length > 0? filterdata.length: sorted.length } Latest Truck Found
-                        <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{opacity:1}} ></hr>
+                        <div>{filterdata.length > 0 ? filterdata.length : sorted.length} Latest Truck Found
+                            <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{ opacity: 1 }} ></hr>
                         </div>
                         <Dropdown overlay={menu} >
                             <Button icon={<DownOutlined />} >Sort By</Button>
                         </Dropdown>
                     </div>
-                    <div className="w-full p-2">
-                        <div className="lg:hidden mb-2">{filterdata.length > 0? filterdata.length: sorted.length } Latest Truck Found
-                            <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{opacity:1}}></hr>
+                    <div className="w-full  p-2 ">
+                        <div className="lg:hidden mb-2">{filterdata.length > 0 ? filterdata.length : sorted.length} Latest Truck Found
+                            <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{ opacity: 1 }}></hr>
                         </div>
                         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                             {filterdata.length > 0 ?
@@ -332,75 +365,79 @@ const Product = () => {
                                         <Grid item xs={12} sm={4} md={4} key={index}>
                                             <div className="border-2  flex flex-col gap-2 bg-sky-100">
                                                 <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
-                                               
+
                                                 <div className="items-center justify-center flex flex-col ">
                                                     <p>{product.slug}</p>
                                                     <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
                                                 </div>
                                                 <Button type="primary" className="w-full ">Check Offers</Button>
-                                                <div className="relative flex w-full justify-between p-1  cursor-pointer" onClick={()=>{toggleVariation(index)}}>
+                                                <div className="relative flex w-full justify-between p-1  cursor-pointer" onClick={() => { toggleVariation(index) }}>
                                                     <p>
                                                         No variation Found
                                                     </p>
-                                                    {variation === index?<PlusOutlined className="rotate-45 transition delay-300 duration-300"/>:<PlusOutlined className="rotate-0 transition delay-300 duration-300"/>}
-                                                    
+                                                    {variation === index ? <PlusOutlined className="rotate-45 transition delay-300 duration-300" /> : <PlusOutlined className="rotate-0 transition delay-300 duration-300" />}
+
                                                     {variation === index && (
                                                         <div className={`absolute top-8 left-0 w-full p-1 border-2  opacity-100 bg-slate-50 delay-1000 transition duration-500`}  >
                                                             No Data Found
                                                         </div>
                                                     )}
-                                                    
+
                                                 </div>
                                             </div>
                                         </Grid>
                                     )
                                 })
                                 :
-                                sorted.map((product, index) => {
-                                    return (
-                                        <Grid item xs={12} sm={4} md={4} key={index}>
-                                            <div className=" border-2 flex flex-col gap-2 bg-slate-50">
-                                                <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
-                                                
-                                                <div className="items-center justify-center flex flex-col ">
-                                                    <p className="text-blue-400">{product.slug}</p>
-                                                    <p>₹ {product.min_price} - ₹{product.max_price} Lakh</p>
-                                                </div>
-                                                <Button type="primary" className="w-full ">Check Offers</Button>
-                                                <hr />
-                                                <div className="relative flex w-full justify-between p-1  cursor-pointer" onClick={()=>{toggleVariation(index)}}>
-                                                    <p>
-                                                        No variation Found
-                                                    </p>
-                                                    {variation === index?<PlusOutlined className="rotate-45 transition delay-300 duration-300"/>:<PlusOutlined className="rotate-0 transition delay-300 duration-300"/>}
-                                                    
-                                                    {variation === index && (
-                                                        <div className={`absolute top-8 left-0 w-full p-1 border-2  opacity-100 bg-slate-50 delay-1000 transition duration-500`}  >
-                                                            No Data Found
-                                                        </div>
-                                                    )}
-                                                    
-                                                </div>
-                                            </div>
-                                        </Grid>
-                                    )
-                                })
+                               ''
+                                // sorted.map((product, index) => {
+                                //     return (
+                                //         <>
+
+                                //             <Grid item xs={12} sm={4} md={4} key={index}>
+                                //                 <div className=" border-2 flex flex-col gap-2 bg-slate-50">
+                                //                     <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
+
+                                //                     <div className="items-center justify-center flex flex-col ">
+                                //                         <p className="text-blue-400">{product.slug}</p>
+                                //                         <p>₹ {product.min_price} - ₹{product.max_price} Lakh</p>
+                                //                     </div>
+                                //                     <Button type="primary" className="w-full ">Check Offers</Button>
+                                //                     <hr />
+                                //                     <div className="relative flex w-full justify-between p-1  cursor-pointer" onClick={() => { toggleVariation(index) }}>
+                                //                         <p>
+                                //                             No variation Found
+                                //                         </p>
+                                //                         {variation === index ? <PlusOutlined className="rotate-45 transition delay-300 duration-300" /> : <PlusOutlined className="rotate-0 transition delay-300 duration-300" />}
+
+                                //                         {variation === index && (
+                                //                             <div className={`absolute top-8 left-0 w-full p-1 border-2  opacity-100 bg-slate-50 delay-1000 transition duration-500`}  >
+                                //                                 No Data Found
+                                //                             </div>
+                                //                         )}
+
+                                //                     </div>
+                                //                 </div>
+                                //             </Grid>
+
+                                //         </>
+                                //     )
+                                // })
                             }
-                            {/* {sorted.map((product, index) => {
-                                return (
-                                    <Grid item xs={12} sm={4} md={4} key={index}>
-                                        <div className="border-2">
-                                            <img className="object-scale-down w-full h-[70px]" src={product.gallery[0].original} alt="logo" />
-                                            <hr />
-                                            <div className="items-center justify-center flex flex-col ">
-                                                <p>{product.brand}</p>
-                                                <p>₹ {product.min_price}-₹ {product.max_price}</p>
-                                            </div>
-                                        </div>
-                                    </Grid>
-                                )
-                            })} */}
+
                         </Grid>
+                        {filterdata.length >0 &&
+                        <div className="w-1/2 text-center m-auto p-1 border-2 rounded flex gap-5 mt-3">
+                        <button className="border rounded outline-1 p-1" onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
+                        <>
+                        {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+                            <button className={`bg-gray-200 w-[100px] ${currentPage === pageNumber ?'bg-gray-500':''}`} key={pageNumber} onClick={() => handlePageClick(pageNumber)}>{pageNumber}</button>
+                        ))}
+                        </>
+                        <button className="border rounded outline-1 p-1" onClick={handleNextPage} disabled={totalPages === currentPage}>Next</button>
+                        </div>
+                        }
+                       
                     </div>
                 </div>
                 <div className={`fixed bottom-0 p-2 w-screen flex lg:hidden bg-white justify-between ${filtermodel & screenWidth < 1024 && 'hidden'} ${sortmodel & screenWidth < 1024 && 'hidden'} `}>
