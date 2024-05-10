@@ -190,7 +190,7 @@ const Product = () => {
             tag: []
         })
         setSelectedPriceOption(null)
-        filtercall()
+        // filtercall()
         // fetchData()
     }
 
