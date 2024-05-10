@@ -207,7 +207,7 @@ const Product = () => {
         filtercall()
     }, [currentPage])
     const handleNextPage = () => {
-        if (totalPages > currentPage) {
+        if (totalPages > 1) {
             setcurrentPage(currentPage + 1);
         }
     };
@@ -437,7 +437,7 @@ const Product = () => {
                         // ))}
                         // </>
                         // </div>
-                        <Button type="primary" className="w-1/2 border mt-3 flex justify-center m-auto rounded outline-1 p-1" onClick={handleNextPage} disabled={totalPages === currentPage}>Load More</Button>
+                        <Button type="primary" className="w-1/2 border mt-3 flex justify-center m-auto rounded outline-1 p-1" onClick={handleNextPage} disabled={totalPages === 1 }>Load More</Button>
                         }
                        
                     </div>
