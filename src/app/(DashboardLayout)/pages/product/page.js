@@ -4,6 +4,7 @@ import { CloseCircleOutlined, DownOutlined, MinusOutlined, PlusOutlined, SearchO
 import { useState, useEffect, useMemo } from "react";
 import { Checkbox, Collapse, Dropdown, Radio, Select, Menu, Button, Tooltip, message } from 'antd';
 import { Grid } from "@mui/material";
+import SkeletonLoader from "../../components/reuseable/skelenton";
 
 const Product = () => {
     const [products, setProducts] = useState([]);
@@ -27,7 +28,7 @@ const Product = () => {
     const [variation, setVariation] = useState(false)
     const [currentPage, setcurrentPage] = useState(1)
     const [totalPages, setTotalPage] = useState(null)
-
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const handleResize = () => {
@@ -142,7 +143,7 @@ const Product = () => {
 
 
     const filtercall = async () => {
-
+        setLoading(true)
         if (screenWidth < 1024) {
             setFilterModel(!filtermodel)
         }
@@ -170,7 +171,7 @@ const Product = () => {
             // setcurrentPage(response.currentPage)
             setTotalPage(response.totalPages)
             // setSorted(response.result)
-
+            setLoading(false);
             message.success({ content: response.message, duration: 2 });
         } else {
             message.warning({ content: response.message })
@@ -426,16 +427,17 @@ const Product = () => {
                             }
 
                         </Grid>
+                        {loading &&  <SkeletonLoader />}
                         {filterdata.length >0 &&
-                        <div className="w-1/2 text-center m-auto p-1 border-2 rounded flex gap-5 mt-3">
-                        <button className="border rounded outline-1 p-1" onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
-                        <>
-                        {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
-                            <button className={`bg-gray-200 w-[100px] ${currentPage === pageNumber ?'bg-gray-500':''}`} key={pageNumber} onClick={() => handlePageClick(pageNumber)}>{pageNumber}</button>
-                        ))}
-                        </>
-                        <button className="border rounded outline-1 p-1" onClick={handleNextPage} disabled={totalPages === currentPage}>Next</button>
-                        </div>
+                        // <div className="w-w-1/2 text-center m-auto p-1 border-2 rounded flex gap-5 mt-3">
+                        // <button className="border rounded outline-1 p-1" onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
+                        // <>
+                        // {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+                        //     <button className={`bg-gray-200 w-[100px] ${currentPage === pageNumber ?'bg-gray-500':''}`} key={pageNumber} onClick={() => handlePageClick(pageNumber)}>{pageNumber}</button>
+                        // ))}
+                        // </>
+                        // </div>
+                        <Button type="primary" className="w-1/2 border mt-3 flex justify-center m-auto rounded outline-1 p-1" onClick={handleNextPage} disabled={totalPages === currentPage}>Load More</Button>
                         }
                        
                     </div>

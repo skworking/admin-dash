@@ -64,13 +64,14 @@ export async function GET(request) {
             query['tag.name'] = { $in: tag.split(',') }; // Assuming multiple tags can be comma-separated
         }
         // console.log("dtaa",query);
-        const limit=3;
+        const limit=3*page;
         const skip=(page-1)*limit;
+        console.log(limit,skip);
         try {
             
-            const result = await Product.find(query).skip(skip).limit(limit)
+            const result = await Product.find(query).limit(limit)
             const totalCount = await Product.countDocuments(query);
-            console.log(totalCount);
+            console.log(result);
             const totalPages = Math.ceil(totalCount / limit);
             if(result.length > 0){
 
