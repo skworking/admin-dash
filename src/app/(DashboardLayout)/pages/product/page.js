@@ -372,25 +372,24 @@ const Product = () => {
                                                     <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
                                                 </div>
                                                 <Button type="primary" className="w-full ">Check Offers</Button>
-                                                <div className="relative flex w-full justify-between p-1  cursor-pointer" onClick={() => { toggleVariation(index) }}>
-                                                    <p>
-                                                        No variation Found
-                                                    </p>
-                                                    {variation === index ? <PlusOutlined className="rotate-45 transition delay-300 duration-300" /> : <PlusOutlined className="rotate-0 transition delay-300 duration-300" />}
-
+                                               
+                                                <div className="relative w-full">
+                                                    <div className="flex w-full justify-between p-1 cursor-pointer" onClick={() => toggleVariation(index)}>
+                                                        <p>No variation Found</p>
+                                                        <PlusOutlined className={`transition-transform duration-300 ${variation === index ? 'rotate-45' : 'rotate-0'}`} />
+                                                    </div>
                                                     {variation === index && (
-                                                        <div className={`absolute top-8 left-0 w-full p-1 border-2  opacity-100 bg-slate-50 delay-1000 transition duration-500`}  >
+                                                        <div className="absolute top-full left-0 w-full p-1 border-2 bg-slate-50 transition-opacity duration-500">
                                                             No Data Found
                                                         </div>
                                                     )}
-
                                                 </div>
                                             </div>
                                         </Grid>
                                     )
                                 })
                                 :
-                               ''
+                                ''
                                 // sorted.map((product, index) => {
                                 //     return (
                                 //         <>
@@ -427,19 +426,19 @@ const Product = () => {
                             }
 
                         </Grid>
-                        {loading &&  <SkeletonLoader />}
-                        {filterdata.length >0 &&
-                        // <div className="w-w-1/2 text-center m-auto p-1 border-2 rounded flex gap-5 mt-3">
-                        // <button className="border rounded outline-1 p-1" onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
-                        // <>
-                        // {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
-                        //     <button className={`bg-gray-200 w-[100px] ${currentPage === pageNumber ?'bg-gray-500':''}`} key={pageNumber} onClick={() => handlePageClick(pageNumber)}>{pageNumber}</button>
-                        // ))}
-                        // </>
-                        // </div>
-                        <Button type="primary" className="w-1/2 border mt-3 flex justify-center m-auto rounded outline-1 p-1" onClick={handleNextPage} disabled={totalPages === 1 }>Load More</Button>
+                        {loading && <SkeletonLoader />}
+                        {filterdata.length > 0 &&
+                            // <div className="w-w-1/2 text-center m-auto p-1 border-2 rounded flex gap-5 mt-3">
+                            // <button className="border rounded outline-1 p-1" onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
+                            // <>
+                            // {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+                            //     <button className={`bg-gray-200 w-[100px] ${currentPage === pageNumber ?'bg-gray-500':''}`} key={pageNumber} onClick={() => handlePageClick(pageNumber)}>{pageNumber}</button>
+                            // ))}
+                            // </>
+                            // </div>
+                            <Button type="primary" className="w-1/2 border mt-5 flex justify-center m-auto rounded outline-1 p-1" onClick={handleNextPage} disabled={totalPages === 1}>Load More</Button>
                         }
-                       
+
                     </div>
                 </div>
                 <div className={`fixed bottom-0 p-2 w-screen flex lg:hidden bg-white justify-between ${filtermodel & screenWidth < 1024 && 'hidden'} ${sortmodel & screenWidth < 1024 && 'hidden'} `}>
