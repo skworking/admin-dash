@@ -1,10 +1,14 @@
 'use client'
 
-import { CloseCircleOutlined, DownOutlined, MinusOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { ClearOutlined, CloseCircleOutlined, DownOutlined, MinusOutlined, PlusOutlined, SearchOutlined, WarningFilled } from "@ant-design/icons";
 import { useState, useEffect, useMemo } from "react";
-import { Checkbox, Collapse, Dropdown, Radio, Select, Menu, Button, Tooltip, message } from 'antd';
+import { Checkbox, Collapse, Dropdown, Radio, Select, Form, Menu, Button, Tooltip, message, Modal, Input, Row, Col } from 'antd';
 import { Grid } from "@mui/material";
 import SkeletonLoader from "../../components/reuseable/skelenton";
+import { Check } from "react-feather";
+
+
+
 
 const Product = () => {
     const [products, setProducts] = useState([]);
@@ -75,7 +79,7 @@ const Product = () => {
 
     const { Panel } = Collapse;
 
-    const priceCount = products.reduce((acc, product) => {
+    const priceCount = products?.reduce((acc, product) => {
         acc[product.price] = (acc[product.price] || 0) + 1;
         return acc
     }, {})
@@ -190,7 +194,7 @@ const Product = () => {
             tag: []
         })
         setSelectedPriceOption(null)
-        // filtercall()
+        filtercall()
         // fetchData()
     }
 
@@ -212,18 +216,84 @@ const Product = () => {
         }
     };
 
-    const handlePrevPage = () => {
-        if (currentPage > 1) {
-            setcurrentPage(currentPage - 1);
+    // const handlePrevPage = () => {
+    //     if (currentPage > 1) {
+    //         setcurrentPage(currentPage - 1);
+    //     }
+    // };
+    // const handlePageClick = (pageNumber) => {
+    //     setcurrentPage(pageNumber);
+    // };
+
+    const FormItem = Form.Item;
+    const [form] = Form.useForm();
+    const [offer, setOffer] = useState(null)
+    const { Option } = Select;
+    // const cities = [
+    //     { name: 'New York', state: 'New York', locations: ['Manhattan', 'Brooklyn', 'Queens'] },
+    //     { name: 'Los Angeles', state: 'California', locations: ['Hollywood', 'Santa Monica', 'Downtown'] },
+    //     // Add more cities and their locations as needed
+    // ];
+    const handleOffer = (e, index) => {
+        e.preventDefault()
+        console.log(index);
+        setOffer(index)
+    }
+    console.log(offer);
+    const [city, setCity] = useState('');
+    const [value, setValue] = useState({
+        name: '',
+        phone: '',
+
+    })
+    const districts = [
+        { name: 'Pune', cities: ['Pune', 'PCMC', 'Hinjewadi'] },
+        { name: 'Mumbai', cities: ['Mumbai', 'Navi Mumbai', 'Thane'] },
+        // Add more districts and their cities as needed
+    ];
+    const handleChange = (e, fieldname) => {
+        setValue({
+            ...value, // Spread the existing state
+            [fieldname]: e.target.value // Update the 'name' property
+        });
+    }
+    const [filteredCities, setFilteredCities] = useState([]);
+    const handleCitySearch = (value) => {
+        const uniqueCities = new Set();
+        districts.forEach(district => {
+            district.cities.forEach(city => {
+                if (city.toLowerCase().includes(value.toLowerCase())) {
+                    uniqueCities.add(`${city}, ${district.name}`);
+                }
+            });
+        });
+        setFilteredCities(Array.from(uniqueCities));
+    };
+    const handleCityChange = (value) => {
+        setCity(value);
+    };
+
+    const handleClose = (e) => {
+        e.preventDefault();
+        setOffer(null);
+        setValue({
+            name: '',
+            phone: ''
+        })
+    }
+    const handleSignIn = async (e) => {
+        const data = {
+            name: value.name,
+            phone: value.phone,
+            city: city
         }
-    };
-    const handlePageClick = (pageNumber) => {
-        setcurrentPage(pageNumber);
-    };
+        console.log(data);
+        
+    }
 
     return (
         <>
-            <div className="d-flex w-full ">
+            <div className="d-flex w-full relative">
                 <div className="w-1/5 text-justify lg:flex flex-col hidden outline-1 ">
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 ">
                         <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>Reset</button>
@@ -363,29 +433,32 @@ const Product = () => {
                             {filterdata.length > 0 ?
                                 filterdata.map((product, index) => {
                                     return (
-                                        <Grid item xs={12} sm={4} md={4} key={index}>
-                                            <div className="border-2  flex flex-col gap-2 bg-sky-100">
-                                                <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
+                                        <>
+                                            <Grid item xs={12} sm={4} md={4} key={index}>
+                                                <div className="border-2  flex flex-col gap-2 bg-sky-100">
+                                                    <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
 
-                                                <div className="items-center justify-center flex flex-col ">
-                                                    <p>{product.slug}</p>
-                                                    <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
-                                                </div>
-                                                <Button type="primary" className="w-full ">Check Offers</Button>
-                                               
-                                                <div className="relative w-full">
-                                                    <div className="flex w-full justify-between p-1 cursor-pointer" onClick={() => toggleVariation(index)}>
-                                                        <p>No variation Found</p>
-                                                        <PlusOutlined className={`transition-transform duration-300 ${variation === index ? 'rotate-45' : 'rotate-0'}`} />
+                                                    <div className="items-center justify-center flex flex-col ">
+                                                        <p>{product.slug}</p>
+                                                        <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
                                                     </div>
-                                                    {variation === index && (
-                                                        <div className="absolute top-full left-0 w-full p-1 border-2 bg-slate-50 transition-opacity duration-500">
-                                                            No Data Found
+                                                    <Button type="primary" className="w-full " onClick={(e) => { handleOffer(e, product) }}>Check Offers</Button>
+
+                                                    <div className="relative w-full">
+                                                        <div className="flex w-full justify-between p-1 cursor-pointer" onClick={() => toggleVariation(index)}>
+                                                            <p>No variation Found</p>
+                                                            <PlusOutlined className={`transition-transform duration-300 ${variation === index ? 'rotate-45' : 'rotate-0'}`} />
                                                         </div>
-                                                    )}
+                                                        {variation === index && (
+                                                            <div className="absolute top-full left-0 w-full p-1 border-2 bg-slate-50 transition-opacity duration-500">
+                                                                No Data Found
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Grid>
+                                            </Grid>
+
+                                        </>
                                     )
                                 })
                                 :
@@ -436,8 +509,10 @@ const Product = () => {
                             // ))}
                             // </>
                             // </div>
-                            <Button type="primary" className="w-1/2 border mt-5 flex justify-center m-auto rounded outline-1 p-1" onClick={handleNextPage} disabled={totalPages === 1}>Load More</Button>
+                            <Button type="primary" className="sm:w-1/2 w-full border mt-5 flex justify-center m-auto rounded outline-1 p-1" onClick={handleNextPage} disabled={totalPages === 1}>Load More</Button>
                         }
+                        <br />
+                        <br />
 
                     </div>
                 </div>
@@ -445,6 +520,102 @@ const Product = () => {
                     <button className="w-full grow border-r-2 border-gray-300" onClick={() => { setShortModel(!sortmodel) }}>Sort</button>
                     <button className="w-full grow" onClick={() => { setFilterModel(!filtermodel) }} >Filter</button>
                 </div>
+                {offer != null &&
+                    <div className="absolute w-full p-2 flex h-screen justify-between opacity-100 bg-transparent  items-center  bg-gray-300" >
+                        <div className="justify-center m-auto bg-slate-50 sm:w-1/2 w-full sm:h-1/2 h-full items-center ">
+                            <CloseCircleOutlined className="flex items-end p-2 text-right w-full" onClick={handleClose} />
+                            <div className="w-full p-2 flex flex-col ">
+                                <Form form={form} className="flex flex-col gap-3" onFinish={handleSignIn}>
+                                    <Row>
+                                        <Col xs={{ span: 20, offset: 1 }} lg={{ span: 10, offset: 1 }}>
+                                            <h1 className="w-full text-bold text-xl">{offer.name}</h1>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={{ span: 20, offset: 1 }} lg={{ span: 10, offset: 1 }}>
+
+                                            <FormItem
+
+                                                name="name"
+                                                rules={[
+                                                    { type: "text" },
+                                                    { required: true, message: 'Please input your Name!' }
+                                                ]}
+                                            >
+                                                <Input suffix={value?.name?.length > 0 ? <Check color="green" /> : <WarningFilled />} placeholder="Name" value={value.name} className="no-rounded"
+                                                    onChange={(e) => handleChange(e, 'name')}
+                                                />
+                                            </FormItem>
+                                        </Col>
+                                        <Col xs={{ span: 20, offset: 1 }} lg={{ span: 10, offset: 1 }}>
+
+                                            <FormItem
+
+                                                name="phone"
+                                                rules={[
+                                                    { type: "tel" },
+                                                    { required: true, message: 'Please input your Mobile No!' }
+                                                ]}
+                                            >
+                                                <Input suffix={value?.phone?.length > 0 ? <Check color="green" /> : <WarningFilled />} placeholder="Phone Number" value={value.phone} className="no-rounded"
+                                                    onChange={(e) => handleChange(e, 'phone')}
+                                                />
+                                            </FormItem>
+                                        </Col>
+                                    </Row>
+
+                                    <Row>
+                                        <Col xs={{ span: 20, offset: 1 }} lg={{ span: 21, offset: 1 }}>
+                                            <FormItem  
+                                             rules={[
+                                                        { required: true, message: 'Please select a city' },
+                                                    ]}
+                                            >
+                                                <Select
+                                                    value={city}
+                                                    onChange={handleCityChange}
+                                                    onSearch={handleCitySearch}
+                                                    placeholder="Select a city"
+                                                   
+                                                    showSearch
+
+                                                >
+                                                    {/* {filteredCities.length> 0 &&
+                                                        filteredCities.map(city => (
+                                                        <Option key={city} value={city}>
+                                                            {city}
+                                                        </Option>
+                                                    ))
+                                                    } */}
+                                                    {districts.map(district => (
+                                                        district.cities.map(city => (
+                                                            <Option key={`${city}, ${district.name}`} value={`${city}, ${district.name}`}>
+                                                                {`${city}, ${district.name}`}
+                                                            </Option>
+                                                        ))
+                                                    ))}
+                                                </Select>
+                                            </FormItem>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs={{ span: 20, offset: 1 }} lg={{ span: 21, offset: 1 }}>
+                                            <Button type="primary" className="w-full" htmlType="submit">
+                                                Submit
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                    <Col lg={{ span: 21, offset: 1 }} >
+                                    <p>By proceeding ahead you expressly agree to the Truck Buses<span>Terms and Conditions</span></p>
+                                    </Col>
+                                    </Row>
+                                </Form>
+                            </div>
+                        </div>
+                    </div>
+
+                }
             </div>
             {sortmodel & screenWidth < 1024 ? (
                 <div className="w-full flex flex-col justify-between h-screen absolute top-0 bg-gray-300">
@@ -583,6 +754,8 @@ const Product = () => {
                     }
                 </div>
             ) : ''}
+
+
         </>
     )
 }
