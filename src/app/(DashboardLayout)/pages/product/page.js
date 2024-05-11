@@ -523,12 +523,12 @@ const Product = () => {
                 {offer != null &&
                     <div className="absolute w-full p-2 flex h-screen justify-between opacity-100 bg-transparent  items-center  bg-gray-300" >
                         <div className="justify-center m-auto bg-slate-50 sm:w-1/2 w-full sm:h-1/2 h-full items-center ">
-                            <CloseCircleOutlined className="flex items-end p-2 text-right w-full" onClick={handleClose} />
+                            <CloseCircleOutlined className="float-end items-end p-2 text-end hover:text-gray-500 font-bold" onClick={handleClose} />
                             <div className="w-full p-2 flex flex-col ">
                                 <Form form={form} className="flex flex-col gap-3" onFinish={handleSignIn}>
                                     <Row>
                                         <Col xs={{ span: 20, offset: 1 }} lg={{ span: 10, offset: 1 }}>
-                                            <h1 className="w-full text-bold text-xl">{offer.name}</h1>
+                                            <h1 className="w-full text-bold text-xl">{offer.slug}</h1>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -589,7 +589,7 @@ const Product = () => {
                                                     } */}
                                                     {districts.map(district => (
                                                         district.cities.map(city => (
-                                                            <Option key={`${city}, ${district.name}`} value={`${city}, ${district.name}`}>
+                                                            <Option  key={`${city}, ${district.name}`} value={`${city}, ${district.name}`}>
                                                                 {`${city}, ${district.name}`}
                                                             </Option>
                                                         ))
