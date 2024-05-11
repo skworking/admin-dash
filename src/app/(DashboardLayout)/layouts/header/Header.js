@@ -35,8 +35,8 @@ const Header = ({ showMobmenu }) => {
   };
 
   return (
-    <Navbar color="primary" dark expand="md">
-      <div className="d-flex align-items-center">
+    <Navbar color="primary" dark expand="md" className="sticky top-0  w-full z-10 " >
+      <div className="d-flex align-items-center ">
         <NavbarBrand href="/" className="d-lg-none">
           <Image src={LogoWhite} alt="logo" />
         </NavbarBrand>
@@ -63,14 +63,10 @@ const Header = ({ showMobmenu }) => {
         <Nav className="me-auto" navbar>
           <NavItem>
             <Link href="/" className="nav-link">
-              Starter
+              Home
             </Link>
           </NavItem>
-          <NavItem>
-            <Link href="/pages/about" className="nav-link">
-              About
-            </Link>
-          </NavItem>
+          
           <NavItem>
             <Link href="/pages/vahicle" className="nav-link">
             SELL-USED-TRUCK

@@ -45,3 +45,24 @@ export async function POST(request){
         return NextResponse.json({ error: error.message }, { status: error.status || 500 });
     }
 }
+export async function GET() {
+    try {
+       
+        let data = []
+        try {
+
+            const res = await mongoose.connect(process.env.MONGODB, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            })
+            data = await District.find();
+        } catch (err) {
+            console.log(err);
+            data = { Success: false, err }
+        }
+
+        return NextResponse.json({ result: data, success: true })
+    } catch (err) {
+        console.log(err);
+    }
+}
