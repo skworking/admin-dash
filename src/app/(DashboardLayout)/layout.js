@@ -46,7 +46,7 @@ const FullLayout = ({ children }) => {
 
       {isAuth && pathname !== '/auth/login' ? (
         pathname !== '/auth/login' && pathname !== '/auth/signup' && role === 'admin' ? (
-          <div className="pageWrapper d-md-block d-lg-flex">
+          <div className="pageWrapper d-md-block d-lg-flex w-full">
             {/******** Sidebar **********/}
             <aside
               className={`sidebarArea shadow bg-white ${!open ? "" : "showSidebar"
@@ -61,7 +61,7 @@ const FullLayout = ({ children }) => {
               <Header showMobmenu={() => showMobilemenu()} />
 
               {/********Middle Content**********/}
-              <Container className="p-4 wrapper" fluid>
+              <Container className="wrapper relative" fluid>
                 {/* <div>{children}</div> */}
                 {React.cloneElement(children, { key })}
               </Container>
@@ -71,7 +71,7 @@ const FullLayout = ({ children }) => {
           : pathname !== '/auth/login' && pathname !== '/auth/signup' && role === 'user' ? (<>
             <Header showMobmenu={() => showMobilemenu()} />
             {/* <Container  fluid> */}
-              <div fluid>{children}</div>
+              <div className="relative" fluid>{children}</div>
               {/* {React.cloneElement(children, { key })} */}
             {/* </Container> */}
           </>) : (

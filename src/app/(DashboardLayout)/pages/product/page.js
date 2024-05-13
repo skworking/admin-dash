@@ -249,7 +249,7 @@ const Product = () => {
         phone: '',
 
     })
-    const [districts,setDistrict]=useState(null)
+    const [districts, setDistrict] = useState(null)
     // const districts = [
     //     { name: 'Pune', cities: ['Pune', 'PCMC', 'Hinjewadi'] },
     //     { name: 'Mumbai', cities: ['Mumbai', 'Navi Mumbai', 'Thane'] },
@@ -257,17 +257,17 @@ const Product = () => {
     // ];
     const fetchCity = async () => {
         await axios.get('/api/district')
-          .then((res) => {
-            console.log("city",res);
-            setDistrict(res.data.result)
-            // setProduct(res.data.result);
-          }).catch((err) => {
-            console.log(err);
-          })
-      }
-      useEffect(() => {
+            .then((res) => {
+                console.log("city", res);
+                setDistrict(res.data.result)
+                // setProduct(res.data.result);
+            }).catch((err) => {
+                console.log(err);
+            })
+    }
+    useEffect(() => {
         fetchCity()
-      }, [])
+    }, [])
     const handleChange = (e, fieldname) => {
         setValue({
             ...value, // Spread the existing state
@@ -305,83 +305,83 @@ const Product = () => {
             city: city
         }
         console.log(data);
-        
+
     }
-   
+
     const pathname = usePathname()
     console.log(Object.keys(typeCount).length)
     return (
-        <div className="mt-5">
-            <Breadcrumbs  currentLoc={pathname}/>
-            <div className=" p-3 d-flex w-full relative">
+        <div className=" relative">
+            <Breadcrumbs currentLoc={pathname} />
+            <div className="px-10  mt-5 d-flex w-full relative">
                 <div className="w-1/5 text-justify lg:flex flex-col hidden outline-1 ">
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 ">
                         <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>Reset</button>
                         <button className="hover:bg-blue-500 bg-blue-400 p-2 grow text-white rounded" onClick={filtercall}>Apply filter</button>
                     </div>
-                    
+
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShowProductType(!showProductType) }}>
                         <h1>Product Type</h1>
                         {showProductType ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
-                  
-                    {showProductType && 
-                        
-                        <>
-                       <div className={`${Object.keys(typeCount)?.length > 5 ?'h-[200px] overflow-auto bg-white':'h-auto bg-white'}`}>
-                        {Object.entries(typeCount).map(([product, count]) => {
-                            return (
-                                <div key={product} className="p-1 flex gap-2">
-                                    
-                                    <Checkbox
-                                        className="w-full"
-                                        key={product}
-                                        value={product}
-                                        checked={filters.body.includes(product)}
-                                        onChange={(e) => setFilters(prevFilters => ({
-                                            ...prevFilters,
-                                            body: e.target.checked
-                                                ? [...prevFilters.body, e.target.value]
-                                                : prevFilters.body.filter(item => item !== e.target.value)
-                                        }))}
-                                    >
-                                        {`${product} (${count})`}
-                                    </Checkbox>
 
-                                </div>
-                            )
-                        })}
-                       </div>
-                     </>
+                    {showProductType &&
+
+                        <>
+                            <div className={`${Object.keys(typeCount)?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto bg-white'}`}>
+                                {Object.entries(typeCount).map(([product, count]) => {
+                                    return (
+                                        <div key={product} className="p-1 flex gap-2">
+
+                                            <Checkbox
+                                                className="w-full"
+                                                key={product}
+                                                value={product}
+                                                checked={filters.body.includes(product)}
+                                                onChange={(e) => setFilters(prevFilters => ({
+                                                    ...prevFilters,
+                                                    body: e.target.checked
+                                                        ? [...prevFilters.body, e.target.value]
+                                                        : prevFilters.body.filter(item => item !== e.target.value)
+                                                }))}
+                                            >
+                                                {`${product} (${count})`}
+                                            </Checkbox>
+
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </>
                     }
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShow(!show) }}>
                         <h1>Brand Type</h1>
                         {show ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
                     {show && <>
-                        <div className={`${Object.keys(brandCounts)?.length > 5 ?'h-[200px] overflow-auto bg-white':'h-auto bg-white'}`} >
-                        {Object.entries(brandCounts).map(([product, count]) => {
+                        <div className={`${Object.keys(brandCounts)?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto bg-white'}`} >
+                            {Object.entries(brandCounts).map(([product, count]) => {
 
-                            return (
-                                <div key={product} className="p-1 flex gap-2 ">
-                                    <Checkbox
-                                        className="w-full"
-                                        key={product}
-                                        value={product}
-                                        checked={filters.brand.includes(product)}
-                                        onChange={(e) => setFilters(prevFilters => ({
-                                            ...prevFilters,
-                                            brand: e.target.checked
-                                                ? [...prevFilters.brand, e.target.value]
-                                                : prevFilters.brand.filter(item => item !== e.target.value)
-                                        }))}
-                                    >
-                                        {`${product} (${count})`}
-                                    </Checkbox>
+                                return (
+                                    <div key={product} className="p-1 flex gap-2 ">
+                                        <Checkbox
+                                            className="w-full"
+                                            key={product}
+                                            value={product}
+                                            checked={filters.brand.includes(product)}
+                                            onChange={(e) => setFilters(prevFilters => ({
+                                                ...prevFilters,
+                                                brand: e.target.checked
+                                                    ? [...prevFilters.brand, e.target.value]
+                                                    : prevFilters.brand.filter(item => item !== e.target.value)
+                                            }))}
+                                        >
+                                            {`${product} (${count})`}
+                                        </Checkbox>
 
-                                </div>
-                            )
-                        })}
+                                    </div>
+                                )
+                            })}
                         </div>
                     </>}
 
@@ -392,25 +392,25 @@ const Product = () => {
                     </div>
                     {showTagFilter && (
                         <>
-                        <div className={`${Object.keys(tagConts)?.length > 5 ?'h-[200px] overflow-auto bg-white':'h-auto bg-white'}`} >
-                            {Object.entries(tagConts)?.map(([tag, count]) => {
-                                return (
-                                    <Checkbox
-                                        className="p-1 flex gap-2 "
-                                        key={tag}
-                                        value={tag}
-                                        checked={filters.tag.includes(tag)}
-                                        onChange={(e) => setFilters(prevFilters => ({
-                                            ...prevFilters,
-                                            tag: e.target.checked
-                                                ? [...prevFilters.tag, e.target.value]
-                                                : prevFilters.tag.filter(item => item !== e.target.value)
-                                        }))}
-                                    >
-                                        {`${tag} (${count})`}
-                                    </Checkbox>
-                                )
-                            })}
+                            <div className={`${Object.keys(tagConts)?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto bg-white'}`} >
+                                {Object.entries(tagConts)?.map(([tag, count]) => {
+                                    return (
+                                        <Checkbox
+                                            className="p-1 flex gap-2 "
+                                            key={tag}
+                                            value={tag}
+                                            checked={filters.tag.includes(tag)}
+                                            onChange={(e) => setFilters(prevFilters => ({
+                                                ...prevFilters,
+                                                tag: e.target.checked
+                                                    ? [...prevFilters.tag, e.target.value]
+                                                    : prevFilters.tag.filter(item => item !== e.target.value)
+                                            }))}
+                                        >
+                                            {`${tag} (${count})`}
+                                        </Checkbox>
+                                    )
+                                })}
                             </div>
                         </>
                     )}
@@ -421,30 +421,30 @@ const Product = () => {
                     </div>
                     {showPriceFilter && (
                         <>
-                        <div className={`${Object.keys(priceCount)?.length > 5 ?'h-[200px] overflow-auto bg-white':'h-auto bg-white'}`} >
-                            {Object.entries(priceCount).map(([price, count]) => (
-                                <Radio
-                                    key={price}
-                                    className="p-1 flex gap-2"
-                                    checked={
-                                        selectedPriceOption !== null &&
-                                        selectedPriceOption === price
-                                    }
-                                    onChange={() => handlePriceFilterChange(price)}
-                                >
+                            <div className={`${Object.keys(priceCount)?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto bg-white'}`} >
+                                {Object.entries(priceCount).map(([price, count]) => (
+                                    <Radio
+                                        key={price}
+                                        className="p-1 flex gap-2"
+                                        checked={
+                                            selectedPriceOption !== null &&
+                                            selectedPriceOption === price
+                                        }
+                                        onChange={() => handlePriceFilterChange(price)}
+                                    >
 
-                                    {`Under ${price} Lakh (${count})`}
+                                        {`Under ${price} Lakh (${count})`}
+                                    </Radio>
+                                ))}
+                                <Radio
+                                    key="none"
+                                    className="p-1 flex gap-2"
+                                    checked={selectedPriceOption === null}
+                                    onChange={() => handlePriceFilterChange(null)}
+                                >
+                                    None
                                 </Radio>
-                            ))}
-                            <Radio
-                                key="none"
-                                className="p-1 flex gap-2"
-                                checked={selectedPriceOption === null}
-                                onChange={() => handlePriceFilterChange(null)}
-                            >
-                                None
-                            </Radio>
-                        </div>
+                            </div>
                         </>
                     )}
                 </div>
@@ -467,15 +467,15 @@ const Product = () => {
                                     return (
                                         <>
                                             <Grid item xs={12} sm={4} md={4} key={index}>
-                                                <div className="border-2  flex flex-col gap-2 bg-sky-100">
+                                                <div className="border-2  flex flex-col gap-2 bg-slate-50">
                                                     <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
 
-                                                    <div className="items-center justify-center flex flex-col ">
+                                                    <div className="items-center justify-center flex flex-col gap-2 p-3">
                                                         <p>{product.slug}</p>
                                                         <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
+                                                        <Button type="primary" className="w-full " onClick={(e) => { handleOffer(e, product) }}>Check Offers</Button>
                                                     </div>
-                                                    <Button type="primary" className="w-full " onClick={(e) => { handleOffer(e, product) }}>Check Offers</Button>
-
+                                                    <hr />
                                                     <div className="relative w-full">
                                                         <div className="flex w-full justify-between p-1 cursor-pointer" onClick={() => toggleVariation(index)}>
                                                             <p>No variation Found</p>
@@ -598,17 +598,17 @@ const Product = () => {
 
                                     <Row>
                                         <Col xs={{ span: 20, offset: 1 }} lg={{ span: 21, offset: 1 }}>
-                                            <FormItem  
-                                             rules={[
-                                                        { required: true, message: 'Please select a city' },
-                                                    ]}
+                                            <FormItem
+                                                rules={[
+                                                    { required: true, message: 'Please select a city' },
+                                                ]}
                                             >
                                                 <Select
                                                     value={city}
                                                     onChange={handleCityChange}
                                                     onSearch={handleCitySearch}
                                                     placeholder="Select a city"
-                                                   
+
                                                     showSearch
 
                                                 >
@@ -621,7 +621,7 @@ const Product = () => {
                                                     } */}
                                                     {districts.map(district => (
                                                         district.cities.map(city => (
-                                                            <Option  key={`${city}, ${district.name}`} value={`${city}, ${district.name}`}>
+                                                            <Option key={`${city}, ${district.name}`} value={`${city}, ${district.name}`}>
                                                                 {`${city}, ${district.name}`}
                                                             </Option>
                                                         ))
@@ -638,9 +638,9 @@ const Product = () => {
                                         </Col>
                                     </Row>
                                     <Row>
-                                    <Col lg={{ span: 21, offset: 1 }} >
-                                    <p>By proceeding ahead you expressly agree to the Truck Buses<span>Terms and Conditions</span></p>
-                                    </Col>
+                                        <Col lg={{ span: 21, offset: 1 }} >
+                                            <p>By proceeding ahead you expressly agree to the Truck Buses<span>Terms and Conditions</span></p>
+                                        </Col>
                                     </Row>
                                 </Form>
                             </div>
