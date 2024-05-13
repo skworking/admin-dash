@@ -7,6 +7,10 @@ import { Grid } from "@mui/material";
 import SkeletonLoader from "../../components/reuseable/skelenton";
 import { Check } from "react-feather";
 import axios from "axios";
+import { Breadcrumb, BreadcrumbItem } from "reactstrap";
+import Breadcrumbs from "../../components/reuseable/bread";
+import { usePathname } from "next/navigation";
+
 
 
 
@@ -16,10 +20,10 @@ const Product = () => {
     const [sorted, setSorted] = useState([]);
     const [filterdata, setFilterData] = useState([]);
     const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
-    const [show, setShow] = useState(false);
-    const [showTagFilter, setShowTagFilter] = useState(false);
-    const [showPriceFilter, setShowPriceFilter] = useState(false);
-    const [showProductType, setShowProductType] = useState(false);
+    const [show, setShow] = useState(true);
+    const [showTagFilter, setShowTagFilter] = useState(true);
+    const [showPriceFilter, setShowPriceFilter] = useState(true);
+    const [showProductType, setShowProductType] = useState(true);
 
     const [selectedPriceOption, setSelectedPriceOption] = useState(null);
     const [filters, setFilters] = useState({
@@ -27,8 +31,8 @@ const Product = () => {
         brand: [],
         tag: []
     });
-    const [sortmodel, setShortModel] = useState(false)
-    const [filtermodel, setFilterModel] = useState(false)
+    const [sortmodel, setShortModel] = useState(true)
+    const [filtermodel, setFilterModel] = useState(true)
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [variation, setVariation] = useState(false)
     const [currentPage, setcurrentPage] = useState(1)
@@ -173,9 +177,7 @@ const Product = () => {
         const response = await result.json();
         if (response.success) {
             setFilterData(response.result)
-            // setcurrentPage(response.currentPage)
             setTotalPage(response.totalPages)
-            // setSorted(response.result)
             setLoading(false);
             message.success({ content: response.message, duration: 2 });
         } else {
@@ -305,24 +307,32 @@ const Product = () => {
         console.log(data);
         
     }
-
+   
+    const pathname = usePathname()
+    console.log(Object.keys(typeCount).length)
     return (
-        <>
-            <div className="d-flex w-full relative">
+        <div className="mt-5">
+            <Breadcrumbs  currentLoc={pathname}/>
+            <div className=" p-3 d-flex w-full relative">
                 <div className="w-1/5 text-justify lg:flex flex-col hidden outline-1 ">
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 ">
                         <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>Reset</button>
                         <button className="hover:bg-blue-500 bg-blue-400 p-2 grow text-white rounded" onClick={filtercall}>Apply filter</button>
                     </div>
-
+                    
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShowProductType(!showProductType) }}>
                         <h1>Product Type</h1>
                         {showProductType ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
-                    {showProductType && <>
+                  
+                    {showProductType && 
+                        
+                        <>
+                       <div className={`${Object.keys(typeCount)?.length > 5 ?'h-[200px] overflow-auto bg-white':'h-auto bg-white'}`}>
                         {Object.entries(typeCount).map(([product, count]) => {
                             return (
-                                <div key={product} className="p-1 flex gap-2 ">
+                                <div key={product} className="p-1 flex gap-2">
+                                    
                                     <Checkbox
                                         className="w-full"
                                         key={product}
@@ -341,13 +351,15 @@ const Product = () => {
                                 </div>
                             )
                         })}
-                    </>
+                       </div>
+                     </>
                     }
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShow(!show) }}>
                         <h1>Brand Type</h1>
                         {show ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
                     {show && <>
+                        <div className={`${Object.keys(brandCounts)?.length > 5 ?'h-[200px] overflow-auto bg-white':'h-auto bg-white'}`} >
                         {Object.entries(brandCounts).map(([product, count]) => {
 
                             return (
@@ -370,6 +382,7 @@ const Product = () => {
                                 </div>
                             )
                         })}
+                        </div>
                     </>}
 
 
@@ -379,6 +392,7 @@ const Product = () => {
                     </div>
                     {showTagFilter && (
                         <>
+                        <div className={`${Object.keys(tagConts)?.length > 5 ?'h-[200px] overflow-auto bg-white':'h-auto bg-white'}`} >
                             {Object.entries(tagConts)?.map(([tag, count]) => {
                                 return (
                                     <Checkbox
@@ -397,6 +411,7 @@ const Product = () => {
                                     </Checkbox>
                                 )
                             })}
+                            </div>
                         </>
                     )}
 
@@ -406,6 +421,7 @@ const Product = () => {
                     </div>
                     {showPriceFilter && (
                         <>
+                        <div className={`${Object.keys(priceCount)?.length > 5 ?'h-[200px] overflow-auto bg-white':'h-auto bg-white'}`} >
                             {Object.entries(priceCount).map(([price, count]) => (
                                 <Radio
                                     key={price}
@@ -428,6 +444,7 @@ const Product = () => {
                             >
                                 None
                             </Radio>
+                        </div>
                         </>
                     )}
                 </div>
@@ -771,7 +788,7 @@ const Product = () => {
             ) : ''}
 
 
-        </>
+        </div>
     )
 }
 export default Product;
