@@ -6,6 +6,7 @@ import { Checkbox, Collapse, Dropdown, Radio, Select, Form, Menu, Button, Toolti
 import { Grid } from "@mui/material";
 import SkeletonLoader from "../../components/reuseable/skelenton";
 import { Check } from "react-feather";
+import axios from "axios";
 
 
 
@@ -239,18 +240,32 @@ const Product = () => {
         console.log(index);
         setOffer(index)
     }
-    console.log(offer);
+    // console.log(offer);
     const [city, setCity] = useState('');
     const [value, setValue] = useState({
         name: '',
         phone: '',
 
     })
-    const districts = [
-        { name: 'Pune', cities: ['Pune', 'PCMC', 'Hinjewadi'] },
-        { name: 'Mumbai', cities: ['Mumbai', 'Navi Mumbai', 'Thane'] },
-        // Add more districts and their cities as needed
-    ];
+    const [districts,setDistrict]=useState(null)
+    // const districts = [
+    //     { name: 'Pune', cities: ['Pune', 'PCMC', 'Hinjewadi'] },
+    //     { name: 'Mumbai', cities: ['Mumbai', 'Navi Mumbai', 'Thane'] },
+    //     // Add more districts and their cities as needed
+    // ];
+    const fetchCity = async () => {
+        await axios.get('/api/district')
+          .then((res) => {
+            console.log("city",res);
+            setDistrict(res.data.result)
+            // setProduct(res.data.result);
+          }).catch((err) => {
+            console.log(err);
+          })
+      }
+      useEffect(() => {
+        fetchCity()
+      }, [])
     const handleChange = (e, fieldname) => {
         setValue({
             ...value, // Spread the existing state
