@@ -19,7 +19,7 @@ const Breadcrumbs = (props) => {
 
     const match = currentLoc.match(regex);
     console.log(match);
-    if (match.length> 1) {
+    if (match?.length> 1) {
       setLocation(match[1]);
     
     }
@@ -44,7 +44,9 @@ const Breadcrumbs = (props) => {
           </svg>
           Home
         </Link>
-        /
+        {location !== null &&
+          <>/</>
+        }
         <Link className=" text-site-color" href={`${location}`}>
           &nbsp;{location}&nbsp;
         </Link>

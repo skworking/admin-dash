@@ -7,7 +7,6 @@ import { Grid } from "@mui/material";
 import SkeletonLoader from "../../components/reuseable/skelenton";
 import { Check } from "react-feather";
 import axios from "axios";
-import { Breadcrumb, BreadcrumbItem } from "reactstrap";
 import Breadcrumbs from "../../components/reuseable/bread";
 import { usePathname } from "next/navigation";
 
