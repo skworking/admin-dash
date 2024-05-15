@@ -26,9 +26,9 @@ const Breadcrumbs = (props) => {
    
   }, [currentLoc]);
   return (
-    <div className=' w-full'>
+    
 
-      <nav className="flex absolute w-full top-[-6%] bg-slate-200 shadow-md " aria-label="Breadcrumb">
+      <nav className="flex relative w-full top-[-6%] bg-slate-200 shadow-md " aria-label="Breadcrumb">
         <Link
           href="/"
           className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
@@ -52,7 +52,7 @@ const Breadcrumbs = (props) => {
         </Link>
         /&nbsp;{endpoint}
       </nav>
-    </div>
+    
   );
 };
 

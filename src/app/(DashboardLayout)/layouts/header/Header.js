@@ -17,6 +17,7 @@ import {
 import LogoWhite from "public/images/logos/xtremelogowhite.svg";
 import user1 from "public/images/users/user1.jpg";
 import { useRouter } from 'next/navigation'
+import MultiLevelDropdown from "./multilevel";
 
 const Header = ({ showMobmenu }) => {
   const router = useRouter()
@@ -77,6 +78,7 @@ const Header = ({ showMobmenu }) => {
               Product
             </Link>
           </NavItem>
+          <MultiLevelDropdown />
           {/*<UncontrolledDropdown inNavbar nav>
             <DropdownToggle caret nav>
               DD Menu

@@ -11,7 +11,7 @@ import ProductDisplay from "../components/reuseable/productdisplay";
 
 const FilterList = ({ items, selectedFilter, onFilterChange }) => {
     return (
-        <ul className="rounded-full bg-sky-200 flex w-max sm:w-fit   sm:p-0 overflow-hidden">
+        <ul className="rounded-full bg-sky-100 flex w-max sm:w-fit   sm:p-0 overflow-hidden">
             {items.map((item, index) => (
                 <li
                     key={index}
@@ -125,9 +125,9 @@ const BrandList = () => {
 
 
     return (
-        <div className="relative mt-6 ">
+        <div className="relative  bg-white ">
             <Breadcrumbs currentLoc={pathname} />
-            <div className="flex flex-col sm:px-5 p-2 gap-2 overflow-auto">
+            <div className="flex flex-col  px-20 gap-2 overflow-auto">
                 <h1>Top Brands</h1>
                 <FilterList items={uniqueBrands} selectedFilter={brandFilter}
                     onFilterChange={setBrandFilter} />
