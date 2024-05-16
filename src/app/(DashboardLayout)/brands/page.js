@@ -11,11 +11,11 @@ import ProductDisplay from "../components/reuseable/productdisplay";
 
 const FilterList = ({ items, selectedFilter, onFilterChange }) => {
     return (
-        <ul className="rounded-full bg-sky-100 flex w-max sm:w-fit   sm:p-0 overflow-hidden">
+        <ul className="rounded-full bg-sky-100 flex w-max sm:w-fit   overflow-hidden">
             {items.map((item, index) => (
                 <li
                     key={index}
-                    className={`flex p-1 rounded-full m-2 ${selectedFilter.index === index ? 'bg-gray-400 rounded-full px-3' : 'items-center'}`}
+                    className={`flex p-1 rounded-full m-1 ${selectedFilter.index === index ? 'bg-blue-500 rounded-full px-3' : 'items-center'}`}
                     onClick={() => onFilterChange({ index, value: item })}
                 >
                     {item}
@@ -127,16 +127,19 @@ const BrandList = () => {
     return (
         <div className="relative  bg-white ">
             <Breadcrumbs currentLoc={pathname} />
-            <div className="sm:px-10 gap-2 overflow-auto w-full relative">
-                <h1>Top Brands</h1>
+            <div className="sm:px-10 flex flex-col gap-3 my-2  overflow-auto w-full relative">
+                <div className="font-bold"> Top Truck Brands
+                <hr className="w-[50px] h-2  bg-blue-500   rounded " style={{ opacity: 1 }}></hr>
+                </div>
                 <FilterList items={uniqueBrands} selectedFilter={brandFilter}
                     onFilterChange={setBrandFilter} />
 
                 {filterdata?.length >= 3 ? (
                     <Slider {...settings}>
+                      
                         {filterdata?.map((product, index) => (
-                            <div key={index}>
-                                <div className="border-2  flex flex-col gap-2 bg-slate-50">
+                            <div key={index} className="p-2">
+                                <div className="flex flex-col gap-2 bg-slate-50">
                                     <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
                                     <div className="items-center justify-center flex flex-col gap-2 p-3">
                                         <p>{product.slug}</p>
@@ -144,8 +147,10 @@ const BrandList = () => {
                                         <Button type="primary" className="w-full" /* onClick={(e) => { handleOffer(e, product) }} */>Check Offers</Button>
                                     </div>
                                 </div>
+                               
                             </div>
                         ))}
+                  
                     </Slider>
                 ) : (
                     filterdata?.map((product, index) => (
@@ -165,7 +170,9 @@ const BrandList = () => {
                         </div>
                     ))
                 )}
-                <h1>Find All truck by Brands</h1>
+               <div className="font-bold">Find All Truck Brands
+                <hr className="w-[50px] h-2  bg-blue-500   rounded " style={{ opacity: 1 }}></hr>
+                </div>
                 <FilterList items={productType} selectedFilter={typeFilter} onFilterChange={setTypeFilter} />
                 <Grid container spacing={{ xs: 2 }} >
                     {filterType?.map((product, index) => (
@@ -178,7 +185,9 @@ const BrandList = () => {
                         </Grid>
                     ))}
                 </Grid>
-                <h1>Latest Models by Category</h1>
+                <div className="font-bold"> Latest Models by Category
+                <hr className="w-[50px] h-2  bg-blue-500   rounded " style={{ opacity: 1 }}></hr>
+                </div>
                 <FilterList items={productType} selectedFilter={categoryFilter} onFilterChange={setCategoryFilter} />
                 <ProductDisplay products={filterCategory} settings={settings} />
             </div>
