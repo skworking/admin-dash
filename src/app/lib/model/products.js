@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const ImageSchema=new mongoose.Schema({
     thumbnail:String,
     original:String,
@@ -52,6 +53,7 @@ const ProductSchema=new mongoose.Schema({
     description:String,
     images:[ImageSchema],
     gallery:[GalleryItemSchema],
+    body:[Buffer],
     quantity:Number,
     price:Number,
     sale_price:String,

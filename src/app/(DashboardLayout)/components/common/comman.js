@@ -1,81 +1,82 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import * as yup from 'yup'; 
+import * as yup from 'yup';
 import { storage } from "../firebase/firebase";
-import { getStorage,ref,uploadBytes,getDownloadURL } from 'firebase/storage';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { redirect } from 'next/navigation'
+import axios from "axios";
 export const options = [
-    { value: 'Electric', label: 'Electric' },
-    { value: 'Diesel', label: 'Diesel' },
-    { value: 'CNG', label: 'CNG' }
-  ]
+  { value: 'Electric', label: 'Electric' },
+  { value: 'Diesel', label: 'Diesel' },
+  { value: 'CNG', label: 'CNG' }
+]
 export const tags = [
-    { value: '1 HP', label: '1 HP' },
-    { value: '200 HP', label: '200 HP' },
-    { value: '250 HP', label: '250 HP' },
-    { value: '300 HP', label: '300 HP' }
-  ];
+  { value: '1 HP', label: '1 HP' },
+  { value: '200 HP', label: '200 HP' },
+  { value: '250 HP', label: '250 HP' },
+  { value: '300 HP', label: '300 HP' }
+];
 export const attributetab = [
-    { value: '12oz', label: '12oz', id: "3" },
-    { value: '24oz', label: '24oz', id: "3" },
-    { value: '36oz', label: '36oz', id: "3" },
+  { value: '12oz', label: '12oz', id: "3" },
+  { value: '24oz', label: '24oz', id: "3" },
+  { value: '36oz', label: '36oz', id: "3" },
 
-  ]
+]
 
 
 export const handleChange = (e, setFormData) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
-  
-export const handleNumberChange = (e,setFormData,index) => {
-    e.preventDefault()
-    const { name, value } = e.target;
-    const newValue = !isNaN(value) && value !== '' ? parseFloat(value) : 0;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: newValue,
-   
-    }));
-  };
+  const { name, value } = e.target;
+  setFormData(prevState => ({
+    ...prevState,
+    [name]: value
+  }));
+};
 
-export const handleSubmit = async (e,formData,router,isAuth) => {
-      e.preventDefault();
-      let result = await fetch("api/products", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${isAuth}`,
-          'Content-Type': 'multipart/form-data'
-        },
-        body: JSON.stringify(formData)
-      });
-      result = await result.json();
-      if (result.success) {
-        toast.success('Record Add successful!');
-        router.push('/product-list');
-    
-      }
+export const handleNumberChange = (e, setFormData, index) => {
+  e.preventDefault()
+  const { name, value } = e.target;
+  const newValue = !isNaN(value) && value !== '' ? parseFloat(value) : 0;
+  setFormData(prevState => ({
+    ...prevState,
+    [name]: newValue,
+
+  }));
+};
+
+export const handleSubmit = async (e, formData, router, isAuth) => {
+  e.preventDefault();
+  let result = await fetch("api/products", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${isAuth}`,
+      'Content-Type': 'multipart/form-data'
+    },
+    body: JSON.stringify(formData)
+  });
+  result = await result.json();
+  if (result.success) {
+    toast.success('Record Add successful!');
+    router.push('/product-list');
+
   }
+}
 
 export const handleSelectOption = (selectedOption, index, formData, setFormData) => {
-    const updatedOptions = selectedOption.map(option => ({
-      name: option.label,
-      value: option.value
-    }));
-  
-    const updatedVariationOptions = [...formData.variation_options];
-    updatedVariationOptions[index] = {
-      ...updatedVariationOptions[index],
-      options: updatedOptions
-    };
-  
-    setFormData(prevState => ({
-      ...prevState,
-      variation_options: updatedVariationOptions
-    }));
+  const updatedOptions = selectedOption.map(option => ({
+    name: option.label,
+    value: option.value
+  }));
+
+  const updatedVariationOptions = [...formData.variation_options];
+  updatedVariationOptions[index] = {
+    ...updatedVariationOptions[index],
+    options: updatedOptions
+  };
+
+  setFormData(prevState => ({
+    ...prevState,
+    variation_options: updatedVariationOptions
+  }));
 };
 
 export const handleSelectAttribute = (selectedOption, index, setFormData) => {
@@ -96,7 +97,7 @@ export const handleSelectAttribute = (selectedOption, index, setFormData) => {
 
 }
 
-export const handleVariationChange = (e, index,setFormData) => {
+export const handleVariationChange = (e, index, setFormData) => {
 
   const { name, value } = e.target;
   setFormData(prevState => ({
@@ -115,7 +116,7 @@ export const handleVariationChange = (e, index,setFormData) => {
 
 }
 
-export const handleVariationNumberChange = (e, index,setFormData) => {
+export const handleVariationNumberChange = (e, index, setFormData) => {
 
   const { name, value } = e.target;
   // const parsedValue = parseFloat(value);
@@ -136,7 +137,7 @@ export const handleVariationNumberChange = (e, index,setFormData) => {
 
 }
 
-export const handleVariationAttributeChange = (e, index,setFormData) => {
+export const handleVariationAttributeChange = (e, index, setFormData) => {
   e.preventDefault();
   const { name, value } = e.target;
 
@@ -157,7 +158,7 @@ export const handleVariationAttributeChange = (e, index,setFormData) => {
   }))
 }
 
-export const handleAddVariation = (e,formData,setFormData) => {
+export const handleAddVariation = (e, formData, setFormData) => {
   e.preventDefault()
   setFormData({
     ...formData,
@@ -176,7 +177,7 @@ export const handleAddVariation = (e,formData,setFormData) => {
   })
 }
 
-export const handleAddVariationOption = (e,formData,setFormData) => {
+export const handleAddVariationOption = (e, formData, setFormData) => {
   e.preventDefault()
   setFormData({
     ...formData,
@@ -194,6 +195,44 @@ export const handleAddVariationOption = (e,formData,setFormData) => {
     ],
   });
 };
+
+export const handleBody = async (e, setFormData) => {
+  e.preventDefault()
+  const file = e.target.files[0];
+  console.log(file);
+  if (!file) return
+
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  console.log(formData);
+  await axios.post('/api/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }).then((res) => {
+    if (res.data.success === true) {
+      const infobuffer = res.data.result.image.data.data;
+      const base64String = Buffer.from(infobuffer).toString('base64');
+      const dataUrl = `data:image/jpeg;base64,${base64String}`;
+      console.log(dataUrl);
+      setFormData(prev =>({
+        ...prev,
+        body:[dataUrl]
+    }))
+    
+    } else {
+      console.log(res);
+    }
+
+  })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
+
+
 
 // export const handleImage = async (e,setFormData) => {
 //   e.preventDefault();
@@ -214,7 +253,7 @@ export const handleAddVariationOption = (e,formData,setFormData) => {
 
 //       }));
 //     } else {
-      
+
 //       console.error("Failed to upload image. Status:", res);
 //     }
 //   } catch (err) {
@@ -223,22 +262,22 @@ export const handleAddVariationOption = (e,formData,setFormData) => {
 
 // }
 
-export const handleGalleryImage = async (e,setFormData) => {
+export const handleGalleryImage = async (e, setFormData) => {
   e.preventDefault();
   const files = e.target.files;
-  try{
+  try {
     const newGalleryImages = [];
     for (let i = 0; i < files.length; i++) {
       const imageFile = files[i];
       const storageRef = ref(storage, `gallery/${imageFile.name}`);
-      
+
       // Upload the current image file to Firebase Storage
       const uploadTask = await uploadBytes(storageRef, imageFile);
-      
+
       // Get the download URL of the uploaded image
       const downloadURL = await getDownloadURL(uploadTask.ref);
       console.log('Image uploaded successfully!', downloadURL);
-      
+
       // Push the download URL of the uploaded image to the updatedImages array
       newGalleryImages.push({
         thumbnail: downloadURL,
@@ -252,7 +291,7 @@ export const handleGalleryImage = async (e,setFormData) => {
         ...newGalleryImages
       ]
     }));
-  }catch(err){
+  } catch (err) {
     console.error('Error uploading images:', err);
   }
 
@@ -286,7 +325,7 @@ export const handleGalleryImage = async (e,setFormData) => {
   // }));
 };
 
-export const handleVariationOptionBoolean = (e, index,setFormData) => {
+export const handleVariationOptionBoolean = (e, index, setFormData) => {
   e.preventDefault();
   const { name } = e.target;
 
@@ -305,7 +344,7 @@ export const handleVariationOptionBoolean = (e, index,setFormData) => {
   }));
 }
 
-export const handleVariationOptionChange = (e, index,setFormData) => {
+export const handleVariationOptionChange = (e, index, setFormData) => {
   e.preventDefault();
 
   const { name, value } = e.target;
@@ -326,7 +365,7 @@ export const handleVariationOptionChange = (e, index,setFormData) => {
   }));
 };
 
-export const handleVariationOptionNumberChange = (e, index,setFormData) => {
+export const handleVariationOptionNumberChange = (e, index, setFormData) => {
 
   e.preventDefault()
   const { name, value } = e.target;
@@ -348,7 +387,7 @@ export const handleVariationOptionNumberChange = (e, index,setFormData) => {
     })
   }));
 };
-export const removeFields=(e,index,formData,setFormData)=>{
+export const removeFields = (e, index, formData, setFormData) => {
   e.preventDefault();
   let newImage;
   if (formData.images.length > 0) {
@@ -361,7 +400,7 @@ export const removeFields=(e,index,formData,setFormData)=>{
     images: newImage
   });
 }
-export const removeFormFields = (e, index,formData,setFormData) => {
+export const removeFormFields = (e, index, formData, setFormData) => {
   e.preventDefault();
   let newvariations;
   if (formData.variations.length > 1) {
@@ -375,7 +414,7 @@ export const removeFormFields = (e, index,formData,setFormData) => {
   });
 }
 
-export const handleRemoveVariationOption = (e, index,formData,setFormData) => {
+export const handleRemoveVariationOption = (e, index, formData, setFormData) => {
   e.preventDefault();
   let newVariationOptions;
   if (formData.variation_options.length > 1) {
@@ -391,7 +430,7 @@ export const handleRemoveVariationOption = (e, index,formData,setFormData) => {
   });
 };
 
-export const handleImageRemove = (index,formData,setFormData) => {
+export const handleImageRemove = (index, formData, setFormData) => {
 
   let updated = [...formData.gallery]
   updated.splice(index, 1)

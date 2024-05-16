@@ -24,6 +24,7 @@ const EditProduct = (props) => {
     //   original: data?.images?.original || ''
     // },
     gallery: data.gallery,
+    body:data?.body,
     tag: data.tag,
     product_type: data.product_type,
     quantity: data.quantity,
@@ -555,7 +556,10 @@ const EditProduct = (props) => {
               }
             </div>
           </div>
-
+          <div  className={`${styles.containerdivright} text-start`} >
+           Product Body
+          <img src={formData.body} alt='logo not found' />
+          </div>
           <section className={`${styles.containerdivright} text-start`}>
             Select Tags:
             <Select

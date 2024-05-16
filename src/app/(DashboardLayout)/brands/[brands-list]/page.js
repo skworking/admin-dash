@@ -406,12 +406,51 @@ const Product = () => {
                 </div>
                 <div className="flex grow flex-col lg:w-4/5 h-screen bg-white">
                     <div className=" p-2 lg:flex  justify-between hidden">
-                        <div>{filterdata.length > 0 ? filterdata.length : sorted.length} Latest Truck Found
+                        <div className="font-bold">Populer {endpoint.charAt(0).toUpperCase()+endpoint.slice(1)} Trucks 
                             <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{ opacity: 1 }} ></hr>
                         </div>
                         <Dropdown overlay={menu} >
                             <Button icon={<DownOutlined />} >Sort By</Button>
                         </Dropdown>
+                    </div>
+                    <div className="w-full  p-2 ">
+                        <div className="lg:hidden mb-2">Populer {endpoint.charAt(0).toUpperCase()+endpoint.slice(1)} Trucks 
+                            <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{ opacity: 1 }}></hr>
+                        </div>
+                        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                        {!!filterProduct &&
+                                filterProduct.map((product, index) => {
+                                    return (
+                                        <>
+                                            <Grid item xs={12} sm={4} md={4} key={index}>
+                                                <div className="border-2  flex flex-col gap-2 bg-slate-50">
+                                                    <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
+
+                                                    <div className="items-center justify-center flex flex-col gap-2 p-3">
+                                                        <p>{product.slug}</p>
+                                                        <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
+                                                        <Button type="primary" className="w-full " onClick={(e) => { handleOffer(e, product) }}>Check Offers</Button>
+                                                    </div>
+                                                    <hr />
+                                                    <div className="relative w-full">
+                                                        <div className="flex w-full justify-between p-1 cursor-pointer" onClick={() => toggleVariation(index)}>
+                                                            <p>No variation Found</p>
+                                                            <PlusOutlined className={`transition-transform duration-300 ${variation === index ? 'rotate-45' : 'rotate-0'}`} />
+                                                        </div>
+                                                        {variation === index && (
+                                                            <div className="absolute top-full left-0 w-full p-1 border-2 bg-slate-50 transition-opacity duration-500">
+                                                                No Data Found
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </Grid>
+
+                                        </>
+                                    )
+                                })
+                        }
+                        </Grid>
                     </div>
                 </div>
             </div>

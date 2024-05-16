@@ -4,7 +4,7 @@ import { Container, Col, Row, Card, CardBody, CardTitle } from "reactstrap";
 import styles from '../../page.module.css'
 import { useRouter,redirect } from 'next/navigation'
 import Select from 'react-select'
-import { options, tags, attributetab, handleChange, handleNumberChange, handleSubmit, handleSelectOption, handleSelectAttribute, handleVariationChange, handleVariationNumberChange, handleVariationAttributeChange, handleAddVariation, handleAddVariationOption, handleImage, handleGalleryImage, handleVariationOptionBoolean, handleVariationOptionNumberChange, removeFormFields, handleRemoveVariationOption, handleImageRemove, handleVariationOptionChange, removeFields } from "../components/common/comman";
+import { options, tags, attributetab, handleChange, handleNumberChange, handleSubmit, handleSelectOption, handleSelectAttribute, handleVariationChange, handleVariationNumberChange, handleVariationAttributeChange, handleAddVariation, handleAddVariationOption, handleImage, handleGalleryImage, handleVariationOptionBoolean, handleVariationOptionNumberChange, removeFormFields, handleRemoveVariationOption, handleImageRemove, handleVariationOptionChange, removeFields,handleBody } from "../components/common/comman";
 import Input from '../components/reuseable/input';
 import File from '../components/reuseable/file';
 import Button from '../components/reuseable/button';
@@ -18,6 +18,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 
 const Product = () => {
+
 
   const router = useRouter()
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -49,6 +50,7 @@ const Product = () => {
     description: '',
     images: [],
     gallery: [],
+    body:[],
     tag: [],
     product_type: '',
     quantity: 0,
@@ -129,7 +131,7 @@ const Product = () => {
     }));
   };
 
-
+  console.log(formData);
   const data = {
     'variations[0].attribute.name': "Attribute name is required",
 
@@ -207,9 +209,16 @@ const Product = () => {
                 </div>
                 <div class="col-xl-6">
                   <div class="d-grid grid-cols-1 ">
-                    <File text={'gallery'} onChange={(e) => handleGalleryImage(e, setFormData)} typeinput="file" option={true} stylediv={styles.containerdivright} inputstyle={styles.containerdivinput} images={formData.gallery.length} gallery={formData.gallery} onClick={(index) => handleImageRemove(index, formData, setFormData)} errors={validationErrors.gallery} />
+                    <File text={'gallery'} onChange={(e) => handleGalleryImage(e, setFormData)} typeinput="file" option={true} stylediv={styles.containerdivright} inputstyle={styles.containerdivinput} images={formData?.gallery?.length} gallery={formData.gallery} onClick={(index) => handleImageRemove(index, formData, setFormData)} errors={validationErrors.gallery} />
                   </div>
                 </div>
+                <div class="col-xl-6">
+                  <div class="d-grid grid-cols-1 ">
+                    <Input text={'body'} onChange={(e)=> handleBody(e,setFormData)} typeinput="file" stylediv={styles.containerdivright} inputstyle={styles.containerdivinput} />
+                  
+                  </div>
+                </div>
+              
                 <div class="col-xl-6 m-auto mt-4 ">
                   <div className="d-grid grid-cols-1" >
                     <Select
@@ -225,7 +234,7 @@ const Product = () => {
                 </div>
 
                 <div className={`col-xl-6`} stylediv={styles.containerdivright} inputstyle={styles.containerdivinput}>
-                  {Object.keys(formData.images).map((key, index) => {
+                  {!!formData.images.length > 0 && Object.keys(formData.images).map((key, index) => {
                     const image = formData.images[key];
                     console.log(image);
                     return (
