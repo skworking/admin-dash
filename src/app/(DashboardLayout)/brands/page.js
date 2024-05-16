@@ -127,7 +127,7 @@ const BrandList = () => {
     return (
         <div className="relative  bg-white ">
             <Breadcrumbs currentLoc={pathname} />
-            <div className="flex flex-col  px-20 gap-2 overflow-auto">
+            <div className="sm:px-10 gap-2 overflow-auto w-full relative">
                 <h1>Top Brands</h1>
                 <FilterList items={uniqueBrands} selectedFilter={brandFilter}
                     onFilterChange={setBrandFilter} />

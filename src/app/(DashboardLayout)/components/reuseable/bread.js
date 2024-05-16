@@ -13,7 +13,7 @@ const Breadcrumbs = (props) => {
 //   const loc = useLocation().pathname;
   const [location, setLocation] = useState(null);
 
-  
+  console.log(location);
   useEffect(() => {
     const regex = /\/(\w+)\//;
 
@@ -47,7 +47,7 @@ const Breadcrumbs = (props) => {
         {location !== null &&
           <>/</>
         }
-        <Link className=" text-site-color" href={`${location}`}>
+        <Link className=" text-site-color" href={`/${location}`}>
           &nbsp;{location}&nbsp;
         </Link>
         /&nbsp;{endpoint}

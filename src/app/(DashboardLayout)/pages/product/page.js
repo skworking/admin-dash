@@ -310,7 +310,7 @@ const Product = () => {
     const pathname = usePathname()
     console.log(Object.keys(typeCount).length)
     return (
-        <div className=" relative">
+        <div className="relative">
             <Breadcrumbs currentLoc={pathname} />
             <div className="px-10  mt-5 d-flex w-full relative">
                 <div className="w-1/5 text-justify lg:flex flex-col hidden outline-1 ">

@@ -15,7 +15,25 @@ import { usePathname } from "next/navigation";
 
 
 const Product = () => {
+    const pathname = usePathname()
+    const endpoint = pathname.split("/").pop();
+
     const [products, setProducts] = useState([]);
+
+    const filterProducts = (products, value) => {
+        return products.filter(product => product.brand.toLowerCase() === value.toLowerCase());
+    }
+    const [filterProduct, setFilterProduct] = useState(null)
+    useMemo(() => {
+
+        if (endpoint !== null & products !== null) {
+            const data = filterProducts(products, endpoint)
+            setFilterProduct(data)
+        }
+    }, [products])
+
+    console.log(filterProduct);
+
     const [sorted, setSorted] = useState([]);
     const [filterdata, setFilterData] = useState([]);
     const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
@@ -63,9 +81,9 @@ const Product = () => {
             const data = await result.json();
             if (data.success) {
 
-                setTotalPage(data.totalPages)
+                // setTotalPage(data.totalPages)
                 setProducts(data.result);
-                setSorted(data.result)
+               
             } else {
                 console.error("Error fetching Products:", data.error);
             }
@@ -83,22 +101,23 @@ const Product = () => {
 
     const { Panel } = Collapse;
 
-    const priceCount = products?.reduce((acc, product) => {
+    const priceCount = filterProduct?.reduce((acc, product) => {
         acc[product.price] = (acc[product.price] || 0) + 1;
         return acc
     }, {})
-
-    const brandCounts = products.reduce((acc, product) => {
+    
+    const brandCounts = filterProduct?.reduce((acc, product) => {
         acc[product.brand] = (acc[product.brand] || 0) + 1;
         return acc;
     }, {});
-    const tagConts = products?.reduce((acc, product) => {
+    console.log(brandCounts);
+    const tagConts = filterProduct?.reduce((acc, product) => {
         product.tag.forEach(tag => {
             acc[tag.name] = (acc[tag.name] || 0) + 1;
         });
         return acc
     }, {})
-    const typeCount = products.reduce((acc, product) => {
+    const typeCount = filterProduct?.reduce((acc, product) => {
         acc[product.product_type] = (acc[product.product_type] || 0) + 1;
         return acc
     }, {})
@@ -307,8 +326,8 @@ const Product = () => {
 
     }
 
-    const pathname = usePathname()
-    console.log(Object.keys(typeCount).length)
+
+    // console.log(Object.keys(typeCount).length)
     return (
         <div className=" relative">
             <Breadcrumbs currentLoc={pathname} />
@@ -323,12 +342,11 @@ const Product = () => {
                         <h1>Product Type</h1>
                         {showProductType ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
-
-                    {showProductType &&
+                    {showProductType && !!typeCount  &&
 
                         <>
-                            <div className={`${Object.keys(typeCount)?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto bg-white'}`}>
-                                {Object.entries(typeCount).map(([product, count]) => {
+                            <div className={`${Object?.keys(typeCount)?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto bg-white'}`}>
+                                {Object?.entries(typeCount)?.map(([product, count]) => {
                                     return (
                                         <div key={product} className="p-1 flex gap-2">
 
@@ -353,72 +371,11 @@ const Product = () => {
                             </div>
                         </>
                     }
-                    <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShow(!show) }}>
-                        <h1>Brand Type</h1>
-                        {show ? <MinusOutlined /> : <PlusOutlined />}
-                    </div>
-                    {show && <>
-                        <div className={`${Object.keys(brandCounts)?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto bg-white'}`} >
-                            {Object.entries(brandCounts).map(([product, count]) => {
-
-                                return (
-                                    <div key={product} className="p-1 flex gap-2 ">
-                                        <Checkbox
-                                            className="w-full"
-                                            key={product}
-                                            value={product}
-                                            checked={filters.brand.includes(product)}
-                                            onChange={(e) => setFilters(prevFilters => ({
-                                                ...prevFilters,
-                                                brand: e.target.checked
-                                                    ? [...prevFilters.brand, e.target.value]
-                                                    : prevFilters.brand.filter(item => item !== e.target.value)
-                                            }))}
-                                        >
-                                            {`${product} (${count})`}
-                                        </Checkbox>
-
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </>}
-
-
-                    <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer" onClick={toggleTagFilter}>
-                        <h1>Tag</h1>
-                        {showTagFilter ? <MinusOutlined /> : <PlusOutlined />}
-                    </div>
-                    {showTagFilter && (
-                        <>
-                            <div className={`${Object.keys(tagConts)?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto bg-white'}`} >
-                                {Object.entries(tagConts)?.map(([tag, count]) => {
-                                    return (
-                                        <Checkbox
-                                            className="p-1 flex gap-2 "
-                                            key={tag}
-                                            value={tag}
-                                            checked={filters.tag.includes(tag)}
-                                            onChange={(e) => setFilters(prevFilters => ({
-                                                ...prevFilters,
-                                                tag: e.target.checked
-                                                    ? [...prevFilters.tag, e.target.value]
-                                                    : prevFilters.tag.filter(item => item !== e.target.value)
-                                            }))}
-                                        >
-                                            {`${tag} (${count})`}
-                                        </Checkbox>
-                                    )
-                                })}
-                            </div>
-                        </>
-                    )}
-
-                    <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer" onClick={togglePriceFilter}>
+                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer" onClick={togglePriceFilter}>
                         <h1>Price Range</h1>
                         {showPriceFilter ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
-                    {showPriceFilter && (
+                    {showPriceFilter && !!priceCount && (
                         <>
                             <div className={`${Object.keys(priceCount)?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto bg-white'}`} >
                                 {Object.entries(priceCount).map(([price, count]) => (
@@ -456,337 +413,8 @@ const Product = () => {
                             <Button icon={<DownOutlined />} >Sort By</Button>
                         </Dropdown>
                     </div>
-                    <div className="w-full  p-2 ">
-                        <div className="lg:hidden mb-2">{filterdata.length > 0 ? filterdata.length : sorted.length} Latest Truck Found
-                            <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{ opacity: 1 }}></hr>
-                        </div>
-                        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                            {filterdata.length > 0 ?
-                                filterdata.map((product, index) => {
-                                    return (
-                                        <>
-                                            <Grid item xs={12} sm={4} md={4} key={index}>
-                                                <div className="border-2  flex flex-col gap-2 bg-slate-50">
-                                                    <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
-
-                                                    <div className="items-center justify-center flex flex-col gap-2 p-3">
-                                                        <p>{product.slug}</p>
-                                                        <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
-                                                        <Button type="primary" className="w-full " onClick={(e) => { handleOffer(e, product) }}>Check Offers</Button>
-                                                    </div>
-                                                    <hr />
-                                                    <div className="relative w-full">
-                                                        <div className="flex w-full justify-between p-1 cursor-pointer" onClick={() => toggleVariation(index)}>
-                                                            <p>No variation Found</p>
-                                                            <PlusOutlined className={`transition-transform duration-300 ${variation === index ? 'rotate-45' : 'rotate-0'}`} />
-                                                        </div>
-                                                        {variation === index && (
-                                                            <div className="absolute top-full left-0 w-full p-1 border-2 bg-slate-50 transition-opacity duration-500">
-                                                                No Data Found
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </Grid>
-
-                                        </>
-                                    )
-                                })
-                                :
-                                ''
-                                // sorted.map((product, index) => {
-                                //     return (
-                                //         <>
-
-                                //             <Grid item xs={12} sm={4} md={4} key={index}>
-                                //                 <div className=" border-2 flex flex-col gap-2 bg-slate-50">
-                                //                     <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
-
-                                //                     <div className="items-center justify-center flex flex-col ">
-                                //                         <p className="text-blue-400">{product.slug}</p>
-                                //                         <p>₹ {product.min_price} - ₹{product.max_price} Lakh</p>
-                                //                     </div>
-                                //                     <Button type="primary" className="w-full ">Check Offers</Button>
-                                //                     <hr />
-                                //                     <div className="relative flex w-full justify-between p-1  cursor-pointer" onClick={() => { toggleVariation(index) }}>
-                                //                         <p>
-                                //                             No variation Found
-                                //                         </p>
-                                //                         {variation === index ? <PlusOutlined className="rotate-45 transition delay-300 duration-300" /> : <PlusOutlined className="rotate-0 transition delay-300 duration-300" />}
-
-                                //                         {variation === index && (
-                                //                             <div className={`absolute top-8 left-0 w-full p-1 border-2  opacity-100 bg-slate-50 delay-1000 transition duration-500`}  >
-                                //                                 No Data Found
-                                //                             </div>
-                                //                         )}
-
-                                //                     </div>
-                                //                 </div>
-                                //             </Grid>
-
-                                //         </>
-                                //     )
-                                // })
-                            }
-
-                        </Grid>
-                        {loading && <SkeletonLoader />}
-                        {filterdata.length > 0 &&
-                            // <div className="w-w-1/2 text-center m-auto p-1 border-2 rounded flex gap-5 mt-3">
-                            // <button className="border rounded outline-1 p-1" onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
-                            // <>
-                            // {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
-                            //     <button className={`bg-gray-200 w-[100px] ${currentPage === pageNumber ?'bg-gray-500':''}`} key={pageNumber} onClick={() => handlePageClick(pageNumber)}>{pageNumber}</button>
-                            // ))}
-                            // </>
-                            // </div>
-                            <Button type="primary" className="sm:w-1/2 w-full border mt-5 flex justify-center m-auto rounded outline-1 p-1" onClick={handleNextPage} disabled={totalPages === 1}>Load More</Button>
-                        }
-                        <br />
-                        <br />
-
-                    </div>
                 </div>
-                <div className={`fixed bottom-0 p-2 w-screen flex lg:hidden bg-white justify-between ${filtermodel & screenWidth < 1024 && 'hidden'} ${sortmodel & screenWidth < 1024 && 'hidden'} `}>
-                    <button className="w-full grow border-r-2 border-gray-300" onClick={() => { setShortModel(!sortmodel) }}>Sort</button>
-                    <button className="w-full grow" onClick={() => { setFilterModel(!filtermodel) }} >Filter</button>
-                </div>
-                {offer != null &&
-                    <div className="absolute w-full p-2 flex h-screen justify-between opacity-100 bg-transparent  items-center  bg-gray-300" >
-                        <div className="justify-center m-auto bg-slate-50 sm:w-1/2 w-full sm:h-1/2 h-full items-center ">
-                            <CloseCircleOutlined className="float-end items-end p-2 text-end hover:text-gray-500 font-bold" onClick={handleClose} />
-                            <div className="w-full p-2 flex flex-col ">
-                                <Form form={form} className="flex flex-col gap-3" onFinish={handleSignIn}>
-                                    <Row>
-                                        <Col xs={{ span: 20, offset: 1 }} lg={{ span: 10, offset: 1 }}>
-                                            <h1 className="w-full text-bold text-xl">{offer.slug}</h1>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col xs={{ span: 20, offset: 1 }} lg={{ span: 10, offset: 1 }}>
-
-                                            <FormItem
-
-                                                name="name"
-                                                rules={[
-                                                    { type: "text" },
-                                                    { required: true, message: 'Please input your Name!' }
-                                                ]}
-                                            >
-                                                <Input suffix={value?.name?.length > 0 ? <Check color="green" /> : <WarningFilled />} placeholder="Name" value={value.name} className="no-rounded"
-                                                    onChange={(e) => handleChange(e, 'name')}
-                                                />
-                                            </FormItem>
-                                        </Col>
-                                        <Col xs={{ span: 20, offset: 1 }} lg={{ span: 10, offset: 1 }}>
-
-                                            <FormItem
-
-                                                name="phone"
-                                                rules={[
-                                                    { type: "tel" },
-                                                    { required: true, message: 'Please input your Mobile No!' }
-                                                ]}
-                                            >
-                                                <Input suffix={value?.phone?.length > 0 ? <Check color="green" /> : <WarningFilled />} placeholder="Phone Number" value={value.phone} className="no-rounded"
-                                                    onChange={(e) => handleChange(e, 'phone')}
-                                                />
-                                            </FormItem>
-                                        </Col>
-                                    </Row>
-
-                                    <Row>
-                                        <Col xs={{ span: 20, offset: 1 }} lg={{ span: 21, offset: 1 }}>
-                                            <FormItem
-                                                rules={[
-                                                    { required: true, message: 'Please select a city' },
-                                                ]}
-                                            >
-                                                <Select
-                                                    value={city}
-                                                    onChange={handleCityChange}
-                                                    onSearch={handleCitySearch}
-                                                    placeholder="Select a city"
-
-                                                    showSearch
-
-                                                >
-                                                    {/* {filteredCities.length> 0 &&
-                                                        filteredCities.map(city => (
-                                                        <Option key={city} value={city}>
-                                                            {city}
-                                                        </Option>
-                                                    ))
-                                                    } */}
-                                                    {districts.map(district => (
-                                                        district.cities.map(city => (
-                                                            <Option key={`${city}, ${district.name}`} value={`${city}, ${district.name}`}>
-                                                                {`${city}, ${district.name}`}
-                                                            </Option>
-                                                        ))
-                                                    ))}
-                                                </Select>
-                                            </FormItem>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col xs={{ span: 20, offset: 1 }} lg={{ span: 21, offset: 1 }}>
-                                            <Button type="primary" className="w-full" htmlType="submit">
-                                                Submit
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col lg={{ span: 21, offset: 1 }} >
-                                            <p>By proceeding ahead you expressly agree to the Truck Buses<span>Terms and Conditions</span></p>
-                                        </Col>
-                                    </Row>
-                                </Form>
-                            </div>
-                        </div>
-                    </div>
-
-                }
             </div>
-            {sortmodel & screenWidth < 1024 ? (
-                <div className="w-full flex flex-col justify-between h-screen absolute top-0 bg-gray-300">
-                    <CloseCircleOutlined className="justify-end flex text-xl hover:text-white p-1 sm:mt-2 mt-3 cursor-pointer" onClick={() => { setShortModel(!sortmodel) }} />
-                    <div>
-                        <Menu onClick={({ key }) => handleSortBy(key)}>
-                            <Menu.Item key="priceHighToLow">Price: High to Low</Menu.Item>
-                            <Menu.Item key="priceLowToHigh">Price: Low to High</Menu.Item>
-
-                        </Menu>
-                    </div>
-                </div>
-            ) : ''}
-            {filtermodel & screenWidth < 1024 ? (
-                <div className="w-full text-justify h-screen bg-white lg:flex flex-col absolute top-0  outline-1  ">
-                    <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 ">
-                        <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>Cancel</button>
-                        <button className="hover:bg-blue-500 bg-blue-400 p-2 grow text-white rounded" onClick={filtercall}>Apply filter</button>
-                    </div>
-                    <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShowProductType(!showProductType) }}>
-                        <h1>Product Type</h1>
-                        {showProductType ? <MinusOutlined /> : <PlusOutlined />}
-                    </div>
-                    {showProductType && <>
-                        {Object.entries(typeCount).map(([product, count]) => {
-                            return (
-                                <div key={product} className="p-1 flex gap-2 ">
-                                    <Checkbox
-                                        className="w-full"
-                                        key={product}
-                                        value={product}
-                                        checked={filters.body.includes(product)}
-                                        onChange={(e) => setFilters(prevFilters => ({
-                                            ...prevFilters,
-                                            body: e.target.checked
-                                                ? [...prevFilters.body, e.target.value]
-                                                : prevFilters.body.filter(item => item !== e.target.value)
-                                        }))}
-                                    >
-                                        {`${product} (${count})`}
-                                    </Checkbox>
-
-                                </div>
-                            )
-                        })}
-                    </>
-                    }
-                    <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShow(!show) }}>
-                        <h1>Brand Type</h1>
-                        {show ? <MinusOutlined /> : <PlusOutlined />}
-                    </div>
-                    {show && <>
-                        {Object.entries(brandCounts).map(([product, count]) => {
-                            return (
-                                <Menu key={product} className="p-1 flex gap-2 ">
-                                    <Checkbox
-                                        className="w-full"
-                                        key={product}
-                                        value={product}
-                                        checked={filters.brand.includes(product)}
-                                        onChange={(e) => setFilters(prevFilters => ({
-                                            ...prevFilters,
-                                            brand: e.target.checked
-                                                ? [...prevFilters.brand, e.target.value]
-                                                : prevFilters.brand.filter(item => item !== e.target.value)
-                                        }))}
-                                    >
-                                        {`${product} (${count})`}
-                                    </Checkbox>
-
-                                </Menu>
-                            )
-                        })}
-                    </>}
-
-
-                    <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer" onClick={toggleTagFilter}>
-                        <h1>Tag</h1>
-                        {showTagFilter ? <MinusOutlined /> : <PlusOutlined />}
-                    </div>
-                    {showTagFilter && (
-                        <>
-                            {Object.entries(tagConts)?.map(([tag, count]) => {
-                                return (
-                                    <Menu key={tag._id} className="p-1 flex gap-2 ">
-                                        <Checkbox
-                                            className="p-1 flex gap-2 "
-                                            key={tag}
-                                            value={tag}
-                                            checked={filters.tag.includes(tag)}
-                                            onChange={(e) => setFilters(prevFilters => ({
-                                                ...prevFilters,
-                                                tag: e.target.checked
-                                                    ? [...prevFilters.tag, e.target.value]
-                                                    : prevFilters.tag.filter(item => item !== e.target.value)
-                                            }))}
-                                        >
-                                            {`${tag} (${count})`}
-                                        </Checkbox>
-                                    </Menu>
-                                )
-                            })}
-                        </>
-                    )}
-
-                    <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer" onClick={togglePriceFilter}>
-                        <h1>Price Range</h1>
-                        {showPriceFilter ? <MinusOutlined /> : <PlusOutlined />}
-                    </div>
-                    {showPriceFilter &&
-                        <>
-                            {Object.entries(priceCount).map(([price, count]) => (
-                                <Menu key={price} className="p-1 flex gap-2 ">
-                                    <Radio
-                                        className="p-1 flex gap-2"
-                                        checked={selectedPriceOption !== null && selectedPriceOption === price}
-                                        onChange={() => handlePriceFilterChange(price)}
-
-                                    >
-                                        {`Under ${price} Lakh (${count})`}
-                                    </Radio>
-                                </Menu>
-                            ))}
-                            <Menu className="p-1 flex gap-2">
-
-                                <Radio
-                                    key="none"
-                                    className="p-1 flex gap-2"
-                                    checked={selectedPriceOption === null}
-                                    onChange={() => setSelectedPriceOption(null)}
-                                >
-                                    None
-                                </Radio>
-                            </Menu>
-                        </>
-                    }
-                </div>
-            ) : ''}
-
-
         </div>
     )
 }
