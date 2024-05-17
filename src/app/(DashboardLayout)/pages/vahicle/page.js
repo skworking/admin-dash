@@ -259,7 +259,7 @@ const Vahicle = () => {
                 const infobuffer = res.data.result.image.data.data;
                 const base64String = Buffer.from(infobuffer).toString('base64');
                 const dataUrl = `data:image/jpeg;base64,${base64String}`;
-
+                
                 const updatedImages = [...vehicleDetails.images];
                 updatedImages[index] = dataUrl;
                 const dummyupdate = [...dummy.images];

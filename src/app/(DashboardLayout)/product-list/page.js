@@ -77,7 +77,7 @@ const ProductList = () => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false)
   const [operation,setOperation]=useState(false)
   const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
-
+console.log(products);
   // ////////////
   const fetchData = async () => {
     try {
@@ -209,7 +209,10 @@ const ProductList = () => {
    const flattenData = products?.map(item => {
      // here we can modify which colums data we want to add 
      const flattenedItem = { ...item };
- 
+      console.log(flattenedItem);
+     if(flattenedItem.body !==null){
+      flattenedItem.body=JSON.stringify(flattenedItem.body)
+     }
      if (flattenedItem.gallery) {
     
        // flattenedItem['Gallery ID']= (flattenedItem?.gallery[0]?._id)
@@ -259,6 +262,8 @@ const ProductList = () => {
     console.log("call");
     setOperation(operation === id ? null : id);
    }
+
+  
   return (
     <Row>
        {loading ? <div className='w-full  text-center m-auto'>Loading Data</div>:
@@ -303,10 +308,11 @@ const ProductList = () => {
                 <tbody>
                   
                   {products?.length>0 ?products?.map((tdata, index) => {
-                    
+                  
                    return (
                     <tr key={index} className="border-top relative">
                       <td>
+                        
                         <div className="d-flex align-items-center p-2">
                           <Image
                             src={user1}

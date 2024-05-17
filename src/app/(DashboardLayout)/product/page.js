@@ -215,7 +215,7 @@ const Product = () => {
                 <div class="col-xl-6">
                   <div class="d-grid grid-cols-1 ">
                     <Input text={'body'} onChange={(e)=> handleBody(e,setFormData)} typeinput="file" stylediv={styles.containerdivright} inputstyle={styles.containerdivinput} />
-                  
+                    <img src={formData?.body} alt='logo' />
                   </div>
                 </div>
               

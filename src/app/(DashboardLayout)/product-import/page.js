@@ -62,7 +62,13 @@ const ImportFile = () => {
                 parsedData = jsonData?.map(item => {
 
                     item.images = JSON.parse(item?.images);
-
+                    if(item.body){
+                        const infobuffer=JSON.parse(item?.body);
+                        
+                        const base64String = Buffer.from(infobuffer).toString('base64');
+                        const dataUrl = `data:image/jpeg;base64,${base64String}`;
+                        item.body=dataUrl;
+                    }
                     if (item.gallery) {
                         item.gallery = JSON.parse(item.gallery);
                     }

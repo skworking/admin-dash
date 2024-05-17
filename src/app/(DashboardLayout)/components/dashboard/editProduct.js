@@ -3,7 +3,7 @@ import styles from '../../../page.module.css'
 import Image from 'next/image';
 import { IoIosCloseCircle } from 'react-icons/io';
 import Select from 'react-select'
-import { options, tags, attributetab, handleChange, handleNumberChange, handleGalleryImage } from '../common/comman';
+import { options, tags, attributetab, handleChange, handleNumberChange, handleGalleryImage,handleBody } from '../common/comman';
 import validateForm from '../reuseable/validation';
 import Input from '../reuseable/input';
 import CustomConfirmation from '../reuseable/confirm';
@@ -13,7 +13,13 @@ import { storage } from '../firebase/firebase';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 const EditProduct = (props) => {
   const { data, oncancel, onUpdate } = props;
+
   console.log(data);
+  const [dataurl,setUrl]=useState('')
+  const [base64Image, setBase64Image] = useState('');
+   
+    
+  
   const [formData, setFormData] = useState({
     name: data?.name,
     slug: data?.slug,
@@ -24,7 +30,7 @@ const EditProduct = (props) => {
     //   original: data?.images?.original || ''
     // },
     gallery: data.gallery,
-    body:data?.body,
+    body:data.body,
     tag: data.tag,
     product_type: data.product_type,
     quantity: data.quantity,
@@ -38,6 +44,16 @@ const EditProduct = (props) => {
     variation_options: data.variation_options
   });
 
+  useEffect(() => {
+    if (formData.body) {
+      // Convert buffer data to base64
+      const buffer = Buffer.from(formData.body[0].data); // Assuming formData.body.data is the buffer data
+      const base64String = buffer.toString('base64');
+      setBase64Image(`data:image/jpeg;base64,${base64String}`); // Change image type if necessary
+    }
+  }, [formData.body]);
+  console.log(base64Image);
+ 
   const [validationErrors, setValidationErrors] = useState({});
   const [selectedOptions, setSelectedOptions] = useState([] | data.tag);
   const [selectedOptionsAttribute, setSelectedOptionsAttribute] = useState([]);
@@ -98,7 +114,6 @@ const EditProduct = (props) => {
   //     [name]: newValue // Store parsed value
   //   }));
   // };
-
   const handleImage = async (e, index, formData, setFormData) => {
     e.preventDefault();
     const imageFile = e.target.files[0];
@@ -409,8 +424,8 @@ const EditProduct = (props) => {
   return (
     <div className={`w-full sm:p-5 `}>
       <h1 className={styles.heading}>Record Details Edit({data?._id})</h1>
-
       <div className='bg-white rounded'>
+    
 
         <div className='md:grid gap-5 p-2  lg:grid-cols-2  grid-cols-1 flex  flex-col'>
 
@@ -558,7 +573,9 @@ const EditProduct = (props) => {
           </div>
           <div  className={`${styles.containerdivright} text-start`} >
            Product Body
-          <img src={formData.body} alt='logo not found' />
+          <input type='file' accept='.png,.jpg' onChange={(e)=>{handleBody(e,setFormData)}} name={formData.body}/>
+          <img src={formData.body} alt='logo not found'/>
+        
           </div>
           <section className={`${styles.containerdivright} text-start`}>
             Select Tags:
