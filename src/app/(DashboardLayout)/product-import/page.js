@@ -145,18 +145,18 @@ const ImportFile = () => {
        }
     console.log(dataset);
     return (
-        <Row>
+        <Row className='absolute w-full '>
             {loading ? <div className='w-full  text-center m-auto'>Loading Data</div> :
                 <Card>
                     <CardBody>
                         {show ? (
-                            <div className='text-center'>
+                            <div className='text-center '>
                                 <IoCloseCircleOutline className=' float-right  hover:bg-white bg-gray-400 w-[30px] h-[30px] text-center  p-1 rounded-full cursor-pointer' onClick={handleCancel} />
                                 <EditProduct data={dataset} oncancel={handleCancel} onUpdate={handleUpdate} />
 
                             </div>)
                             : (
-                                <>
+                                <div className=''>
                                     <CardTitle tag="h5">Project Listing</CardTitle>
                                     <CardSubtitle className="mb-2 text-muted" tag="h6">
                                         Overview of the projects
@@ -168,9 +168,9 @@ const ImportFile = () => {
                                         </div>
                                         <input type='file' id="filePicker" accept='.csv, .xlsx' style={{ display: 'none' }} onChange={handleFileChange} />
                                     </div>
-                                    <div className="table-responsive">
-                                        <Table className="text-nowrap mt-3 align-middle" borderless>
-                                            <thead>
+                                    <div className="table-responsive ">
+                                        <Table className="text-nowrap mt-3 align-middle " borderless>
+                                            <thead >
                                                 <tr>
                                                     <th>Product</th>
                                                     <th>Slug</th>
@@ -184,7 +184,7 @@ const ImportFile = () => {
 
                                                     console.log(tdata)
                                                     return (
-                                                        <tr key={index} className="border-top relative">
+                                                        <tr key={index} className="border-top">
                                                             <td>
                                                                 <div className="d-flex align-items-center p-2">
                                                                     <Image
@@ -225,7 +225,7 @@ const ImportFile = () => {
                                             </tbody>
                                         </Table>
                                     </div>
-                                </>
+                                </div>
                             )}
                     </CardBody>
                 </Card>

@@ -16,9 +16,8 @@ const EditProduct = (props) => {
 
   console.log(data);
   const [dataurl,setUrl]=useState('')
-  const [base64Image, setBase64Image] = useState('');
-   
-    
+
+  
   
   const [formData, setFormData] = useState({
     name: data?.name,
@@ -44,15 +43,7 @@ const EditProduct = (props) => {
     variation_options: data.variation_options
   });
 
-  useEffect(() => {
-    if (formData.body) {
-      // Convert buffer data to base64
-      const buffer = Buffer.from(formData.body[0].data); // Assuming formData.body.data is the buffer data
-      const base64String = buffer.toString('base64');
-      setBase64Image(`data:image/jpeg;base64,${base64String}`); // Change image type if necessary
-    }
-  }, [formData.body]);
-  console.log(base64Image);
+
  
   const [validationErrors, setValidationErrors] = useState({});
   const [selectedOptions, setSelectedOptions] = useState([] | data.tag);

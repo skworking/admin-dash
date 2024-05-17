@@ -211,7 +211,7 @@ console.log(products);
      const flattenedItem = { ...item };
       console.log(flattenedItem);
      if(flattenedItem.body !==null){
-      flattenedItem.body=JSON.stringify(flattenedItem.body)
+      flattenedItem.body=JSON.stringify(flattenedItem.body).substring(0,32767)
      }
      if (flattenedItem.gallery) {
     
@@ -265,7 +265,7 @@ console.log(products);
 
   
   return (
-    <Row>
+    <Row className='absolute w-full  '>
        {loading ? <div className='w-full  text-center m-auto'>Loading Data</div>:
        <Card>
           <CardBody>
