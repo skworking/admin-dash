@@ -23,19 +23,23 @@ const Product = () => {
     const filterProducts = (products, value) => {
         return products.filter(product => product.brand.toLowerCase() === value.toLowerCase());
     }
+    const [filterdata, setFilterData] = useState(null);
     const [filterProduct, setFilterProduct] = useState(null)
+    const [sorted, setSorted] = useState([]);
     useMemo(() => {
 
         if (endpoint !== null & products !== null) {
             const data = filterProducts(products, endpoint)
             setFilterProduct(data)
+            setFilterData(data)
+        
         }
     }, [products])
 
     console.log(filterProduct);
 
-    const [sorted, setSorted] = useState([]);
-    const [filterdata, setFilterData] = useState([]);
+    
+    
     const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
     const [show, setShow] = useState(true);
     const [showTagFilter, setShowTagFilter] = useState(true);
@@ -83,7 +87,7 @@ const Product = () => {
 
                 // setTotalPage(data.totalPages)
                 setProducts(data.result);
-               
+
             } else {
                 console.error("Error fetching Products:", data.error);
             }
@@ -98,7 +102,8 @@ const Product = () => {
     // const uniqueBrands = [...new Set(products.map(product => product.brand))];
     // const uniqueTags = Array.from(new Set(products?.flatMap(product => product.tag.map(tag => tag.name))));
     // const productType=[...new Set(products.map(product => product.product_type))];
-    const body=[...new Set(products.map(product=> product?.body[0]))];
+
+    const body = [...new Set(products.map(product => product?.body[0]))];
     console.log(body);
     const { Panel } = Collapse;
 
@@ -106,12 +111,12 @@ const Product = () => {
         acc[product.price] = (acc[product.price] || 0) + 1;
         return acc
     }, {})
-    
+
     const brandCounts = filterProduct?.reduce((acc, product) => {
         acc[product.brand] = (acc[product.brand] || 0) + 1;
         return acc;
     }, {});
-    console.log(brandCounts);
+
     const tagConts = filterProduct?.reduce((acc, product) => {
         product.tag.forEach(tag => {
             acc[tag.name] = (acc[tag.name] || 0) + 1;
@@ -122,8 +127,8 @@ const Product = () => {
         acc[product.product_type] = (acc[product.product_type] || 0) + 1;
         return acc
     }, {})
-   
-    console.log(filterdata);
+
+
     const toggleTagFilter = () => {
         setShowTagFilter(!showTagFilter);
     }
@@ -134,27 +139,29 @@ const Product = () => {
         setSelectedPriceOption(max);
     }
 
+    console.log(filterdata);
 
     const handleSortBy = (criteria) => {
+        // let sortedProducts = [...filterProduct];
         let sortedProducts;
         if (filterdata.length > 0) {
             sortedProducts = [...filterdata]
         } else {
-            sortedProducts = [...products]
+            sortedProducts = [...sorted]
         }
-        // let sortedProducts = [...products];
-
+        // // let sortedProducts = [...products];
+        console.log(sortedProducts);
         if (criteria === 'priceHighToLow') {
             sortedProducts.sort((a, b) => b.max_price - a.max_price);
         } else if (criteria === 'priceLowToHigh') {
             sortedProducts.sort((a, b) => a.min_price - b.min_price);
         }
+        // setSorted(sortedProducts)
+        // {
+        //     sortmodel & screenWidth < 1024 &&
 
-        {
-            sortmodel & screenWidth < 1024 &&
-
-                setShortModel(!sortmodel)
-        }
+        //         setShortModel(!sortmodel)
+        // }
         if (filterdata.length > 0) {
             setFilterData(sortedProducts)
         } else {
@@ -196,7 +203,7 @@ const Product = () => {
         const response = await result.json();
         if (response.success) {
             setFilterData(response.result)
-           
+
             setTotalPage(response.totalPages)
             setLoading(false);
             message.success({ content: response.message, duration: 2 });
@@ -217,8 +224,8 @@ const Product = () => {
             tag: []
         })
         setSelectedPriceOption(null)
-        filtercall()
-        // fetchData()
+        // filtercall()
+        fetchData()
     }
 
     const toggleVariation = (index) => {
@@ -328,7 +335,7 @@ const Product = () => {
 
     }
 
-
+    console.log(sorted,filterdata);
     // console.log(Object.keys(typeCount).length)
     return (
         <div className=" relative">
@@ -344,7 +351,7 @@ const Product = () => {
                         <h1>Product Type</h1>
                         {showProductType ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
-                    {showProductType && !!typeCount  &&
+                    {showProductType && !!typeCount &&
 
                         <>
                             <div className={`${Object?.keys(typeCount)?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto bg-white'}`}>
@@ -373,7 +380,7 @@ const Product = () => {
                             </div>
                         </>
                     }
-                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer" onClick={togglePriceFilter}>
+                    <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer" onClick={togglePriceFilter}>
                         <h1>Price Range</h1>
                         {showPriceFilter ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
@@ -408,7 +415,7 @@ const Product = () => {
                 </div>
                 <div className="flex grow flex-col lg:w-4/5 h-screen bg-white">
                     <div className=" p-2 lg:flex  justify-between hidden">
-                        <div className="font-bold">Populer {endpoint.charAt(0).toUpperCase()+endpoint.slice(1)} Trucks 
+                        <div className="font-bold">Populer {endpoint.charAt(0).toUpperCase() + endpoint.slice(1)} Trucks
                             <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{ opacity: 1 }} ></hr>
                         </div>
                         <Dropdown overlay={menu} >
@@ -416,17 +423,49 @@ const Product = () => {
                         </Dropdown>
                     </div>
                     <div className="w-full  p-2 ">
-                        <div className="lg:hidden mb-2">Populer {endpoint.charAt(0).toUpperCase()+endpoint.slice(1)} Trucks 
+                        <div className="lg:hidden mb-2">Populer {endpoint.charAt(0).toUpperCase() + endpoint.slice(1)} Trucks
                             <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{ opacity: 1 }}></hr>
                         </div>
                         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                        {
-                        
-                        !!filterProduct &&
-                                filterProduct.map((product, index) => {
-                                    return (
-                                        <>
-                                            <Grid item xs={12} sm={4} md={4} key={index}>
+                            {
+
+                                !!filterdata && sorted.length === 0 ?
+                                    filterdata.map((product, index) => {
+                                        return (
+                                            <>
+                                                <Grid item xs={12} sm={4} md={4} key={index}>
+                                                    <div className="border-2  flex flex-col gap-2 bg-slate-50">
+                                                        <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
+
+                                                        <div className="items-center justify-center flex flex-col gap-2 p-3">
+                                                            <p>{product.slug}</p>
+                                                            <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
+                                                            <Button type="primary" className="w-full " onClick={(e) => { handleOffer(e, product) }}>Check Offers</Button>
+                                                        </div>
+                                                        <hr />
+                                                        <div className="relative w-full">
+                                                            <div className="flex w-full justify-between p-1 cursor-pointer" onClick={() => toggleVariation(index)}>
+                                                                <p>No variation Found</p>
+                                                                <PlusOutlined className={`transition-transform duration-300 ${variation === index ? 'rotate-45' : 'rotate-0'}`} />
+                                                            </div>
+                                                            {variation === index && (
+                                                                <div className="absolute top-full left-0 w-full p-1 border-2 bg-slate-50 transition-opacity duration-500">
+                                                                    No Data Found
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </Grid>
+
+                                            </>
+                                        )
+                                    })
+                                    :
+                                    sorted.length > 0 &&
+                                    sorted.map((product,index) => {
+
+                                        return (
+                                            <>    <Grid item xs={12} sm={4} md={4} key={index}>
                                                 <div className="border-2  flex flex-col gap-2 bg-slate-50">
                                                     <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
 
@@ -449,18 +488,10 @@ const Product = () => {
                                                     </div>
                                                 </div>
                                             </Grid>
-
-                                        </>
-                                    )
-                                })
-                        // :
-                        // filterdata.length > 0 &&
-                        //  filterdata.map((product)=>{
-                        //     return(
-                        //         <>data</>
-                        //     )
-                        //  })
-                        }
+                                            </>
+                                        )
+                                    })
+                            }
                         </Grid>
                     </div>
                 </div>
