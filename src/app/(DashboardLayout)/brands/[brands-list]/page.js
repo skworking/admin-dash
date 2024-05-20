@@ -98,7 +98,8 @@ const Product = () => {
     // const uniqueBrands = [...new Set(products.map(product => product.brand))];
     // const uniqueTags = Array.from(new Set(products?.flatMap(product => product.tag.map(tag => tag.name))));
     // const productType=[...new Set(products.map(product => product.product_type))];
-
+    const body=[...new Set(products.map(product=> product?.body[0]))];
+    console.log(body);
     const { Panel } = Collapse;
 
     const priceCount = filterProduct?.reduce((acc, product) => {
@@ -121,8 +122,8 @@ const Product = () => {
         acc[product.product_type] = (acc[product.product_type] || 0) + 1;
         return acc
     }, {})
-
-
+   
+    console.log(filterdata);
     const toggleTagFilter = () => {
         setShowTagFilter(!showTagFilter);
     }
@@ -195,6 +196,7 @@ const Product = () => {
         const response = await result.json();
         if (response.success) {
             setFilterData(response.result)
+           
             setTotalPage(response.totalPages)
             setLoading(false);
             message.success({ content: response.message, duration: 2 });
@@ -418,7 +420,9 @@ const Product = () => {
                             <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{ opacity: 1 }}></hr>
                         </div>
                         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                        {!!filterProduct &&
+                        {
+                        
+                        !!filterProduct &&
                                 filterProduct.map((product, index) => {
                                     return (
                                         <>
@@ -449,6 +453,13 @@ const Product = () => {
                                         </>
                                     )
                                 })
+                        // :
+                        // filterdata.length > 0 &&
+                        //  filterdata.map((product)=>{
+                        //     return(
+                        //         <>data</>
+                        //     )
+                        //  })
                         }
                         </Grid>
                     </div>

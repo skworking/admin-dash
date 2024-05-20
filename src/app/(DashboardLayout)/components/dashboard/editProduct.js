@@ -14,11 +14,10 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 const EditProduct = (props) => {
   const { data, oncancel, onUpdate } = props;
 
-  console.log(data);
+  console.log(data?.body);
   const [dataurl,setUrl]=useState('')
 
-  
-  
+  console.log(dataurl);
   const [formData, setFormData] = useState({
     name: data?.name,
     slug: data?.slug,
@@ -29,7 +28,7 @@ const EditProduct = (props) => {
     //   original: data?.images?.original || ''
     // },
     gallery: data.gallery,
-    body:data.body,
+    body:data?.body,
     tag: data.tag,
     product_type: data.product_type,
     quantity: data.quantity,

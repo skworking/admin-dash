@@ -53,7 +53,7 @@ const ProductSchema=new mongoose.Schema({
     description:String,
     images:[ImageSchema],
     gallery:[GalleryItemSchema],
-    body:[Buffer],
+    body:[String],
     quantity:Number,
     price:Number,
     sale_price:String,

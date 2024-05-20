@@ -199,14 +199,13 @@ export const handleAddVariationOption = (e, formData, setFormData) => {
 export const handleBody = async (e, setFormData) => {
   e.preventDefault()
   const file = e.target.files[0];
-  console.log(file);
+
   if (!file) return
 
 
   const formData = new FormData();
   formData.append("file", file);
 
-  console.log(formData);
   await axios.post('/api/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
@@ -216,7 +215,7 @@ export const handleBody = async (e, setFormData) => {
       const infobuffer = res.data.result.image.data.data;
       const base64String = Buffer.from(infobuffer).toString('base64');
       const dataUrl = `data:image/jpeg;base64,${base64String}`;
-      console.log(dataUrl);
+      
       setFormData(prev =>({
         ...prev,
         body:[dataUrl]
