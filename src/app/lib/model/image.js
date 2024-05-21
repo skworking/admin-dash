@@ -4,6 +4,7 @@ const Schema=mongoose.Schema;
 const imageSchema = new Schema({
     image: {
       data: Buffer,
+      name:String,
       contentType: String
     }
 })

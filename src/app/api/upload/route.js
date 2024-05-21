@@ -9,9 +9,9 @@ export async function POST(request) {
     await mongoose.connect(process.env.MONGODB)
   
     const data = await request.formData();
-    console.log("00000",data);
     const file = data.get('file');
-    console.log("data",file);
+    console.log("file",file);
+  
     if (!file) {
       return NextResponse.json({Success:false,status:400})
     }
@@ -20,14 +20,16 @@ export async function POST(request) {
     const newImage = new Image({
       image: {
         data: Buffer.from(bytes),
+        name: file.name,
         contentType: file.type
       }
     });
     const res= await newImage.save();
+    console.log(res);
     // const path = `./public/Images/${file.name}`;
     
     // await writeFile(path, Buffer.from(bytes));
-    console.log("response---",res);
+  
     return NextResponse.json ({
       status: 200,
       success: true,

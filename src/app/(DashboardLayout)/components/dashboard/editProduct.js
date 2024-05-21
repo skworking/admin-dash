@@ -3,7 +3,7 @@ import styles from '../../../page.module.css'
 import Image from 'next/image';
 import { IoIosCloseCircle } from 'react-icons/io';
 import Select from 'react-select'
-import { options, tags, attributetab, handleChange, handleNumberChange, handleGalleryImage,handleBody } from '../common/comman';
+import { options, tags, attributetab, handleChange, handleNumberChange, handleGalleryImage,handleBody, ImageUpdate } from '../common/comman';
 import validateForm from '../reuseable/validation';
 import Input from '../reuseable/input';
 import CustomConfirmation from '../reuseable/confirm';
@@ -12,7 +12,7 @@ import File from '../reuseable/file';
 import { storage } from '../firebase/firebase';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 const EditProduct = (props) => {
-  const { data, oncancel, onUpdate } = props;
+  const { data, oncancel, onUpdate,isAuth } = props;
 
   console.log(data);
   const [dataurl,setUrl]=useState('')
@@ -563,8 +563,9 @@ const EditProduct = (props) => {
           </div>
           <div  className={`${styles.containerdivright} text-start`} >
            Product Body
-          <input type='file' accept='.png,.jpg' onChange={(e)=>{handleBody(e,setFormData)}} name={formData.body}/>
-          <img src={formData.body} alt='logo not found'/>
+          {/* <input type='file' accept='.png,.jpg' onChange={(e)=>{handleBody(e,setFormData)}} name={formData?.body?.name}/> */}
+          <input type='file' accept='.png,.jpg' onChange={(e)=>{ImageUpdate(e,formData.body._id,setFormData,isAuth)}} name={formData?.body?.name}/>
+          <img src={formData?.body?.url} alt='logo not found'/>
         
           </div>
           <section className={`${styles.containerdivright} text-start`}>

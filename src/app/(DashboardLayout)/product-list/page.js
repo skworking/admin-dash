@@ -272,7 +272,7 @@ console.log(products);
           {show ? (
           <div className='text-center'>
             <IoCloseCircleOutline className=' float-right  hover:bg-white bg-gray-400 w-[30px] h-[30px] text-center  p-1 rounded-full cursor-pointer' onClick={()=>{setShow(!show)}} />
-            <EditProduct data={data} oncancel={handleCancel} onUpdate={handleUpdate}/>
+            <EditProduct data={data} oncancel={handleCancel} onUpdate={handleUpdate} isAuth={isAuth}/>
            
           </div>)
           :(

@@ -211,14 +211,22 @@ export const handleBody = async (e, setFormData) => {
       'Content-Type': 'multipart/form-data'
     }
   }).then((res) => {
+    console.log("result",res);
     if (res.data.success === true) {
       const infobuffer = res.data.result.image.data.data;
       const base64String = Buffer.from(infobuffer).toString('base64');
       const dataUrl = `data:image/jpeg;base64,${base64String}`;
+      const name=res.data.result.image.name;
+      const _id=res.data.result._id;
       
       setFormData(prev =>({
         ...prev,
-        body:[dataUrl]
+        // body:[dataUrl]
+        body:{
+          url:dataUrl,
+          name:name,
+          _id:_id
+        }
     }))
     
     } else {
@@ -231,6 +239,123 @@ export const handleBody = async (e, setFormData) => {
     });
 }
 
+export const ImageUpdate=async(e,_id,setFormData,isAuth)=>{
+  e.preventDefault()
+  const file=e.target.files[0];
+  console.log("dd",file);
+  if(!file) return;
+  const formData=new FormData();
+  formData.append("file",file);
+  console.log(formData);
+  if(_id == undefined){
+    
+    await axios.post('/api/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then((res)=>{
+    
+      if (res.data.success === true) {
+        const infobuffer = res.data.result.image.data.data;
+        const base64String = Buffer.from(infobuffer).toString('base64');
+        const dataUrl = `data:image/jpeg;base64,${base64String}`;
+        const name=res.data.result.image.name;
+        const _id=res.data.result._id;
+        
+        setFormData(prev =>({
+          ...prev,
+          // body:[dataUrl]
+          body:{
+            url:dataUrl,
+            name:name,
+            _id:_id
+          }
+      }))
+      
+      } else {
+        console.log(res);
+      }
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }else{
+
+    await axios.put(`/api/upload/${_id}`,formData,{
+      headers:{
+  
+        "Content-Type":"multipart/form-data"
+      }
+    }).then((res)=>{
+    
+      if (res.data.success === true) {
+        const infobuffer = res.data.result.image.data.data;
+        const base64String = Buffer.from(infobuffer).toString('base64');
+        const dataUrl = `data:image/jpeg;base64,${base64String}`;
+        const name=res.data.result.image.name;
+        const _id=res.data.result._id;
+        
+        setFormData(prev =>({
+          ...prev,
+          // body:[dataUrl]
+          body:{
+            url:dataUrl,
+            name:name,
+            _id:_id
+          }
+      }))
+      
+      } else {
+        console.log(res);
+      }
+    }).catch((err)=>{
+      console.log(err);
+    })
+  }
+  
+  // try {
+  //   const formData=new FormData();
+  //   formData.append("file",file);
+  //   console.log("sss",formData);
+ 
+  //   const response =await fetch(`/api/upload/${_id}`,{
+  //     method:"PUT",
+  //     body:formData,
+  //     headers: {
+  //       "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
+  //       // 'Content-Type': 'application/json',
+  //     },
+  //   })
+  //   if (!response.ok) {
+  //     const errorResponse = await response.json();
+  //     throw new Error(errorResponse.error || 'Failed to update image');
+  //   }
+
+  //   const updatedProduct = await response.json();
+  //   console.log('Updated product:', updatedProduct);
+  //   if(updatedProduct.success){
+  //     const infobuffer=updatedProduct.result.image.data.data;
+  //     const base64String=Buffer.from(infobuffer).toString('base64');
+  //     const dataUrl = `data:image/jpeg;base64,${base64String}`;
+  //     const name=updatedProduct.result.image.name;
+  //     const _id=updatedProduct.result._id;
+  //     console.log(infobuffer,dataUrl,name,_id);
+  //     setFormData(prev=>({
+  //       ...prev,
+  //       body:{
+  //         url:dataUrl,
+  //         name:name,
+  //         _id:_id
+  //       }
+  //     }))
+  //     console.log(formData);
+  //   }
+
+   
+  // }catch(err){
+  //   console.log("Error",err);
+  // }
+
+}
 
 
 // export const handleImage = async (e,setFormData) => {
