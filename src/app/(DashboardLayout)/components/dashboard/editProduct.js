@@ -14,7 +14,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 const EditProduct = (props) => {
   const { data, oncancel, onUpdate } = props;
 
-  console.log(data?.body);
+  console.log(data);
   const [dataurl,setUrl]=useState('')
 
   console.log(dataurl);

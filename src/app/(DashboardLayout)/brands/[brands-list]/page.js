@@ -184,7 +184,7 @@ const Product = () => {
         }
         const data = {
             product_type: filters.body,
-            brand: filters.brand,
+            brand: endpoint,
             min_price: selectedPriceOption && 0,
             max_price: selectedPriceOption,
             page: currentPage || 1,
@@ -226,7 +226,7 @@ const Product = () => {
         setSelectedPriceOption(null)
         // filtercall()
         fetchData()
-    }
+    } 
 
     const toggleVariation = (index) => {
         setVariation(index === variation ? null : index);
