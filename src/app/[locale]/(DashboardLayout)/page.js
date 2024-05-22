@@ -1,11 +1,11 @@
 'use client'
 import Head from "next/head";
 import { Col, Row } from "reactstrap";
-import SalesChart from "@/app/(DashboardLayout)/components/dashboard/SalesChart";
-import Feeds from "@/app/(DashboardLayout)/components/dashboard/Feeds";
-import ProjectTables from "@/app/(DashboardLayout)/components/dashboard/ProjectTable";
-import TopCards from "@/app/(DashboardLayout)/components/dashboard/TopCards";
-import Blog from "@/app/(DashboardLayout)/components/dashboard/Blog";
+import SalesChart from "@/app/[locale]/(DashboardLayout)/components/dashboard/SalesChart";
+import Feeds from "@/app/[locale]/(DashboardLayout)/components/dashboard/Feeds";
+import ProjectTables from "@/app/[locale]/(DashboardLayout)/components/dashboard/ProjectTable";
+import TopCards from "@/app/[locale]/(DashboardLayout)/components/dashboard/TopCards";
+import Blog from "@/app/[locale]/(DashboardLayout)/components/dashboard/Blog";
 import bg1 from "public/images/bg/bg1.jpg";
 import bg2 from "public/images/bg/bg2.jpg";
 import bg3 from "public/images/bg/bg3.jpg";

@@ -12,7 +12,7 @@ import {
   Col,
 } from "reactstrap";
 
-import Blog from "@/app/(DashboardLayout)/components/dashboard/Blog";
+import Blog from "@/app/[locale]/(DashboardLayout)/components/dashboard/Blog";
 import bg1 from "public/images/bg/bg1.jpg";
 import bg2 from "public/images/bg/bg2.jpg";
 import bg3 from "public/images/bg/bg3.jpg";

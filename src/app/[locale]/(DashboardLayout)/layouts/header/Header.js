@@ -18,6 +18,7 @@ import LogoWhite from "public/images/logos/xtremelogowhite.svg";
 import user1 from "public/images/users/user1.jpg";
 import { useRouter } from 'next/navigation'
 import MultiLevelDropdown from "./multilevel";
+import SelectLanguage from "@/app/[locale]/selectLanguage";
 
 const Header = ({ showMobmenu }) => {
   const router = useRouter()
@@ -58,6 +59,7 @@ const Header = ({ showMobmenu }) => {
             <i className="bi bi-three-dots-vertical"></i>
           )}
         </Button>
+        <SelectLanguage />
       </div>
 
       <Collapse navbar isOpen={isOpen}>

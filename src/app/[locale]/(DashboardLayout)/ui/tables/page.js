@@ -1,6 +1,6 @@
 'use client'
 import { Row, Col, Table, Card, CardTitle, CardBody } from "reactstrap";
-import ProjectTables from "@/app/(DashboardLayout)/components/dashboard/ProjectTable";
+import ProjectTables from "@/app/[locale]/(DashboardLayout)/components/dashboard/ProjectTable";
 
 const Tables = () => {
   return (

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
 import SignIn from "./auth/login/page";
 import SignUp from "./auth/signup/page";
-import RootLayout from "../layout";
+import RootLayout from "../../layout";
 
 const FullLayout = ({ children }) => {
 
@@ -21,6 +21,10 @@ const FullLayout = ({ children }) => {
   const [role, setRole] = useState(typeof window !== 'undefined' && JSON.parse(sessionStorage.getItem('user')))
   const [key, setKey] = useState(0);
   // console.log(pathname);
+  // const newPath = pathname.replace(/^\/[^\/]+/, '');
+  // console.log(newPath);
+  const parts = pathname.split('/').filter(Boolean);
+  console.log(parts[0]);
   useEffect(() => {
     setIsAuth(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
     const updateUser = JSON.parse(sessionStorage.getItem('user'));
@@ -31,12 +35,15 @@ const FullLayout = ({ children }) => {
     setKey(prevKey => prevKey + 1);
   }, [isAuth]);
   // console.log("is-auth", role);
+  // console.log(pathname);
   useEffect(() => {
-    if (!isAuth && pathname !== '/auth/signup') {
-      router.push('/auth/login');
-    } else if (!isAuth && pathname !== '/auth/login') {
-      router.push('/auth/signup');
-    } else {
+    if (!isAuth && pathname !== `/${parts[0]&& parts[0]}/auth/signup`) {
+      router.push(`/${parts[0]}/auth/login`);
+      // router.push(pathname)
+    } else if (!isAuth && pathname !== `/${parts[0]&& parts[0]}/auth/login`) {
+      router.push(`/${parts[0]}/auth/signup`);
+      // router.push(pathname)
+    }else {
       router.push(pathname);
     }
   }, [isAuth]);
@@ -44,8 +51,8 @@ const FullLayout = ({ children }) => {
   return (
     <main>
 
-      {isAuth && pathname !== '/auth/login' ? (
-        pathname !== '/auth/login' && pathname !== '/auth/signup' && role === 'admin' ? (
+      {isAuth && pathname !== `/${parts[0]}/auth/login` ? (
+        pathname !== `/${parts[0]}/auth/login` && pathname !== `/${parts[0]}/auth/signup` && role === 'admin' ? (
           <div className="pageWrapper d-md-block d-lg-flex w-full">
             {/******** Sidebar **********/}
             <aside
@@ -68,7 +75,7 @@ const FullLayout = ({ children }) => {
             </div>
           </div>
         )
-          : pathname !== '/auth/login' && pathname !== '/auth/signup' && role === 'user' ? (<>
+          : pathname !== `/${parts[0]}/auth/login` && pathname !== `${parts[0]}/auth/signup` && role === 'user' ? (<>
             <Header showMobmenu={() => showMobilemenu()} />
             {/* <Container  fluid> */}
               <div className="relative" fluid>{children}</div>
@@ -81,7 +88,7 @@ const FullLayout = ({ children }) => {
           )
       ) : (
 
-        !isAuth && pathname === '/auth/login' ? <SignIn /> : <SignUp />
+        !isAuth && pathname === `/${parts[0]}/auth/login` ? <SignIn /> : <SignUp />
 
       )
       }
