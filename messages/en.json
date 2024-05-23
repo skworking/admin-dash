@@ -1,5 +1,31 @@
 {
     "Index": {
-      "title": "Hello world!"
+      "title": "Hello world!",
+      "Home":"Home",
+      "USED-TRUCK":"USED-TRUCK",
+      "Vahicle":"Vahicle",
+      "my-account":" My Account",
+      "Info":"Info",
+      "Edit Profile":"Edit Profile",
+      "My Balance":"My Balance",
+      "Logout":"Logout",
+      "New Trucks":"New Trucks",
+      "Brands":"Brands",
+      "Tata":"Tata",
+      "All Brands" :"All Brands",
+      "brands":"brands",
+      "tata":"tata",
+      "Reset":"Reset",
+      "Apply filter":"Apply filter",
+      "pages":"pages",
+      "product":"product",
+      "Vehicle Types":"Vehicle Types",
+      "Latest Truck Founds":"Latest Truck Founds",
+      "E-rickshaw":"E-rickshaw",
+      "3 wheelers":"3 wheelers",
+      "4 wheelers":"4 wheelers",
+      "mini-loader":"mini-loader"
+      
+
     }
   }

@@ -19,8 +19,9 @@ import user1 from "public/images/users/user1.jpg";
 import { useRouter } from 'next/navigation'
 import MultiLevelDropdown from "./multilevel";
 import SelectLanguage from "@/app/[locale]/selectLanguage";
-
+import { useTranslations } from 'next-intl';
 const Header = ({ showMobmenu }) => {
+  const t = useTranslations('Index');
   const router = useRouter()
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
@@ -68,18 +69,20 @@ const Header = ({ showMobmenu }) => {
         <Nav className="me-auto" navbar>
           <NavItem>
             <Link href="/" className="nav-link">
-              Home
+              {/* Home */}
+              {`${t("Home")}`}
             </Link>
           </NavItem>
           
           <NavItem>
             <Link href="/pages/vahicle" className="nav-link">
-            SELL-USED-TRUCK
+            
+            {t('USED-TRUCK')}
             </Link>
           </NavItem>
           <NavItem>
             <Link href="/pages/product" className="nav-link">
-              Product
+              {t('Vahicle')}
             </Link>
           </NavItem>
          
@@ -109,17 +112,17 @@ const Header = ({ showMobmenu }) => {
             </div>
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem header>Info</DropdownItem>
+            <DropdownItem header>{t('Info')}</DropdownItem>
             <DropdownItem>
               <Link href="/pages/profile" className="nav-link">
-                My Account
+                {t('my-account')}
               </Link>
             </DropdownItem>
-            <DropdownItem>Edit Profile</DropdownItem>
+            <DropdownItem>{t('Edit Profile')}</DropdownItem>
             <DropdownItem divider />
-            <DropdownItem>My Balance</DropdownItem>
-            <DropdownItem>Inbox</DropdownItem>
-            <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+            <DropdownItem>{t('My Balance')}</DropdownItem>
+            
+            <DropdownItem onClick={handleLogout}>{t('Logout')}</DropdownItem>
           </DropdownMenu>
         </Dropdown>
         <div className="sm:flex hidden">

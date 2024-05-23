@@ -9,12 +9,13 @@ import { Check } from "react-feather";
 import axios from "axios";
 import Breadcrumbs from "../../components/reuseable/bread";
 import { usePathname } from "next/navigation";
-
+import { useTranslations } from "next-intl";
 
 
 
 
 const Product = () => {
+    const t=useTranslations("Index")
     const [products, setProducts] = useState([]);
     const [sorted, setSorted] = useState([]);
     const [filterdata, setFilterData] = useState([]);
@@ -315,12 +316,12 @@ const Product = () => {
             <div className="px-10  mt-5 d-flex w-full relative">
                 <div className="w-1/5 text-justify lg:flex flex-col hidden outline-1 ">
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 ">
-                        <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>Reset</button>
-                        <button className="hover:bg-blue-500 bg-blue-400 p-2 grow text-white rounded" onClick={filtercall}>Apply filter</button>
+                        <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>{t('Reset')}</button>
+                        <button className="hover:bg-blue-500 bg-blue-400 p-2 grow text-white rounded" onClick={filtercall}>{t('Apply filter')}</button>
                     </div>
 
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShowProductType(!showProductType) }}>
-                        <h1>Product Type</h1>
+                        <h1>{t('Vehicle Types')}</h1>
                         {showProductType ? <MinusOutlined /> : <PlusOutlined />}
                     </div>
 
@@ -344,7 +345,8 @@ const Product = () => {
                                                         : prevFilters.body.filter(item => item !== e.target.value)
                                                 }))}
                                             >
-                                                {`${product} (${count})`}
+                                                {t(`${product}`)}
+                                                {` (${count})`}
                                             </Checkbox>
 
                                         </div>
@@ -449,7 +451,7 @@ const Product = () => {
                 </div>
                 <div className="flex grow flex-col lg:w-4/5 h-screen bg-white">
                     <div className=" p-2 lg:flex  justify-between hidden">
-                        <div>{filterdata.length > 0 ? filterdata.length : sorted.length} Latest Truck Found
+                        <div>{filterdata.length > 0 ? filterdata.length : sorted.length} {t('Latest Truck Founds')}
                             <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{ opacity: 1 }} ></hr>
                         </div>
                         <Dropdown overlay={menu} >

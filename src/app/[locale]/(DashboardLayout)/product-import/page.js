@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import * as XLSX from 'xlsx';
-import styles from '../../page.module.css'
+import styles from '@/styles/page.module.css'
 import { Row, Col, Table, Card, CardTitle, CardBody, CardSubtitle } from "reactstrap";
 
 import { FaFileAlt } from "react-icons/fa";

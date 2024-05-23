@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 // import { usePathname } from 'next/navigation';
 // interface BreadCrumbProps {
 //   currentLoc?: string;
 // }
 const Breadcrumbs = (props) => {
   const { currentLoc } = props;
+  const t=useTranslations("Index")
   const endpoint = currentLoc.split("/").pop();
 //   console.log('bg', currentLoc);
 // const pathname = usePathname()
@@ -13,11 +15,14 @@ const Breadcrumbs = (props) => {
 //   const loc = useLocation().pathname;
   const [location, setLocation] = useState(null);
 
-  console.log(location);
+  console.log(currentLoc);
+  
   useEffect(() => {
-    const regex = /\/(\w+)\//;
-
-    const match = currentLoc.match(regex);
+    // const regex = url1.replace(/^\/(hi|en)/, '');
+    // const regex = /\/(\w+)\//;
+    const regex = /^\/(hi|en)\//;
+    // const match = currentLoc.replace(regex, '/');
+    const match=  currentLoc.split('/').filter(segment => segment !== '');
     console.log(match);
     if (match?.length> 1) {
       setLocation(match[1]);
@@ -42,15 +47,15 @@ const Breadcrumbs = (props) => {
           >
             <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
           </svg>
-          Home
+          {t('Home')}
         </Link>
         {location !== null &&
           <>/</>
         }
         <Link className=" text-site-color" href={`/${location}`}>
-          &nbsp;{location}&nbsp;
+          &nbsp;{t(`${location}`)}&nbsp;
         </Link>
-        /&nbsp;{endpoint}
+        /&nbsp;{t(`${endpoint}`)}
       </nav>
     
   );

@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { Container, Col, Row, Card, CardBody, CardTitle } from "reactstrap";
-import styles from '../../../page.module.css'
+import styles from '../../../../styles/page.module.css'
 import { useRouter,redirect } from 'next/navigation'
 import Select from 'react-select'
 import { options, tags, attributetab, handleChange, handleNumberChange, handleSubmit, handleSelectOption, handleSelectAttribute, handleVariationChange, handleVariationNumberChange, handleVariationAttributeChange, handleAddVariation, handleAddVariationOption, handleImage, handleGalleryImage, handleVariationOptionBoolean, handleVariationOptionNumberChange, removeFormFields, handleRemoveVariationOption, handleImageRemove, handleVariationOptionChange, removeFields,handleBody } from "../components/common/comman";

@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from '../../../page.module.css'
+import styles from '../../../../../styles/page.module.css'
 const Button = (props) => {
     const {onClick,styles,text,disable,type}=props;
   return (

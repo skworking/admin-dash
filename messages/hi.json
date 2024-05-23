@@ -1,0 +1,30 @@
+{
+  "Index": {
+    "title": "Hello world!",
+    "Home": "होम",
+    "USED-TRUCK":"पुराना ट्रक",
+    "Vahicle":"वाहन",
+    "my-account":"मेरा खाता",
+    "Info":"खाता",
+    "Edit Profile":"प्रोफ़ाइल संपादित करें",
+    "My Balance":"मेरा धन",
+    "Logout":"लॉगआउट",
+    "New Trucks":"नए ट्रक",
+    "Brands":"ब्रांड",
+    "Tata":"टाटा",
+    "All Brands":"सभी ब्रांड",
+    "brands":"ब्रांड",
+    "tata":"टाटा",
+    "Reset":"रीसेट",
+    "Apply filter":"फ़िल्टर लागू करें",
+    "pages":"पृष्ठ",
+    "product":"उत्पाद",
+    "Vehicle Types":"वाहनों के प्रकार",
+    "Trucks":"ट्रक",
+    "E-rickshaw":"ई-रिक्शा",
+    "3 wheelers" :"3 व्हीलर ",
+    "4 wheelers":"4 व्हीलर",
+    "mini-loader":"मिनी-लोडर",
+    "Latest Truck Founds":"नवीनतम ट्रक की खोज"
+  }
+}

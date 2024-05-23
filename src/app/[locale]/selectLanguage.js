@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter,usePathname } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { ChangeEvent, useTransition } from 'react';
 
 export default function LanguageDropdown() {
   const router = useRouter();
+  const pathname=usePathname()
   const locale = router.locale;
   const [isPending, startTransition] = useTransition();
   const localActive = useLocale();
@@ -13,7 +14,7 @@ export default function LanguageDropdown() {
     en: { label: 'English', flag: '/flags/en.png' },
     hi: { label: 'हिन्दी', flag: '/flags/hn.png' },
   };
-
+console.log(pathname);
   const [selectedLang, setSelectedLang] = useState(locale);
 
   useEffect(() => {
@@ -22,8 +23,12 @@ export default function LanguageDropdown() {
  
   const changeLanguageAction = (lang) => {
     setSelectedLang(lang);
+    const newPath = pathname.replace(/^\/[a-zA-Z]{2}/, `${lang}`);
+
     startTransition(() => {
-      router.replace(`/${lang}`);
+      // router.replace(`/${lang}`);
+      router.replace(`/${newPath}`);
+      // router.push(pathname, undefined, { locale: lang });
     });
   };
 

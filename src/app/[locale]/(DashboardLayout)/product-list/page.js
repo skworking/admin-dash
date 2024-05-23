@@ -1,7 +1,6 @@
 'use client'
 import React,{useState,useEffect} from 'react'
 import { Row, Col, Table, Card, CardTitle, CardBody,CardSubtitle } from "reactstrap";
-import Style from '../../page.module.css'
 import { useRouter } from 'next/navigation';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { CiSearch } from "react-icons/ci";
