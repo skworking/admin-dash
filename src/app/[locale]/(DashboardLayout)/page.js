@@ -47,6 +47,7 @@ const BlogData = [
 ];
 
 export default function Home() {
+
   return (
     <div>
       <Head>

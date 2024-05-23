@@ -59,7 +59,9 @@ const Header = ({ showMobmenu }) => {
             <i className="bi bi-three-dots-vertical"></i>
           )}
         </Button>
-        <SelectLanguage />
+        <div className="d-sm-block d-md-none">
+          <SelectLanguage />
+        </div>
       </div>
 
       <Collapse navbar isOpen={isOpen}>
@@ -80,6 +82,7 @@ const Header = ({ showMobmenu }) => {
               Product
             </Link>
           </NavItem>
+         
           <MultiLevelDropdown />
           {/*<UncontrolledDropdown inNavbar nav>
             <DropdownToggle caret nav>
@@ -119,6 +122,9 @@ const Header = ({ showMobmenu }) => {
             <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
           </DropdownMenu>
         </Dropdown>
+        <div className="sm:flex hidden">
+          <SelectLanguage />
+        </div>
       </Collapse>
     </Navbar>
   );
