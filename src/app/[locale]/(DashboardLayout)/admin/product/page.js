@@ -1,16 +1,16 @@
 'use client'
 import React, { useState } from 'react'
 import { Container, Col, Row, Card, CardBody, CardTitle } from "reactstrap";
-import styles from '../../../../styles/page.module.css'
+import styles from '@/styles/page.module.css'
 import { useRouter,redirect } from 'next/navigation'
 import Select from 'react-select'
-import { options, tags, attributetab, handleChange, handleNumberChange, handleSubmit, handleSelectOption, handleSelectAttribute, handleVariationChange, handleVariationNumberChange, handleVariationAttributeChange, handleAddVariation, handleAddVariationOption, handleImage, handleGalleryImage, handleVariationOptionBoolean, handleVariationOptionNumberChange, removeFormFields, handleRemoveVariationOption, handleImageRemove, handleVariationOptionChange, removeFields,handleBody } from "../components/common/comman";
-import Input from '../components/reuseable/input';
-import File from '../components/reuseable/file';
-import Button from '../components/reuseable/button';
-import validateForm from '../components/reuseable/validation';
+import { options, tags, attributetab, handleChange, handleNumberChange, handleSubmit, handleSelectOption, handleSelectAttribute, handleVariationChange, handleVariationNumberChange, handleVariationAttributeChange, handleAddVariation, handleAddVariationOption, handleImage, handleGalleryImage, handleVariationOptionBoolean, handleVariationOptionNumberChange, removeFormFields, handleRemoveVariationOption, handleImageRemove, handleVariationOptionChange, removeFields,handleBody } from "../../components/common/comman";
+import Input from '../../components/reuseable/input';
+import File from '../../components/reuseable/file';
+import Button from '../../components/reuseable/button';
+import validateForm from '../../components/reuseable/validation';
 
-import { storage } from '../components/firebase/firebase';
+import { storage } from '../../components/firebase/firebase';
 // firebase connections
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -214,8 +214,9 @@ const Product = () => {
                 </div>
                 <div class="col-xl-6">
                   <div class="d-grid grid-cols-1 ">
+                  
                     <Input text={'body'} onChange={(e)=> handleBody(e,setFormData)} typeinput="file" stylediv={styles.containerdivright} inputstyle={styles.containerdivinput} />
-                    <img src={formData?.body} alt='logo' />
+                    <img src={formData?.body?.url} alt='logo' />
                   </div>
                 </div>
               

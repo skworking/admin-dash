@@ -45,7 +45,7 @@ export const handleNumberChange = (e, setFormData, index) => {
 
 export const handleSubmit = async (e, formData, router, isAuth) => {
   e.preventDefault();
-  let result = await fetch("api/products", {
+  let result = await fetch("/api/products", {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${isAuth}`,
@@ -56,7 +56,7 @@ export const handleSubmit = async (e, formData, router, isAuth) => {
   result = await result.json();
   if (result.success) {
     toast.success('Record Add successful!');
-    router.push('/product-list');
+    router.push('/admin/product-list');
 
   }
 }

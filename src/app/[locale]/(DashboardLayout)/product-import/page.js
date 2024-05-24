@@ -122,7 +122,7 @@ const ImportFile = () => {
     }
 
     const handleUpdate = async (data, id) => {
-        let result = await fetch(`api/products/${id}`, {
+        let result = await fetch(`/api/products/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"

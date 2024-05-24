@@ -7,7 +7,7 @@ import { CiSearch } from "react-icons/ci";
 import * as XLSX from 'xlsx';
 import { saveAs } from "file-saver";
 import {  toast } from 'react-toastify';
-import CustomConfirmation from '../components/reuseable/confirm';
+import CustomConfirmation from '../../components/reuseable/confirm';
 import { AiOutlineMenu } from "react-icons/ai";
 import { FaFileAlt } from "react-icons/fa";
 
@@ -17,7 +17,7 @@ import user2 from "public/images/users/user2.jpg";
 import user3 from "public/images/users/user3.jpg";
 import user4 from "public/images/users/user4.jpg";
 import user5 from "public/images/users/user5.jpg";
-import EditProduct from '../components/dashboard/editProduct';
+import EditProduct from '../../components/dashboard/editProduct';
 
 const tableData = [
   {
@@ -80,7 +80,7 @@ console.log(products);
   // ////////////
   const fetchData = async () => {
     try {
-      const result = await fetch("api/products", {
+      const result = await fetch("/api/products", {
         method: "GET", // or any other HTTP method you're using
         headers: {
           "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
@@ -156,7 +156,7 @@ console.log(products);
        setShow(!show)
    }
    const handleUpdate=async(data,id)=>{
-     let result=await fetch(`api/products/${id}`,{
+     let result=await fetch(`/api/products/${id}`,{
        method:"PUT",
        headers: {
         "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
@@ -210,7 +210,7 @@ console.log(products);
      const flattenedItem = { ...item };
       console.log(flattenedItem);
      if(flattenedItem.body !==null){
-      flattenedItem.body=JSON.stringify(flattenedItem.body).substring(0,32767)
+      flattenedItem.body=JSON.stringify(flattenedItem.body).substring(0,32767);
      }
      if (flattenedItem.gallery) {
     

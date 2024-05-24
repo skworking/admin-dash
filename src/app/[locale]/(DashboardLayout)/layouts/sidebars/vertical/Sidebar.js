@@ -104,12 +104,12 @@ const navigation = [
     children: [
       {
         title: "Product",
-        href: "/product",
+        href: "/admin/product",
         icon: "bi bi-textarea-resize",
       },
       {
         title: "Product List",
-        href: "/product-list",
+        href: "/admin/product-list",
         icon: "bi bi-textarea-resize",
       },
       {
