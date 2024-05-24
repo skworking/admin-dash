@@ -8,7 +8,7 @@ import { IoMdClose } from "react-icons/io";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import axios from 'axios';
 import { FaLongArrowAltLeft } from "react-icons/fa";
-
+import { useTranslations } from 'next-intl';
 
 const years = ['2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024']
 // const brands = ['Toyota', 'Ford', 'Chevrolet', 'Nissan', 'Honda', 'Volkswagen', 'Hyundai', 'Mercedes-Benz'];
@@ -41,9 +41,10 @@ const tehsils = {
     Swat: ['Mingora', 'Saidu Sharif', 'Barikot']
 };
 const Vahicle = () => {
+    const t=useTranslations("Index")
     const [models, setModels] = useState({});
     const [brands, setBrands] = useState([]);
-    console.log(brands);
+
     const fetchbrandmodel = async () => {
         await axios.get('/api/brandmodel')
             .then((res) => {
@@ -126,40 +127,36 @@ const Vahicle = () => {
             case 4: // Image upload step
                 if (vehicleDetails.images.length < 2) {
                     errors.images = 'Upload minimum 2 Images';
-                    message.error({ content: errors.images, duration: 2 });
+                    message.error({ content: t(`${errors.images}`), duration: 2 })
                 }
                 if (!vehicleDetails.price) {
                     errors.price = 'Price is required';
-                    message.error({ content: errors.price, duration: 2 })
+                    message.error({ content: t(`${errors.price}`), duration: 2 })
                 }
                 if (!vehicleDetails.drivenkm) {
                     errors.drivenkm = 'Driven Kilometer is required';
-                    message.error({
-                        content: errors.drivenkm,
-                        duration: 2,
-
-                    })
+                    message.error({ content: t(`${errors.drivenkm}`),duration: 2,})
                 }
                 break;
             case 5:
                 if (!vehicleDetails.userDetails.username) {
-                    message.error({ content: "Please Enter UserName", duration: 2 })
+                    message.error({ content: t("Please Enter UserName"), duration: 2 })
 
                 }
                 if (!vehicleDetails.userDetails.email) {
-                    message.error({ content: "Enter valid Email", duration: 2 })
+                    message.error({ content: t("Enter valid Email"), duration: 2 })
                 }
                 if (!vehicleDetails.userDetails.mno) {
-                    message.error({ content: "Enter Mobile Number", duration: 2 })
+                    message.error({ content: t("Enter Mobile Number"), duration: 2 })
                 }
                 if (!vehicleDetails.userDetails.address.state) {
-                    message.error({ content: "Please Select state", duration: 2 })
+                    message.error({ content: t("Please Select state"), duration: 2 })
                 }
                 if (!vehicleDetails.userDetails.address.district) {
-                    message.error({ content: "Please Select district", duration: 2 })
+                    message.error({ content: t("Please Select district"), duration: 2 })
                 }
                 if (!vehicleDetails.userDetails.address.tehshil) {
-                    message.error({ content: "Please Select tehshil", duration: 2 })
+                    message.error({ content: t("Please Select tehshil"), duration: 2 })
                 }
                 break;
             default:
@@ -301,7 +298,7 @@ const Vahicle = () => {
                                 onClick={() => handleModelSelect("brand", brand)}
                                 className={vehicleDetails?.brand === brand ? 'bg-[#1890ff]  p-2 ' : ' cursor-pointer p-2  hover:bg-[#f0f0f0]'}
                             >
-                                {brand}
+                                {t(`${brand}`)}
                             </li>
                         ))}
                     </ul>
@@ -325,7 +322,7 @@ const Vahicle = () => {
                                 onClick={() => handleModelSelect("model", model)}
                                 className={vehicleDetails?.model === model ? 'bg-[#1890ff] p-2' : ' cursor-pointer p-2  hover:bg-[#f0f0f0]'}
                             >
-                                {model}
+                                {t(`${model}`)}
                             </li>
                         ))}
                     </ul>
@@ -368,34 +365,34 @@ const Vahicle = () => {
                         <Grid container spacing={2} columns={12} >
                             <Grid item xs={12} md={6}>
                                 <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">RC Status</InputLabel>
+                                    <InputLabel id="demo-simple-select-label">{t('RC Status')}</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
                                         value={vehicleDetails.rcStatus.rcStatus}
-                                        label="RC Status"
+                                        label={t("RC Status")}
                                         onChange={(e) => { handleChange(e, "rcStatus") }}
                                     >
-                                        <MenuItem value={'Yes'}>Yes</MenuItem>
-                                        <MenuItem value={'No'}>No</MenuItem>
+                                        <MenuItem value={'Yes'}>{t('Yes')}</MenuItem>
+                                        <MenuItem value={'No'}>{t('No')}</MenuItem>
 
                                     </Select>
                                 </FormControl>
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">State Permit</InputLabel>
+                                    <InputLabel id="demo-simple-select-label">{t('select Permit')}</InputLabel>
                                     <Select
 
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
                                         value={vehicleDetails.rcStatus.permit}
-                                        label="State Permit"
+                                        label={t("select Permit")}
                                         onChange={(e) => { handleChange(e, "permit") }}
                                     // onChange={handleChangePermit}
                                     >
-                                        <MenuItem value={'State Permit'}>State Permit</MenuItem>
-                                        <MenuItem value={'National Permit'}>National Permit</MenuItem>
+                                        <MenuItem value={'National Permit'}>{t('National Permit')}</MenuItem>
+                                        <MenuItem value={'State Permit'}>{t('State Permit')}</MenuItem>
 
                                     </Select>
                                 </FormControl>
@@ -403,7 +400,7 @@ const Vahicle = () => {
                             <Grid item xs={12} md={6}>
                                 <FormControl fullWidth>
 
-                                    <TextField type='date' value={vehicleDetails.rcStatus.fitnessValidity} onChange={(e) => { handleChange(e, "fitnessValidity") }} label="Fitness Validity"
+                                    <TextField type='date' value={vehicleDetails.rcStatus.fitnessValidity} onChange={(e) => { handleChange(e, "fitnessValidity") }} label={t("Fitness Validity")}
                                         InputLabelProps={{
                                             shrink: true,
                                         }} />
@@ -412,7 +409,7 @@ const Vahicle = () => {
                             <Grid item xs={12} md={6}>
                                 <FormControl fullWidth>
 
-                                    <TextField type='date' value={vehicleDetails.rcStatus.insuranceValidity} onChange={(e) => { handleChange(e, "insuranceValidity") }} label="Insorence Validity"
+                                    <TextField type='date' value={vehicleDetails.rcStatus.insuranceValidity} onChange={(e) => { handleChange(e, "insuranceValidity") }} label={t("Insorence Validity")}
                                         InputLabelProps={{
                                             shrink: true,
                                         }} />
@@ -421,7 +418,7 @@ const Vahicle = () => {
                             <Grid item xs={12} md={6}>
                                 <FormControl fullWidth>
 
-                                    <TextField type='date' value={vehicleDetails.rcStatus.taxValidity} onChange={(e) => { handleChange(e, 'taxValidity') }} label="Tax Validity"
+                                    <TextField type='date' value={vehicleDetails.rcStatus.taxValidity} onChange={(e) => { handleChange(e, 'taxValidity') }} label={t("Tax Validity")}
                                         InputLabelProps={{
                                             shrink: true,
                                         }} />
@@ -438,7 +435,7 @@ const Vahicle = () => {
             label: 'Upload Images',
             content: (
                 <div className='p-2 gap-3 flex flex-col'>
-                    <h1 className='text-xs '>Note - Upload minimum 2 Images</h1>
+                    <h1 className='text-xs '>{t('Note - Upload minimum 2 Images')}</h1>
                     <div>
                         <Grid container spacing={2}   >
                             {dummy?.images.map((image, index) => (
@@ -460,11 +457,11 @@ const Vahicle = () => {
 
                         </Grid>
                     </div>
-                    <h5 className='text-xs' >Enter Price for Tata Magic Express Bi-Fuel</h5>
-                    <p className='text-center px-2 text-xs'>Note : Please enter the price that you expect in return for selling your used vehicle. Ensure you quote the expected price based on your vehicle's condition and the price you would be willing to pay to buy a similar second-hand model.</p>
+                    <h5 className='text-xs' >Enter Price for {t(`${vehicleDetails.brand}`)} {t(`${vehicleDetails.model}`)}</h5>
+                    <p className='text-center px-2 text-xs'>{t(`Note Please enter the price that you expect in return for selling your used vehicle \n Ensure you quote the expected price based on your vehicle's condition and the price you would be willing to pay to buy a similar second-hand model`)}</p>
                     <TextField
                         id="outlined-Model"
-                        label="Enter Price"
+                        label={t("Enter Price")}
                         type='tel'
                         name={vehicleDetails?.price}
                         value={vehicleDetails?.price}
@@ -477,7 +474,7 @@ const Vahicle = () => {
                     />
                     <TextField
                         id="outlined-Model"
-                        label="Enter Driven Kilometer"
+                        label={t("Enter Driven Kilometer")}
                         type='tel'
                         name={vehicleDetails?.drivenkm}
                         value={vehicleDetails?.drivenkm}
@@ -490,7 +487,7 @@ const Vahicle = () => {
                     />
                     <TextField
                         id="outlined-Model"
-                        label="Overview"
+                        label={t("Overview")}
                         name={vehicleDetails?.overview}
                         value={vehicleDetails?.overview}
                         className='w-full'
@@ -511,7 +508,7 @@ const Vahicle = () => {
                 <div className='p-2 gap-3 flex flex-col'>
                     <TextField
                         id="outlined-Model"
-                        label="Enter Your Name"
+                        label={t("Enter Your Name")}
                         name={vehicleDetails?.userDetails?.username}
                         value={vehicleDetails?.userDetails?.username}
                         className='w-full'
@@ -526,7 +523,7 @@ const Vahicle = () => {
                             <TextField
                                 id="outlined-Model"
                                 type='tel'
-                                label="Enter Your Mobile No"
+                                label={t("Enter Your Mobile No")}
                                 name={vehicleDetails?.userDetails?.mno}
                                 value={vehicleDetails?.userDetails?.mno}
                                 className='w-full'
@@ -545,7 +542,7 @@ const Vahicle = () => {
                         <Grid item xs={12} md={6}>
                             <TextField
                                 id="outlined-Model"
-                                label="Enter Your Email"
+                                label={t("Enter Your Email")}
                                 type='email'
                                 name={vehicleDetails?.userDetails?.email}
                                 value={vehicleDetails?.userDetails?.email}
@@ -558,20 +555,20 @@ const Vahicle = () => {
                         </Grid>
                     </Grid>
                     <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select State</InputLabel>
+                        <InputLabel id="demo-simple-select-label">{t('Select State')}</InputLabel>
                         <Select
 
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={vehicleDetails.userDetails.address.state}
-                            label="State State"
+                            label={t("Select State")}
                             onChange={(e) => { handleChangeUser(e, "state") }}
 
                         >
                             {states.map((state) => {
 
                                 return (
-                                    <MenuItem key={state} value={state}>{state}</MenuItem>
+                                    <MenuItem key={state} value={state}>{t(`${state}`)}</MenuItem>
 
                                 )
                             })}
@@ -579,20 +576,20 @@ const Vahicle = () => {
                         </Select>
                     </FormControl>
                     <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select District</InputLabel>
+                        <InputLabel id="demo-simple-select-label">{t('Select District')}</InputLabel>
                         <Select
 
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={vehicleDetails.userDetails.address.district}
-                            label="Select District"
+                            label={t("Select District")}
                             onChange={(e) => { handleChangeUser(e, "district") }}
 
                         >
                             {districts[vehicleDetails.userDetails.address.state]?.map((district) => {
 
                                 return (
-                                    <MenuItem key={district} value={district}>{district}</MenuItem>
+                                    <MenuItem key={district} value={district}>{t(`${district}`)}</MenuItem>
 
                                 )
                             })}
@@ -600,20 +597,20 @@ const Vahicle = () => {
                         </Select>
                     </FormControl>
                     <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Select tehshil</InputLabel>
+                        <InputLabel id="demo-simple-select-label">{t('Select tehshil')}</InputLabel>
                         <Select
 
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={vehicleDetails.userDetails.address.tehshil}
-                            label="Select tehshil"
+                            label={t("Select tehshil")}
                             onChange={(e) => { handleChangeUser(e, "tehshil") }}
 
                         >
                             {tehsils[vehicleDetails.userDetails.address.district]?.map((tehshil) => {
 
                                 return (
-                                    <MenuItem key={tehshil} value={tehshil}>{tehshil}</MenuItem>
+                                    <MenuItem key={tehshil} value={tehshil}>{t(`${tehshil}`)}</MenuItem>
 
                                 )
                             })}
@@ -649,7 +646,7 @@ const Vahicle = () => {
         <div >
 
             {isModalVisible ?
-                <div className='sm:w-[50%] flex flex-col justify-start   m-auto  bg-white'>
+                <div className='sm:w-[50%] mt-2 flex flex-col justify-center p-2    m-auto  bg-white'>
                     <div className='flex justify-between  overflow-auto gap-2'>
                         {currentStep > 0 && (
                             <Button onClick={handlePrev}>
@@ -705,27 +702,27 @@ const Vahicle = () => {
                         </Button>
 
                     </div>
-                    <div className='w-full bg-blue-600 p-2 my-2 overflow-auto '>{steps[currentStep].label}</div>
+                    <div className='w-full bg-blue-600 p-2 my-2 overflow-auto '>{t(`${steps[currentStep].label}`)}</div>
                     <div className='h-[50vh] overflow-auto'>{steps[currentStep].content}</div>
                     <div >
                         {currentStep > 2 && currentStep < steps.length - 1 && (
                             <Button type="primary" onClick={handleNext} className='w-full'>
-                                Next
+                               {t('Next Step')}
                             </Button>
                         )}
                         {currentStep === steps.length - 1 && (
                             <Button type="primary" onClick={() => handleSubmit()} className='w-full '>
-                                List My Truck
+                                {t('List My Truck')}
                             </Button>
                         )}
 
                     </div>
                 </div>
                 :
-                <div className='sm:w-2/3 m-auto justify-center items-center flex flex-col gap-3'>
-                    <div>
-                        <h1>SELL YOUR USED TRUCK AT BEST PRICE</h1>
-                        <p>Enjoy a hassle free Truck selling process with us.</p>
+                <div className='sm:w-2/3 m-auto justify-center items-center  flex flex-col mt-2 gap-3'>
+                    <div className='text-center'>
+                        <h1 className='bold text-xl font-semibold'>{t('SELL YOUR USED TRUCK AT BEST PRICE')}</h1>
+                        <p>{t('Enjoy a hassle free Truck selling process with us')}</p>
 
                     </div>
                     <Box
@@ -736,7 +733,7 @@ const Vahicle = () => {
                             <Grid item xs={12} md={6}>
                                 <TextField
                                     id="outlined-Brand"
-                                    label="Select Brand"
+                                    label={t("Select Brand")}
                                     value={vehicleDetails?.brand}
                                     className='w-full rounded-none'
                                     InputProps={{
@@ -751,7 +748,7 @@ const Vahicle = () => {
                             <Grid item xs={12} md={6}>
                                 <TextField
                                     id="outlined-Model"
-                                    label="Select Model"
+                                    label={t("Select Model")}
                                     value={vehicleDetails?.model}
                                     className='w-full'
                                     InputProps={{
@@ -766,7 +763,7 @@ const Vahicle = () => {
                             <Grid item xs={12} md={6}>
                                 <TextField
                                     id="outlined-tkd"
-                                    label="Total Km Driven"
+                                    label={t("Total Km Driven")}
                                     value={vehicleDetails?.drivenkm}
                                     className='w-full rounded-none'
                                     InputProps={{
@@ -781,7 +778,7 @@ const Vahicle = () => {
                             <Grid item xs={12} md={6}>
                                 <TextField
                                     id="outlined-price"
-                                    label="Price"
+                                    label={t("Price")}
                                     value={vehicleDetails?.price}
                                     InputProps={{
                                         readOnly: true,
@@ -795,7 +792,7 @@ const Vahicle = () => {
                             </Grid>
                         </Grid>
                         <div className='mt-3'>
-                            <h1>UPLOAD TRUCK IMAGES</h1>
+                            <h1>{t('UPLOAD TRUCK IMAGES')}</h1>
                             <div className='flex max-w-1/6 gap-1 m-auto p-2'>
 
                                 {/* {vehicleDetails?.images?.map((image, index) => { */}
@@ -817,8 +814,8 @@ const Vahicle = () => {
                                 })}
                             </div>
                         </div>
-                        <Button type='primary' className='w-full' onClick={openModal}>Shell Your Truck</Button>
-                        <p>By proceeding ahead you expressly agree to the Truck-Buses <span>Terms and Conditions</span></p>
+                        <Button type='primary' className='w-full' onClick={openModal}>{t('Sell Your Truck')}</Button>
+                        <p className='text-center'>{t('By proceeding ahead you expressly agree to the Truck-Buses')} <span>{t('Terms and Conditions')}</span></p>
 
                     </Box>
 

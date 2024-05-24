@@ -104,8 +104,8 @@ const Product = () => {
     // const uniqueTags = Array.from(new Set(products?.flatMap(product => product.tag.map(tag => tag.name))));
     // const productType=[...new Set(products.map(product => product.product_type))];
 
-    const body = [...new Set(products.map(product => product?.body[0]))];
-    console.log(body);
+    // const body = [...new Set(products.map(product => product?.body[0]))];
+    // console.log(body);
     const { Panel } = Collapse;
 
     const priceCount = filterProduct?.reduce((acc, product) => {

@@ -136,7 +136,7 @@ const navigation = [
     ]
   },
   {
-    title: "State Brands",
+    title: "State ",
     icon: "bi bi-textarea-resize",
     children: [
       {
@@ -150,15 +150,16 @@ const navigation = [
         icon: "bi bi-card-text",
       },
       {
-        title: "Add State",
-        href: "/admin/brandmodel",
-        icon: "bi bi-card-text",
+        title:"State Form",
+        href:"/admin/statemodel",
+        icon:'bi bi-card-text'
       },
       {
         title: "Tehshil Form",
         href: "/admin/statedistrict",
         icon: "bi bi-card-text",
       },
+     
 
     ]
   }

@@ -18,6 +18,7 @@ import user3 from "public/images/users/user3.jpg";
 import user4 from "public/images/users/user4.jpg";
 import user5 from "public/images/users/user5.jpg";
 import EditProduct from '../../components/dashboard/editProduct';
+import { message } from 'antd';
 
 const tableData = [
   {
@@ -106,7 +107,7 @@ console.log(products);
   
   const handleConfirmDelete = async() => {
    
-    let response =await fetch("api/products/"+deleteItemId,{
+    let response =await fetch("/api/products/"+deleteItemId,{
        method:"DELETE",
        headers: {
         "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
@@ -116,7 +117,6 @@ console.log(products);
      response=await response.json();
      if(response.success){
        setIsConfirmationOpen(false); // Close modal after success or error
- 
        toast.success('Delete successful!');
        // router.push('/user-list',{scroll:false})
        fetchData()

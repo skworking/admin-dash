@@ -53,7 +53,7 @@ export async function PUT(request,{params}){
 export async function GET(request,{params}){
     try{
     await authenticateToken(request)
-    const userId=params.userid;
+    const userId=params.productid;
  
     console.log(userId);
     // id object create
@@ -84,9 +84,9 @@ export async function GET(request,{params}){
 export async function DELETE(request,content){
     try{
         await authenticateToken(request)
-        console.log(content.params.userid);
+        console.log("id",content.params);
         // get id
-        const userId=content.params.userid;
+        const userId=content.params.productid;
         // id object create
         const record={_id:userId}
         // check the connection
