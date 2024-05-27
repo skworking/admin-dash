@@ -36,7 +36,58 @@ const Header = ({ showMobmenu }) => {
     // setIsAuth(false); // Update the authentication status when the user logs out
     router.push('/auth/login')
   };
-
+  const headerItems = [
+    {
+      label: 'Home',
+      href: '/'
+    },
+    {
+      label: 'New Trucks',
+      subItems: [
+        {
+          label: 'Brands',
+          subItems: [
+            { label: 'Tata', href: '/brands/tata' },
+            { label: 'Ashok Leyland', href: '/brands/ashok-leyland' },
+            { label: 'Eicher', href: '/brands/eicher' },
+            { label: 'All Brands', href: '/brands' }
+          ]
+        },
+        {
+          label: 'Price Range',
+          subItems: [
+            { label: 'Below 10 Lakh', href: '/price-range/below-10-lakh' },
+            { label: '10-20 Lakh', href: '/price-range/10-20-lakh' },
+            { label: 'Above 20 Lakh', href: '/price-range/above-20-lakh' }
+          ]
+        }
+      ]
+    },
+    {
+      label: 'Used Trucks',
+      subItems: [
+        { label: 'Buy Used Trucks', href: '/buy-used-trucks' },
+        { label: 'Sell Used Trucks', href: '/sell-used-trucks' },
+      
+      ]
+    },
+    // {
+    //   label: 'Sell Truck',
+    //   href: '/sell-truck'
+    // },
+    {
+      label: 'Compare',
+      href: '/compare'
+    },
+    {
+      label: 'Loan',
+      href: '/loan'
+    },
+    {
+      label: 'Contact Us',
+      href: '/contact-us'
+    }
+  ];
   return (
     <Navbar color="primary" dark expand="md" className="sticky top-0  w-full z-10 " >
       <div className="d-flex align-items-center ">
@@ -67,9 +118,8 @@ const Header = ({ showMobmenu }) => {
 
       <Collapse navbar isOpen={isOpen}>
         <Nav className="me-auto" navbar>
-          <NavItem>
+          {/* <NavItem>
             <Link href="/" className="nav-link">
-              {/* Home */}
               {`${t("Home")}`}
             </Link>
           </NavItem>
@@ -84,20 +134,11 @@ const Header = ({ showMobmenu }) => {
             <Link href="/pages/product" className="nav-link">
               {t('Vahicle')}
             </Link>
-          </NavItem>
+          </NavItem> */}
+          <MultiLevelDropdown headerItems={headerItems} />
+          {/* <MultiLevelDropdown /> */}
          
-          <MultiLevelDropdown />
-          {/*<UncontrolledDropdown inNavbar nav>
-            <DropdownToggle caret nav>
-              DD Menu
-            </DropdownToggle>
-            <DropdownMenu end>
-              <DropdownItem>Option 1</DropdownItem>
-              <DropdownItem>Option 2</DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem>Reset</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown> */}
+        
         </Nav>
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle color="primary">

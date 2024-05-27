@@ -309,8 +309,7 @@ const Product = () => {
     }
 
     const pathname = usePathname()
-    console.log(pathname);
-    console.log(Object.keys(typeCount).length)
+ 
     return (
         <div className="relative">
             <Breadcrumbs currentLoc={pathname} />
