@@ -10,12 +10,13 @@ import axios from "axios";
 import Breadcrumbs from "../../components/reuseable/bread";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 
 
 
 const Product = () => {
-    const t=useTranslations("Index")
+    const t = useTranslations("Index")
     const [products, setProducts] = useState([]);
     const [sorted, setSorted] = useState([]);
     const [filterdata, setFilterData] = useState([]);
@@ -24,12 +25,14 @@ const Product = () => {
     const [showTagFilter, setShowTagFilter] = useState(true);
     const [showPriceFilter, setShowPriceFilter] = useState(true);
     const [showProductType, setShowProductType] = useState(true);
+    const [showProdctBody, setShowProductBody] = useState(true);
 
     const [selectedPriceOption, setSelectedPriceOption] = useState(null);
     const [filters, setFilters] = useState({
         body: [],
         brand: [],
-        tag: []
+        tag: [],
+        bodytype:[]
     });
     const [sortmodel, setShortModel] = useState(true)
     const [filtermodel, setFilterModel] = useState(true)
@@ -81,6 +84,22 @@ const Product = () => {
     // const uniqueBrands = [...new Set(products.map(product => product.brand))];
     // const uniqueTags = Array.from(new Set(products?.flatMap(product => product.tag.map(tag => tag.name))));
     // const productType=[...new Set(products.map(product => product.product_type))];
+
+    const bodytag = [...new Set(products.map(product => product.body))];
+    const uniqueNameUrlCount = bodytag?.reduce((acc, product) => {
+        const key = `${product.name}-${JSON.stringify(product.url)}`;
+        acc[key] = { name: product.name, url: product.url };
+        return acc;
+    }, {});
+    const uniqueNameUrlWithCount = Object.entries(uniqueNameUrlCount).map(([key, value]) => {
+        const count = bodytag.filter(product => {
+            const productKey = `${product.name}-${JSON.stringify(product.url)}`;
+            return productKey === key;
+        }).length;
+        return { ...value, count };
+    });
+
+    console.log(uniqueNameUrlWithCount);
 
     const { Panel } = Collapse;
 
@@ -145,8 +164,8 @@ const Product = () => {
     }
     const menu = (
         <Menu onClick={({ key }) => handleSortBy(key)}>
-            <Menu.Item key="priceHighToLow">Price: High to Low</Menu.Item>
-            <Menu.Item key="priceLowToHigh">Price: Low to High</Menu.Item>
+            <Menu.Item key="priceHighToLow">{t('Price: High to Low')}</Menu.Item>
+            <Menu.Item key="priceLowToHigh">{t('Price: Low to High')}</Menu.Item>
         </Menu>
     );
 
@@ -194,7 +213,8 @@ const Product = () => {
         setFilters({
             body: [],
             brand: [],
-            tag: []
+            tag: [],
+            bodytype:[]
         })
         setSelectedPriceOption(null)
         filtercall()
@@ -309,7 +329,7 @@ const Product = () => {
     }
 
     const pathname = usePathname()
- 
+
     return (
         <div className="relative">
             <Breadcrumbs currentLoc={pathname} />
@@ -319,7 +339,47 @@ const Product = () => {
                         <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>{t('Reset')}</button>
                         <button className="hover:bg-blue-500 bg-blue-400 p-2 grow text-white rounded" onClick={filtercall}>{t('Apply filter')}</button>
                     </div>
+                    <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShowProductBody(!showProdctBody) }}>
+                        <h1>{t('Vehicle Body')}</h1>
+                        {showProdctBody ? <MinusOutlined /> : <PlusOutlined />}
+                    </div>
+                    {showProdctBody &&
 
+                        <div className={`${uniqueNameUrlWithCount?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto  bg-white  '} `}>
+                            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+                                {uniqueNameUrlWithCount.map((item,index) => {
+
+                                    const name1 = item?.name?.split('-')
+                                    const handleChange = (e) => {
+                                        const { value, checked } = e.target;
+                                        setFilters(prevFilters => ({
+                                            ...prevFilters,
+                                            bodytype: checked
+                                                ? [...prevFilters.bodytype, value]
+                                                : prevFilters.bodytype.filter(item => item !== value)
+                                        }));
+                                    }
+                                    return (
+                                        <Grid item xs={12} sm={4} md={4} key={index}>
+                                            <Checkbox
+                                                className="w-full"
+                                                key={index}
+                                                value={name1[0]}
+                                                checked={filters.bodytype.includes(name1[0])}
+                                                onChange={handleChange}
+                                               
+                                            >
+                                            <Image src={item.url} width={50} height={80} />
+                                            <div>{name1[0]} ({item.count})</div>
+                                            
+                                            </Checkbox>
+                                        </Grid>
+                                    )
+                                })}
+
+                            </Grid>
+                        </div>
+                    }
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShowProductType(!showProductType) }}>
                         <h1>{t('Vehicle Types')}</h1>
                         {showProductType ? <MinusOutlined /> : <PlusOutlined />}
@@ -455,7 +515,7 @@ const Product = () => {
                             <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{ opacity: 1 }} ></hr>
                         </div>
                         <Dropdown overlay={menu} >
-                            <Button icon={<DownOutlined />} >Sort By</Button>
+                            <Button icon={<DownOutlined />} >{t('Sort By')}</Button>
                         </Dropdown>
                     </div>
                     <div className="w-full  p-2 ">
