@@ -9,7 +9,7 @@ const RootLayout=({
 })=> {
   
   return (
-    <html lang="en">
+    <html>
       <Head>
         <title>Xtreme Free Next Js Dashboard</title>
         <meta name="description" content="Xtreme Free Next Js Dashboard" />

@@ -166,7 +166,11 @@ const navigation = [
 ];
 const Sidebar = ({ showMobilemenu }) => {
   const location = usePathname();
-  const currentURL = location.slice(0, location.lastIndexOf('/'));
+  const currentURL = location.split('/');
+  const url= `/${currentURL.slice(2).join('/')}`
+  // console.log(url);
+
+  console.log(currentURL);
   const [isOpen, setIsOpen] = useState(false);
   const [i,setIndex]=useState(null)
   const toggleSubMenu = (index) => {
@@ -209,7 +213,7 @@ const Sidebar = ({ showMobilemenu }) => {
                 <Link
                   href={navItem.href}
                   className={
-                    location === navItem.href
+                    url === navItem.href
                       ? "text-primary nav-link py-3"
                       : "nav-link text-secondary py-3"
                   }
@@ -244,7 +248,7 @@ const Sidebar = ({ showMobilemenu }) => {
                           <Link
                             href={child.href}
                             className={
-                              location === child.href
+                              url === child.href
                                 ? "text-primary nav-link py-3"
                                 : "nav-link text-secondary py-3"
                             }

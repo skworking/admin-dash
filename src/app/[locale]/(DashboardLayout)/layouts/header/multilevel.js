@@ -108,14 +108,14 @@ const MultiLevelDropdown = ({ headerItems }) => {
   };
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative sm:inline-block flex flex-col text-left mt-2 sm:mt-0">
       {headerItems.map((item, index) => (
         <div key={index} className="relative inline-block text-left mr-4">
           {item.subItems ? (
             <>
               <button
                 onClick={() => toggleDropdown(index)}
-                className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="inline-flex justify-between w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
               >
                 {t(item.label)}
                 <svg
@@ -134,7 +134,7 @@ const MultiLevelDropdown = ({ headerItems }) => {
               </button>
 
               {dropdownOpen === index && (
-                <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                <div className="origin-top-right relative sm:absolute right-0 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                   <div className="py-1">
                     {item.subItems.map((subItem, subIndex) => (
                       <div key={subIndex} className="relative">
@@ -142,7 +142,7 @@ const MultiLevelDropdown = ({ headerItems }) => {
                           <>
                             <button
                               onClick={() => toggleSubDropdown(subIndex)}
-                              className="flex justify-between w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              className="flex justify-between sm:w-52 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             >
                               {t(subItem.label)}
                               <svg
@@ -161,7 +161,7 @@ const MultiLevelDropdown = ({ headerItems }) => {
                             </button>
 
                             {subDropdownOpen === subIndex && (
-                              <div className="origin-top-left absolute left-full top-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                              <div className="sm:origin-top-left sm:absolute static sm:left-full top-0 mt-2 sm:w-48 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                                 <div className="py-1">
                                   {subItem.subItems.map((innerSubItem, innerSubIndex) => (
                                     <Link
@@ -193,7 +193,7 @@ const MultiLevelDropdown = ({ headerItems }) => {
           ) : (
             <Link
               href={item.href}
-              className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="inline-flex justify-start w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               {t(item.label)}
             </Link>
