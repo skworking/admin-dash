@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Breadcrumbs from "../components/reuseable/bread";
 import { usePathname } from "next/navigation";
 import ProductDisplay from "../components/reuseable/productdisplay";
-
+import { fetchData } from "@/app/utils/apiUtils";
 const FilterList = ({ items, selectedFilter, onFilterChange }) => {
     return (
         <ul className="rounded-full bg-sky-100 flex w-max sm:w-fit   overflow-hidden">
@@ -32,34 +32,42 @@ const BrandList = () => {
     const [brandFilter, setBrandFilter] = useState({ index: null, value: '' });
     const [typeFilter, setTypeFilter] = useState({ index: null, value: '' });
     const [categoryFilter,setCategoryFilter]=useState({index: null, value: ''})
-    const fetchData = async () => {
-        try {
-            const result = await fetch("/api/products", {
-                method: "GET", // or any other HTTP method you're using
-                headers: {
-                    "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
-                    "Content-Type": "application/json"
-                }
-            });
-            // const result = await fetch("api/products");
-            const data = await result.json();
-            if (data.success) {
+    // const fetchData = async () => {
+    //     try {
+    //         const result = await fetch("/api/products", {
+    //             method: "GET", // or any other HTTP method you're using
+    //             headers: {
+    //                 "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
+    //                 "Content-Type": "application/json"
+    //             }
+    //         });
+    //         // const result = await fetch("api/products");
+    //         const data = await result.json();
+    //         if (data.success) {
 
-                // setTotalPage(data.totalPages)
-                setProduct(data.result);
-                // setSorted(data.result)
-            } else {
-                console.error("Error fetching Products:", data.error);
-            }
-        } catch (error) {
-            console.error("Error fetching Products:", error);
-        }
-    };
+    //             // setTotalPage(data.totalPages)
+    //             setProduct(data.result);
+    //             // setSorted(data.result)
+    //         } else {
+    //             console.error("Error fetching Products:", data.error);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching Products:", error);
+    //     }
+    // };
+    // useEffect(() => {
+
+    //     fetchData();
+    // }, []);
     useEffect(() => {
-
-        fetchData();
-    }, []);
-
+        const fetchProducts = async () => {
+          const { data, totalPages } = await fetchData('/api/products', isAuth);
+          setProduct(data);
+        //   setTotalPage(totalPages);
+        };
+    
+        fetchProducts();
+      }, []);
 
     const uniqueBrands = [...new Set(products.map(product => product.brand))]
     const productType = [...new Set(products.map(product => product.product_type))];
