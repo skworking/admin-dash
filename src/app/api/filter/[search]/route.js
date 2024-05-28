@@ -33,6 +33,7 @@ export async function GET(request) {
         await authenticateToken(request)
         
         const { searchParams } = new URL(request.url)
+        const bodytype=searchParams.get('bodytype')
         const body=searchParams.get('product_type')
         const brand = searchParams.get('brand');
         const min = searchParams.get('min_price')
@@ -40,12 +41,15 @@ export async function GET(request) {
         const tag = searchParams.get('tag')
         let page= searchParams.get('page') 
         
-        console.log(brand, tag, min, max,page);
+        console.log(body);
         const res = await mongoose.connect(process.env.MONGODB, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
         let query = {};
+        if(bodytype){
+            query.product_type={$in: bodytype.split(',')}
+        }
         if(body){
             query.product_type={$in:body.split(',')};
         }
