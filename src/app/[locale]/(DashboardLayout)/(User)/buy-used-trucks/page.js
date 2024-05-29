@@ -11,7 +11,9 @@ import Breadcrumbs from "../../components/reuseable/bread";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-
+import { fetchData } from "@/app/utils/apiUtils";
+import { calculateBrandCounts, calculatePriceCounts, calculateTagCounts, getUniqueNameUrlWithCount } from "@/app/utils/utils";
+import SortModal from "../../components/reuseable/shortModel";
 
 
 
@@ -54,74 +56,32 @@ const Product = () => {
         };
     }, []);
     // ////////////
-    const fetchData = async () => {
-        try {
-            const result = await fetch("/api/products", {
-                method: "GET", // or any other HTTP method you're using
-                headers: {
-                    "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
-                    "Content-Type": "application/json"
-                }
-            });
-            // const result = await fetch("api/products");
-            const data = await result.json();
-            if (data.success) {
-
-                setTotalPage(data.totalPages)
-                setProducts(data.result);
-                setSorted(data.result)
-            } else {
-                console.error("Error fetching Products:", data.error);
-            }
-        } catch (error) {
-            console.error("Error fetching Products:", error);
-        }
+  
+    const fetchProducts = async () => {
+        const { data, totalPages } = await fetchData('/api/products', isAuth);
+        setProducts(data);
+        
     };
     useEffect(() => {
 
-        fetchData();
+        fetchProducts();
+     
     }, []);
-    // const uniqueBrands = [...new Set(products.map(product => product.brand))];
-    // const uniqueTags = Array.from(new Set(products?.flatMap(product => product.tag.map(tag => tag.name))));
-    // const productType=[...new Set(products.map(product => product.product_type))];
-
-    const bodytag = [...new Set(products.map(product => product.body))];
-    const uniqueNameUrlCount = bodytag?.reduce((acc, product) => {
-        const key = `${product.name}-${JSON.stringify(product.url)}`;
-        acc[key] = { name: product.name, url: product.url };
-        return acc;
-    }, {});
-    const uniqueNameUrlWithCount = Object.entries(uniqueNameUrlCount).map(([key, value]) => {
-        const count = bodytag.filter(product => {
-            const productKey = `${product.name}-${JSON.stringify(product.url)}`;
-            return productKey === key;
-        }).length;
-        return { ...value, count };
-    });
-
-    console.log(uniqueNameUrlWithCount);
-
+  
+    const uniqueNameUrlWithCount = getUniqueNameUrlWithCount(products)
+   
     const { Panel } = Collapse;
+    const priceCount = calculatePriceCounts(products);
 
-    const priceCount = products?.reduce((acc, product) => {
-        acc[product.price] = (acc[product.price] || 0) + 1;
-        return acc
-    }, {})
+    const brandCounts = calculateBrandCounts(products);
 
-    const brandCounts = products.reduce((acc, product) => {
-        acc[product.brand] = (acc[product.brand] || 0) + 1;
-        return acc;
-    }, {});
-    const tagConts = products?.reduce((acc, product) => {
-        product.tag.forEach(tag => {
-            acc[tag.name] = (acc[tag.name] || 0) + 1;
-        });
-        return acc
-    }, {})
-    const typeCount = products.reduce((acc, product) => {
-        acc[product.product_type] = (acc[product.product_type] || 0) + 1;
-        return acc
-    }, {})
+    const tagConts=calculateTagCounts(products);
+   
+   
+    // const typeCount = products.reduce((acc, product) => {
+    //     acc[product.product_type] = (acc[product.product_type] || 0) + 1;
+    //     return acc
+    // }, {})
 
 
     const toggleTagFilter = () => {
@@ -330,7 +290,9 @@ const Product = () => {
     }
 
     const pathname = usePathname()
-
+    const closemodel=()=>{
+        setShortModel(!sortmodel)
+    }
     return (
         <div className="relative">
             <Breadcrumbs currentLoc={pathname} />
@@ -384,39 +346,7 @@ const Product = () => {
                             </Grid>
                         </div>
                     }
-                    {/* <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShowProductType(!showProductType) }}>
-                        <h1>{t('Vehicle Types')}</h1>
-                        {showProductType ? <MinusOutlined /> : <PlusOutlined />}
-                    </div> */}
-                    {/* {showProductType &&
-                        <>
-                            <div className={`${Object.keys(typeCount)?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto bg-white'}`}>
-                                {Object.entries(typeCount).map(([product, count]) => {
-                                    return (
-                                        <div key={product} className="p-1 flex gap-2">
-
-                                            <Checkbox
-                                                className="w-full"
-                                                key={product}
-                                                value={product}
-                                                checked={filters.body.includes(product)}
-                                                onChange={(e) => setFilters(prevFilters => ({
-                                                    ...prevFilters,
-                                                    body: e.target.checked
-                                                        ? [...prevFilters.body, e.target.value]
-                                                        : prevFilters.body.filter(item => item !== e.target.value)
-                                                }))}
-                                            >
-                                                {t(`${product}`)}
-                                                {` (${count})`}
-                                            </Checkbox>
-
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        </>
-                    } */}
+                   
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShow(!show) }}>
                         <h1>{t('Brand')}</h1>
                         {show ? <MinusOutlined /> : <PlusOutlined />}
@@ -557,52 +487,13 @@ const Product = () => {
                                 })
                                 :
                                 ''
-                                // sorted.map((product, index) => {
-                                //     return (
-                                //         <>
-
-                                //             <Grid item xs={12} sm={4} md={4} key={index}>
-                                //                 <div className=" border-2 flex flex-col gap-2 bg-slate-50">
-                                //                     <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
-
-                                //                     <div className="items-center justify-center flex flex-col ">
-                                //                         <p className="text-blue-400">{product.slug}</p>
-                                //                         <p>₹ {product.min_price} - ₹{product.max_price} Lakh</p>
-                                //                     </div>
-                                //                     <Button type="primary" className="w-full ">Check Offers</Button>
-                                //                     <hr />
-                                //                     <div className="relative flex w-full justify-between p-1  cursor-pointer" onClick={() => { toggleVariation(index) }}>
-                                //                         <p>
-                                //                             No variation Found
-                                //                         </p>
-                                //                         {variation === index ? <PlusOutlined className="rotate-45 transition delay-300 duration-300" /> : <PlusOutlined className="rotate-0 transition delay-300 duration-300" />}
-
-                                //                         {variation === index && (
-                                //                             <div className={`absolute top-8 left-0 w-full p-1 border-2  opacity-100 bg-slate-50 delay-1000 transition duration-500`}  >
-                                //                                 No Data Found
-                                //                             </div>
-                                //                         )}
-
-                                //                     </div>
-                                //                 </div>
-                                //             </Grid>
-
-                                //         </>
-                                //     )
-                                // })
+                               
                             }
 
                         </Grid>
                         {loading && <SkeletonLoader />}
                         {filterdata.length > 0 &&
-                            // <div className="w-w-1/2 text-center m-auto p-1 border-2 rounded flex gap-5 mt-3">
-                            // <button className="border rounded outline-1 p-1" onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
-                            // <>
-                            // {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
-                            //     <button className={`bg-gray-200 w-[100px] ${currentPage === pageNumber ?'bg-gray-500':''}`} key={pageNumber} onClick={() => handlePageClick(pageNumber)}>{pageNumber}</button>
-                            // ))}
-                            // </>
-                            // </div>
+                          
                             <Button type="primary" className="sm:w-1/2 w-full border mt-5 flex justify-center m-auto rounded outline-1 p-1" onClick={handleNextPage} disabled={totalPages === 1}>{t('Load More')}</Button>
                         }
                         <br />
@@ -610,10 +501,7 @@ const Product = () => {
 
                     </div>
                 </div>
-                {/* <div className={`fixed bottom-0 p-2 w-screen flex lg:hidden bg-white justify-between ${filtermodel & screenWidth < 1024 && 'hidden'} ${sortmodel & screenWidth < 1024 && 'hidden'} `}>
-                    <button className="w-full grow border-r-2 border-gray-300" onClick={() => { setShortModel(!sortmodel) }}>Sort</button>
-                    <button className="w-full grow" onClick={() => { setFilterModel(!filtermodel) }} >Filter</button>
-                </div> */}
+              
                 {offer != null &&
                     <div className="absolute w-full p-2 flex h-screen justify-between opacity-100 bg-transparent  items-center  bg-gray-300" >
                         <div className="justify-center m-auto bg-slate-50 sm:w-1/2 w-full sm:h-1/2 h-full items-center ">
@@ -715,18 +603,13 @@ const Product = () => {
                     <button className="w-full grow border-r-2 border-gray-300" onClick={() => { setShortModel(!sortmodel) }}>Sort</button>
                     <button className="w-full grow" onClick={() => { setFilterModel(!filtermodel) }} >Filter</button>
             </div>
-            {sortmodel & screenWidth < 1024 ? (
-                <div className="w-full flex flex-col justify-between h-screen fixed top-0 bg-gray-300">
-                    <CloseCircleOutlined className="justify-end flex text-xl hover:text-white p-3  mt-5 cursor-pointer" onClick={() => { setShortModel(!sortmodel) }} />
-                    <div>
-                        <Menu onClick={({ key }) => handleSortBy(key)}>
-                            <Menu.Item key="priceHighToLow">Price: High to Low</Menu.Item>
-                            <Menu.Item key="priceLowToHigh">Price: Low to High</Menu.Item>
-
-                        </Menu>
-                    </div>
-                </div>
-            ) : ''}
+            
+            <SortModal
+                isVisible={sortmodel}
+                screenWidth={screenWidth}
+                handleClose={ closemodel}
+                handleSortBy={handleSortBy}
+            />
             {filtermodel & screenWidth < 1024 ? (
                 <div className="w-full text-justify h-screen bg-white lg:flex flex-col fixed overflow-x-auto  top-0  outline-1  ">
                     <div className="flex mt-5 justify-between w-full gap-2 p-2 bg-blue-100 ">

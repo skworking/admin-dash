@@ -77,29 +77,7 @@ const Product = () => {
         };
     }, []);
     // ////////////
-    // const fetchData = async () => {
-    //     try {
-    //         const result = await fetch("/api/products", {
-    //             method: "GET", // or any other HTTP method you're using
-    //             headers: {
-    //                 "Authorization": `Bearer ${isAuth}`, // Replace jwtToken with your actual JWT token
-    //                 "Content-Type": "application/json"
-    //             }
-    //         });
-    //         // const result = await fetch("api/products");
-    //         const data = await result.json();
-    //         if (data.success) {
-
-    //             // setTotalPage(data.totalPages)
-    //             setProducts(data.result);
-
-    //         } else {
-    //             console.error("Error fetching Products:", data.error);
-    //         }
-    //     } catch (error) {
-    //         console.error("Error fetching Products:", error);
-    //     }
-    // };
+ 
     const fetchProducts = async () => {
         const { data, totalPages } = await fetchData('/api/products', isAuth);
         setProducts(data);
@@ -119,26 +97,11 @@ const Product = () => {
     // console.log(body);
     const { Panel } = Collapse;
     const priceCount = calculatePriceCounts(filterProduct)
-    // const priceCount = filterProduct?.reduce((acc, product) => {
-    //     acc[product.price] = (acc[product.price] || 0) + 1;
-    //     return acc
-    // }, {})
+   
     const brandCounts = calculateBrandCounts(filterProduct)
-    // const brandCounts = filterProduct?.reduce((acc, product) => {
-    //     acc[product.brand] = (acc[product.brand] || 0) + 1;
-    //     return acc;
-    // }, {});
+  
     const uniqueNameUrlWithCount = getUniqueNameUrlWithCount(filterProduct)
-    // const tagConts = filterProduct?.reduce((acc, product) => {
-    //     product.tag.forEach(tag => {
-    //         acc[tag.name] = (acc[tag.name] || 0) + 1;
-    //     });
-    //     return acc
-    // }, {})
-    // const typeCount = filterProduct?.reduce((acc, product) => {
-    //     acc[product.product_type] = (acc[product.product_type] || 0) + 1;
-    //     return acc
-    // }, {})
+   
 
     const toggleTagFilter = () => {
         setShowTagFilter(!showTagFilter);
@@ -233,8 +196,6 @@ const Product = () => {
             bodytype: [],
         })
         setSelectedPriceOption(null)
-        // filtercall()
-        // fetchData()
         fetchProducts()
     }
 
@@ -405,39 +366,6 @@ const Product = () => {
                         </div>
                     }
 
-                    {/* <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer " onClick={() => { setShowProductType(!showProductType) }}>
-                        <h1>Product Type</h1>
-                        {showProductType ? <MinusOutlined /> : <PlusOutlined />}
-                    </div> */}
-                    {/* {showProductType && !!typeCount &&
-
-                        <>
-                            <div className={`${Object?.keys(typeCount)?.length > 5 ? 'h-[200px] overflow-auto bg-white' : 'h-auto bg-white'}`}>
-                                {Object?.entries(typeCount)?.map(([product, count]) => {
-                                    return (
-                                        <div key={product} className="p-1 flex gap-2">
-
-                                            <Checkbox
-                                                className="w-full"
-                                                key={product}
-                                                value={product}
-                                                checked={filters.body.includes(product)}
-                                                onChange={(e) => setFilters(prevFilters => ({
-                                                    ...prevFilters,
-                                                    body: e.target.checked
-                                                        ? [...prevFilters.body, e.target.value]
-                                                        : prevFilters.body.filter(item => item !== e.target.value)
-                                                }))}
-                                            >
-                                                {`${product} (${count})`}
-                                            </Checkbox>
-
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                        </>
-                    } */}
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 cursor-pointer" onClick={togglePriceFilter}>
                         <h1>{t('Price Range')}</h1>
                         {showPriceFilter ? <MinusOutlined /> : <PlusOutlined />}
@@ -520,36 +448,7 @@ const Product = () => {
                                     })
                                     :
                                     ''
-                                // sorted.length > 0 &&
-                                // sorted.map((product, index) => {
-
-                                //     return (
-                                //         <>    <Grid item xs={12} sm={4} md={4} key={index}>
-                                //             <div className="border-2  flex flex-col gap-2 bg-slate-50">
-                                //                 <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
-
-                                //                 <div className="items-center justify-center flex flex-col gap-2 p-3">
-                                //                     <p>{product.slug}</p>
-                                //                     <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
-                                //                     <Button type="primary" className="w-full " onClick={(e) => { handleOffer(e, product) }}>Check Offers</Button>
-                                //                 </div>
-                                //                 <hr />
-                                //                 <div className="relative w-full">
-                                //                     <div className="flex w-full justify-between p-1 cursor-pointer" onClick={() => toggleVariation(index)}>
-                                //                         <p>No variation Found</p>
-                                //                         <PlusOutlined className={`transition-transform duration-300 ${variation === index ? 'rotate-45' : 'rotate-0'}`} />
-                                //                     </div>
-                                //                     {variation === index && (
-                                //                         <div className="absolute top-full left-0 w-full p-1 border-2 bg-slate-50 transition-opacity duration-500">
-                                //                             No Data Found
-                                //                         </div>
-                                //                     )}
-                                //                 </div>
-                                //             </div>
-                                //         </Grid>
-                                //         </>
-                                //     )
-                                // })
+                              
                             }
                         </Grid>
                         {loading && <SkeletonLoader />}
@@ -661,18 +560,7 @@ const Product = () => {
                 <button className="w-full grow border-r-2 border-gray-300" onClick={() => { setShortModel(!sortmodel) }}>Sort</button>
                 <button className="w-full grow" onClick={() => { setFilterModel(!filtermodel) }} >Filter</button>
             </div>
-            {/* {sortmodel & screenWidth < 1024 ? (
-                <div className="w-full flex flex-col justify-between h-screen fixed top-0 bg-gray-300">
-                    <CloseCircleOutlined className="justify-end flex text-xl hover:text-white p-3  mt-5 cursor-pointer" onClick={() => { setShortModel(!sortmodel) }} />
-                    <div>
-                        <Menu onClick={({ key }) => handleSortBy(key)}>
-                            <Menu.Item key="priceHighToLow">Price: High to Low</Menu.Item>
-                            <Menu.Item key="priceLowToHigh">Price: Low to High</Menu.Item>
-
-                        </Menu>
-                    </div>
-                </div>
-            ) : ''} */}
+          
             <SortModal
                 isVisible={sortmodel}
                 screenWidth={screenWidth}
