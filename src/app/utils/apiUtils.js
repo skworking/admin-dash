@@ -15,7 +15,7 @@ export const fetchData = async (url, token) => {
             console.error("Error fetching data:", data.error);
             return { data: [], totalPages: 0 };
         }
-    } catch (err) {
+    } catch (error) {
         console.error("Error fetching data:", error);
         return { data: [], totalPages: 0 };
     }
