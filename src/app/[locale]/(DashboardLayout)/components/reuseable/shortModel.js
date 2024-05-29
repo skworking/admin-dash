@@ -3,10 +3,10 @@ import { Menu } from 'antd';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { useTranslations } from 'next-intl';
 const SortModal = ({ isVisible, screenWidth, handleClose, handleSortBy }) => {
+    const t=useTranslations("Index")
     if (!isVisible || screenWidth >= 1024) {
         return null;
     }
-    const t=useTranslations("Index")
 
     return (
         <div className="w-full flex flex-col justify-between h-screen fixed top-0 ">

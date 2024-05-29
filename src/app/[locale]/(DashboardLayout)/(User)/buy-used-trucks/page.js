@@ -296,7 +296,7 @@ const Product = () => {
     return (
         <div className="relative">
             <Breadcrumbs currentLoc={pathname} />
-            <div className="px-10  mt-5 d-flex w-full relative">
+            <div className="sm:px-10  sm:mt-5 d-flex w-full sm:relative ">
                 <div className="w-1/5 text-justify lg:flex flex-col hidden outline-1 ">
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 ">
                         <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>{t('Reset')}</button>
@@ -503,14 +503,14 @@ const Product = () => {
                 </div>
               
                 {offer != null &&
-                    <div className="absolute w-full p-2 flex h-screen justify-between opacity-100 bg-transparent  items-center  bg-gray-300" >
+                    <div className="fixed w-full p-2 flex h-screen justify-between opacity-100 bg-transparent  items-center  bg-gray-300" >
                         <div className="justify-center m-auto bg-slate-50 sm:w-1/2 w-full sm:h-1/2 h-full items-center ">
                             <CloseCircleOutlined className="float-end items-end p-2 text-end hover:text-gray-500 font-bold" onClick={handleClose} />
                             <div className="w-full p-2 flex flex-col ">
                                 <Form form={form} className="flex flex-col gap-3" onFinish={handleSignIn}>
                                     <Row>
                                         <Col xs={{ span: 20, offset: 1 }} lg={{ span: 10, offset: 1 }}>
-                                            <h1 className="w-full text-bold text-xl">{offer.slug}</h1>
+                                            <h1 className="w-full text-bold text-xl">{t(`${offer.slug}`)}</h1>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -524,7 +524,7 @@ const Product = () => {
                                                     { required: true, message: 'Please input your Name!' }
                                                 ]}
                                             >
-                                                <Input suffix={value?.name?.length > 0 ? <Check color="green" /> : <WarningFilled />} placeholder="Name" value={value.name} className="no-rounded"
+                                                <Input suffix={value?.name?.length > 0 ? <Check color="green" /> : <WarningFilled />} placeholder={t("Name")} value={value.name} className="no-rounded"
                                                     onChange={(e) => handleChange(e, 'name')}
                                                 />
                                             </FormItem>
@@ -539,7 +539,7 @@ const Product = () => {
                                                     { required: true, message: 'Please input your Mobile No!' }
                                                 ]}
                                             >
-                                                <Input suffix={value?.phone?.length > 0 ? <Check color="green" /> : <WarningFilled />} placeholder="Phone Number" value={value.phone} className="no-rounded"
+                                                <Input suffix={value?.phone?.length > 0 ? <Check color="green" /> : <WarningFilled />} placeholder={t("Phone Number")} value={value.phone} className="no-rounded"
                                                     onChange={(e) => handleChange(e, 'phone')}
                                                 />
                                             </FormItem>
@@ -569,7 +569,7 @@ const Product = () => {
                                                         </Option>
                                                     ))
                                                     } */}
-                                                    {districts.map(district => (
+                                                    {districts?.map(district => (
                                                         district.cities.map(city => (
                                                             <Option key={`${city}, ${district.name}`} value={`${city}, ${district.name}`}>
                                                                 {`${city}, ${district.name}`}
