@@ -142,7 +142,7 @@ const MultiLevelDropdown = ({ headerItems }) => {
                           <>
                             <button
                               onClick={() => toggleSubDropdown(subIndex)}
-                              className="flex justify-between sm:w-52 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              className="flex justify-between w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             >
                               {t(subItem.label)}
                               <svg

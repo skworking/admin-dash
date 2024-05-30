@@ -9,7 +9,9 @@ import Breadcrumbs from "../components/reuseable/bread";
 import { usePathname } from "next/navigation";
 import ProductDisplay from "../components/reuseable/productdisplay";
 import { fetchData } from "@/app/utils/apiUtils";
+import { useTranslations } from "next-intl";
 const FilterList = ({ items, selectedFilter, onFilterChange }) => {
+    const t=useTranslations("Index")
     return (
         <ul className="rounded-full bg-sky-100 flex w-max sm:w-fit   overflow-hidden">
             {items.map((item, index) => (
@@ -18,7 +20,7 @@ const FilterList = ({ items, selectedFilter, onFilterChange }) => {
                     className={`flex p-1 rounded-full m-1 ${selectedFilter.index === index ? 'bg-blue-500 rounded-full px-3' : 'items-center'}`}
                     onClick={() => onFilterChange({ index, value: item })}
                 >
-                    {item}
+                    {t(`${item}`)}
                 </li>
             ))}
         </ul>
@@ -26,6 +28,7 @@ const FilterList = ({ items, selectedFilter, onFilterChange }) => {
 };
 
 const BrandList = () => {
+    const t=useTranslations("Index")
     const [products, setProduct] = useState([])
     const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
 
@@ -136,7 +139,7 @@ const BrandList = () => {
         <div className="relative  bg-white ">
             <Breadcrumbs currentLoc={pathname} />
             <div className="sm:px-10 flex flex-col gap-3 my-2  overflow-auto w-full absolute bg-white">
-                <div className="font-bold"> Top Truck Brands
+                <div className="font-bold"> {t('Top Truck Brands')}
                 <hr className="w-[50px] h-2  bg-blue-500   rounded " style={{ opacity: 1 }}></hr>
                 </div>
                 <FilterList items={uniqueBrands} selectedFilter={brandFilter}
@@ -150,9 +153,9 @@ const BrandList = () => {
                                 <div className="flex flex-col gap-2 bg-slate-50">
                                     <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
                                     <div className="items-center justify-center flex flex-col gap-2 p-3">
-                                        <p>{product.slug}</p>
-                                        <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
-                                        <Button type="primary" className="w-full" /* onClick={(e) => { handleOffer(e, product) }} */>Check Offers</Button>
+                                        <p>{t(`${product.slug}`)}</p>
+                                        <p>₹{product.min_price} - ₹{product.max_price} {t('Lakh')}</p>
+                                        <Button type="primary" className="w-full" /* onClick={(e) => { handleOffer(e, product) }} */>{t('Check Offers')}</Button>
                                     </div>
                                 </div>
                                
@@ -168,9 +171,9 @@ const BrandList = () => {
                                     <div className="border-2  flex flex-col gap-2 bg-slate-50">
                                         <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
                                         <div className="items-center justify-center flex flex-col gap-2 p-3">
-                                            <p>{product.slug}</p>
-                                            <p>₹{product.min_price} - ₹{product.max_price} Lakh</p>
-                                            <Button type="primary" className="w-full" /* onClick={(e) => { handleOffer(e, product) }} */>Check Offers</Button>
+                                            <p>{t(`${product.slug}`)}</p>
+                                            <p>₹{product.min_price} - ₹{product.max_price} {t('Lakh')}</p>
+                                            <Button type="primary" className="w-full" /* onClick={(e) => { handleOffer(e, product) }} */>{t('Check Offers')}</Button>
                                         </div>
                                     </div>
                                 </Grid>

@@ -14,6 +14,7 @@ import { fetchData } from "@/app/utils/apiUtils";
 import { calculateBrandCounts, calculatePriceCounts, getUniqueNameUrlWithCount } from "@/app/utils/utils";
 import Image from "next/image";
 import SortModal from "../../components/reuseable/shortModel";
+import Link from "next/link";
 
 
 const Product = () => {
@@ -420,6 +421,7 @@ const Product = () => {
                                         return (
                                             <>
                                                 <Grid item xs={12} sm={4} md={4} key={index}>
+                                                <Link href={`/brands/${endpoint}-truck/${product.slug}`} className="no-underline text-black">
                                                     <div className="border-2  flex flex-col gap-2 bg-slate-50">
                                                         <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
 
@@ -441,6 +443,7 @@ const Product = () => {
                                                             )}
                                                         </div>
                                                     </div>
+                                                    </Link>
                                                 </Grid>
 
                                             </>
