@@ -14,6 +14,7 @@ import Image from "next/image";
 import { fetchData } from "@/app/utils/apiUtils";
 import { calculateBrandCounts, calculatePriceCounts, calculateTagCounts, getUniqueNameUrlWithCount } from "@/app/utils/utils";
 import SortModal from "../../components/reuseable/shortModel";
+import Link from "next/link";
 
 
 
@@ -290,6 +291,10 @@ const Product = () => {
     }
 
     const pathname = usePathname()
+    const endpoint = pathname.split("/").pop();
+    const end=endpoint.split('-')
+    const newurl =end[0]+'-'+end[1];
+    console.log(newurl);
     const closemodel=()=>{
         setShortModel(!sortmodel)
     }
@@ -456,9 +461,11 @@ const Product = () => {
                         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                             {filterdata.length > 0 ?
                                 filterdata.map((product, index) => {
+                                    console.log(product);
                                     return (
                                         <>
                                             <Grid item xs={12} sm={4} md={4} key={index}>
+                                            <Link href={`/${newurl}/${product.brand}/${product.slug}`} className="no-underline text-black">
                                                 <div className="border-2  flex flex-col gap-2 bg-slate-50">
                                                     <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
 
@@ -480,6 +487,7 @@ const Product = () => {
                                                         )}
                                                     </div>
                                                 </div>
+                                                </Link>
                                             </Grid>
 
                                         </>

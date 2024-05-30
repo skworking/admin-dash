@@ -46,7 +46,8 @@
     "slick-carousel": "^1.8.1",
     "uuid": "^9.0.1",
     "xlsx": "^0.18.5",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",

@@ -15,16 +15,27 @@ import { calculateBrandCounts, calculatePriceCounts, getUniqueNameUrlWithCount }
 import Image from "next/image";
 import SortModal from "../../components/reuseable/shortModel";
 import Link from "next/link";
+// import useProductStore from "@/store/productStrore";
 
 
 const Product = () => {
     const t = useTranslations('Index')
+    // const setItems=useProductStore((state)=>state.setItems)
     const pathname = usePathname()
     const endpoint = pathname.split("/").pop();
 
     const [products, setProducts] = useState([]);
 
-
+    // const handleSetProduct = () => {
+    //     const product = {
+    //         id: 1,
+    //         name: 'Sample Product',
+    //         description: 'This is a sample product.',
+    //         price: 99.99,
+    //       };
+        
+    //     setItems(product);
+    //   };
     const filterProducts = (products, value) => {
         return products.filter(product => product.brand.toLowerCase() === value.toLowerCase());
     }
@@ -413,6 +424,7 @@ const Product = () => {
                         <div className="lg:hidden mb-2">{t('Populer')} {t(`${endpoint.charAt(0).toUpperCase() + endpoint.slice(1)}`)} {t(`Trucks`)}
                             <hr className="w-[50px] h-2  bg-blue-500  rounded " style={{ opacity: 1 }}></hr>
                         </div>
+                        
                         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                             {
 
@@ -420,8 +432,12 @@ const Product = () => {
                                     filterdata.map((product, index) => {
                                         return (
                                             <>
-                                                <Grid item xs={12} sm={4} md={4} key={index}>
-                                                <Link href={`/brands/${endpoint}-truck/${product.slug}`} className="no-underline text-black">
+                                                <Grid item xs={12} sm={4} md={4} key={index}/*  onClick={()=>{handleSetProduct(product)}} */>
+                                                <Link /* href={`/brands/${endpoint}-truck/${product.slug}`} */
+                                                href={{ pathname:`/brands/${endpoint}-truck/${product.slug}`
+                                                // query: { name: product.name, image: product.image, body: product.body },
+                                                }}
+                                                 className="no-underline text-black">
                                                     <div className="border-2  flex flex-col gap-2 bg-slate-50">
                                                         <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
 

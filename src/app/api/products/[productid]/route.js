@@ -54,14 +54,16 @@ export async function GET(request,{params}){
     try{
     await authenticateToken(request)
     const userId=params.productid;
- 
-    console.log(userId);
+   
+   
     // id object create
     const record={_id:userId}
+    console.log(record);
     // check the connection
     await mongoose.connect(process.env.MONGODB)
 
     const result=await Product.findOne(record);
+   console.log(result);
     return NextResponse.json({result,success:true})
     }catch(error){
         console.error('Error:', error);
