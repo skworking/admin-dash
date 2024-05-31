@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 function parseBreadcrumbs(url) {
     // const path = new URL(url).pathname;
     const path = new URL(url, 'http://example.com').pathname;
-    const segments = path.split('/').filter(segment => segment !== 'en| hi')
+    const segments = path.split('/').filter(segment => segment !== 'en' && segment !=='hi')
     console.log(segments);
     const breadcrumbMap = {
         '': 'Home',
@@ -17,6 +17,7 @@ function parseBreadcrumbs(url) {
     };
 
     let breadcrumbs = segments.map((segment, index) => {
+        console.log(segment);
         if (segment === 'en') {
             return null; // Skip the language segment
         }
@@ -25,7 +26,7 @@ function parseBreadcrumbs(url) {
         const label = breadcrumbMap[segment] || segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
 
         // Construct the URL for the breadcrumb
-        const url = '/' + segments.slice(0, index + 1).map(seg => (seg === 'tata-truck' || seg === 'Tata-truck') ? 'tata' : seg).filter(seg => seg && seg !== 'en' && seg !== 'hi').join('/');
+        const url = '/' + segments.slice(0, index + 1).map(seg => seg === segments[2] ? seg.replace('-truck','') : seg).filter(seg => seg && seg !== 'en' && seg !== 'hi').join('/');
 
         return { label, url };
     }).filter(breadcrumb => breadcrumb); // Remove null values
@@ -45,7 +46,7 @@ const DetailPage = () => {
 
     const currentURL = pathname.split('/');
     const breadcrumbs = parseBreadcrumbs(pathname);
-    console.log(items);
+    console.log(breadcrumbs);
     return (
         <>
             <nav aria-label="breadcrumb">

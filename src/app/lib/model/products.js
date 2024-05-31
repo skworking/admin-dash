@@ -47,7 +47,7 @@ const variationOptionSchema=new mongoose.Schema({
    options:[optionSchema]
 })
 const ProductSchema=new mongoose.Schema({
-    _id:String,
+    // _id:String,
     name:String,
     slug:String,
     description:String,

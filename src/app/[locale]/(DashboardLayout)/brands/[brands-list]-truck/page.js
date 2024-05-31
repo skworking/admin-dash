@@ -23,7 +23,7 @@ const Product = () => {
     const setItems=useProductStore((state)=>state.setItems)
     const pathname = usePathname()
     const endpoint = pathname.split("/").pop();
-    const end=endpoint.split('-')
+  
     // console.log("end-",endpoint,end[0]);
     const [products, setProducts] = useState([]);
 
