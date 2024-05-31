@@ -3,43 +3,6 @@ import useProductStore from "@/store/productStrore";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-
-// function parseBreadcrumbs(url) {
-
-//     // Extract the path from the URL
-//     // const path = new URL(url).pathname;
-
-//     // Split the path into components
-//     // const segments = url.split('/').filter(segment => segment); // Remove empty segments
-//     const segments = url.split('/') // Remove empty segments
-
-//     // Map URL segments to breadcrumb labels
-//     const breadcrumbMap = {
-//         '': 'Home',
-//         'tata-truck': 'Tata',
-//         'ace-gold-cng': 'Ace Gold CNG',
-//     };
-
-//     // Convert segments to breadcrumbs
-//     let breadcrumbs = segments.map((segment, index) => {
-//         if (segment === 'en') {
-//             return ''; // Skip the language segment
-//         }
-//         if (index === 0) {
-//             return breadcrumbMap[''] || 'Home'; // Root segment
-//         }
-//         return breadcrumbMap[segment] || segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
-//     }).filter(breadcrumb => breadcrumb); // Remove empty breadcrumbs
-
-//     // Add a custom breadcrumb for 'Tata ACE' between 'Tata' and 'Ace Gold CNG'
-//     const tataIndex = breadcrumbs.indexOf('Tata');
-//     if (tataIndex !== -1 && breadcrumbs[tataIndex + 1] === 'Ace Gold CNG') {
-//         breadcrumbs.splice(tataIndex + 1, 0, 'Tata ACE');
-//     }
-
-//     return breadcrumbs.join(' > ');
-// }
-
 function parseBreadcrumbs(url) {
     // const path = new URL(url).pathname;
     const path = new URL(url, 'http://example.com').pathname;
@@ -51,19 +14,6 @@ function parseBreadcrumbs(url) {
         'ace-gold-cng': 'Ace Gold CNG',
     };
 
-    // let breadcrumbs = segments.map((segment, index) => {
-    //   if (segment === 'en') {
-    //     return null; // Skip the language segment
-    //   }
-    //   let label;
-    //   if (index === 0) {
-    //     label = breadcrumbMap[''] || 'Home';
-    //   } else {
-    //     label = breadcrumbMap[segment] || segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
-    //   }
-    //   const url = '/' + segments.slice(0, index + 1).join('/');
-    //   return { label, url };
-    // }).filter(breadcrumb => breadcrumb);
     let breadcrumbs = segments.map((segment, index) => {
         if (segment === 'en') {
             return null; // Skip the language segment
@@ -99,9 +49,9 @@ const DetailPage = () => {
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     {breadcrumbs?.map((crumb, index) => {
-                      
+
                         return (
-                              <li key={index} className="breadcrumb-item">
+                            <li key={index} className="breadcrumb-item">
                                 {index === breadcrumbs.length - 1 ? (
                                     <>{crumb.label}</>
                                 ) : (
@@ -109,7 +59,7 @@ const DetailPage = () => {
                                         {crumb.label}
                                     </Link>
                                 )}
-                           
+
                             </li>
                         )
                     })}
