@@ -15,27 +15,28 @@ import { calculateBrandCounts, calculatePriceCounts, getUniqueNameUrlWithCount }
 import Image from "next/image";
 import SortModal from "../../components/reuseable/shortModel";
 import Link from "next/link";
-// import useProductStore from "@/store/productStrore";
+import useProductStore from "@/store/productStrore";
 
 
 const Product = () => {
     const t = useTranslations('Index')
-    // const setItems=useProductStore((state)=>state.setItems)
+    const setItems=useProductStore((state)=>state.setItems)
     const pathname = usePathname()
     const endpoint = pathname.split("/").pop();
-
+    const end=endpoint.split('-')
+    // console.log("end-",endpoint,end[0]);
     const [products, setProducts] = useState([]);
 
-    // const handleSetProduct = () => {
-    //     const product = {
-    //         id: 1,
-    //         name: 'Sample Product',
-    //         description: 'This is a sample product.',
-    //         price: 99.99,
-    //       };
+    const handleSetProduct = (product) => {
+        // const product = {
+        //     id: 1,
+        //     name: 'Sample Product',
+        //     description: 'This is a sample product.',
+        //     price: 99.99,
+        //   };
         
-    //     setItems(product);
-    //   };
+        setItems(product);
+      };
     const filterProducts = (products, value) => {
         return products.filter(product => product.brand.toLowerCase() === value.toLowerCase());
     }
@@ -432,7 +433,7 @@ const Product = () => {
                                     filterdata.map((product, index) => {
                                         return (
                                             <>
-                                                <Grid item xs={12} sm={4} md={4} key={index}/*  onClick={()=>{handleSetProduct(product)}} */>
+                                                <Grid item xs={12} sm={4} md={4} key={index} onClick={()=>{handleSetProduct(product)}}>
                                                 <Link /* href={`/brands/${endpoint}-truck/${product.slug}`} */
                                                 href={{ pathname:`/brands/${endpoint}-truck/${product.slug}`
                                                 // query: { name: product.name, image: product.image, body: product.body },
