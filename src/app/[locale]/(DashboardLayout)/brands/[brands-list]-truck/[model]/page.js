@@ -1,7 +1,9 @@
 'use client'
 import useProductStore from "@/store/productStrore";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 function parseBreadcrumbs(url) {
     // const path = new URL(url).pathname;
@@ -36,14 +38,14 @@ function parseBreadcrumbs(url) {
     return breadcrumbs;
 }
 const DetailPage = () => {
+    const t=useTranslations();
     const { count, items } = useProductStore()
 
     const pathname = usePathname()
 
     const currentURL = pathname.split('/');
     const breadcrumbs = parseBreadcrumbs(pathname);
-    console.log(breadcrumbs);
-    console.log(pathname, currentURL);
+    console.log(items);
     return (
         <>
             <nav aria-label="breadcrumb">
@@ -65,8 +67,22 @@ const DetailPage = () => {
                     })}
                 </ol>
             </nav>
-
-            details page
+            <div className="sm:flex  gap-3 w-full p-3">
+                <div className="sm:w-1/3">
+                    
+                <img src={items.gallery[0].original} height={500} width={500} alt="logo"/> 
+                </div>
+                <div className="mt-2 sm:mt-0 flex flex-col gap-2">
+                    <h3 className="bold font-semibold text-xl">{items.brand} {items.slug}</h3>
+                    <hr className="w-[50px] h-2  bg-blue-500   rounded " style={{ opacity: 1 }}></hr>
+                    <p>{items.description}</p>
+                    <p>₹{items.min_price} - ₹{items.max_price} {t(`Lakh`)}* <mark>get on Reoad price</mark></p>
+                    <p>Product-Type   : {items.product_type}</p>
+                    <p>No's of available- {items.quantity}</p>
+                    <p>Selling Price : ₹{items.sale_price} Lakh</p>
+                </div>
+            </div>
+           
         </>
     )
 }
