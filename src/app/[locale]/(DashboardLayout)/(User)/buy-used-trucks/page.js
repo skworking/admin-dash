@@ -163,7 +163,12 @@ const Product = () => {
             setLoading(false);
             message.success({ content: response.message, duration: 2 });
         } else {
-            message.warning({ content: response.message })
+            message.warning({ content: response.message.message })
+            if(response.message.status === 403){
+                sessionStorage.clear()
+               
+            }
+            console.log("worning",response);
         }
     }
 
