@@ -12,8 +12,8 @@ function parseBreadcrumbs(url) {
     console.log(segments);
     const breadcrumbMap = {
         '': 'Home',
-        'tata-truck': 'Tata',
-        'ace-gold-cng': 'Ace Gold CNG',
+        // 'tata-truck': 'Tata',
+        // 'ace-gold-cng': 'Ace Gold CNG',
     };
 
     let breadcrumbs = segments.map((segment, index) => {
@@ -46,7 +46,7 @@ const DetailPage = () => {
 
     const currentURL = pathname.split('/');
     const breadcrumbs = parseBreadcrumbs(pathname);
-    console.log(breadcrumbs);
+  
     return (
         <>
             <nav aria-label="breadcrumb">

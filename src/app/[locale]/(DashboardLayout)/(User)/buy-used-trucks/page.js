@@ -15,6 +15,7 @@ import { fetchData } from "@/app/utils/apiUtils";
 import { calculateBrandCounts, calculatePriceCounts, calculateTagCounts, getUniqueNameUrlWithCount } from "@/app/utils/utils";
 import SortModal from "../../components/reuseable/shortModel";
 import Link from "next/link";
+import useProductStore from "@/store/productStrore";
 
 
 
@@ -291,12 +292,17 @@ const Product = () => {
     }
 
     const pathname = usePathname()
-    const endpoint = pathname.split("/").pop();
-    const end=endpoint.split('-')
-    const newurl =end[0]+'-'+end[1];
-    console.log(newurl);
+    // const endpoint = pathname.split("/").pop();
+    // const end=endpoint.split('-')
+    // console.log(end);
+    // const newurl =end[0]+'-'+end[1];
+    // console.log(newurl);
     const closemodel=()=>{
         setShortModel(!sortmodel)
+    }
+    const setItems=useProductStore((state)=> state.setItems)
+    const handleSetProduct=(product)=>{
+        setItems(product)
     }
     return (
         <div className="relative">
@@ -464,8 +470,8 @@ const Product = () => {
                                     console.log(product);
                                     return (
                                         <>
-                                            <Grid item xs={12} sm={4} md={4} key={index}>
-                                            <Link href={`/${newurl}/${product.brand}/${product.slug}`} className="no-underline text-black">
+                                            <Grid item xs={12} sm={4} md={4} key={index}  onClick={()=>{handleSetProduct(product)}}>
+                                            <Link href={`${pathname}/${product.brand}/${product.slug}`} className="no-underline text-black">
                                                 <div className="border-2  flex flex-col gap-2 bg-slate-50">
                                                     <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
 

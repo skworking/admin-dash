@@ -44,6 +44,16 @@ const nextConfig = {
           ]
         }
       ]
-    }
+    },
+    // redirect 307 issues fix in dynamic routing
+    // async redirects() {
+    //   return [
+    //     {
+    //       source: '/old-route',
+    //       destination: '/brands/tata',// Matched parameters can be used in the destination
+    //       permanent: true,
+    //     },
+    //   ]
+    // },
   };
 export default withNextIntl(nextConfig);
