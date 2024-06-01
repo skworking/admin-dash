@@ -9,6 +9,8 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/mater
 import axios from 'axios';
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { useTranslations } from 'next-intl';
+import Breadcrumbs from '../../components/reuseable/bread';
+import { usePathname } from 'next/navigation';
 
 const years = ['2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024']
 // const brands = ['Toyota', 'Ford', 'Chevrolet', 'Nissan', 'Honda', 'Volkswagen', 'Hyundai', 'Mercedes-Benz'];
@@ -44,7 +46,7 @@ const UsedVahicle = () => {
     const t=useTranslations("Index")
     const [models, setModels] = useState({});
     const [brands, setBrands] = useState([]);
-
+    const pathname=usePathname();
     const fetchbrandmodel = async () => {
         await axios.get('/api/brandmodel')
             .then((res) => {
@@ -719,7 +721,10 @@ const UsedVahicle = () => {
                     </div>
                 </div>
                 :
+                <>
+                <Breadcrumbs  currentLoc={pathname} />
                 <div className='sm:w-2/3 m-auto justify-center items-center  flex flex-col mt-2 gap-3'>
+                    
                     <div className='text-center'>
                         <h1 className='bold text-xl font-semibold'>{t('SELL YOUR USED TRUCK AT BEST PRICE')}</h1>
                         <p>{t('Enjoy a hassle free Truck selling process with us')}</p>
@@ -820,6 +825,7 @@ const UsedVahicle = () => {
                     </Box>
 
                 </div>
+                </>
             }
 
         </div>

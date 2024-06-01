@@ -328,7 +328,7 @@ console.log(products);
                          /> */}
                           <div className="ms-3">
                             <h6 className="mb-0">{tdata.name}</h6>
-                            <span className="text-muted">{tdata.description}</span>
+                            <span className="text-muted">{tdata.description.substring(0,20)+'...'}</span>
                           </div>
                         </div>
                       </td>
