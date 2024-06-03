@@ -6,13 +6,14 @@ import { usePathname } from "next/navigation";
 import Breadcrumbs from "../../../components/reuseable/bread";
 import { fetchData } from "@/app/utils/apiUtils";
 import { calculatePriceCounts, getUniqueNameUrlWithCount } from "@/app/utils/utils";
-import { Button, Checkbox, Col, Dropdown,  Menu, Radio, Row, message } from "antd";
-import { CloseCircleOutlined, DownOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Col,Form,Input, Dropdown,  Menu, Radio, Row, message, Select } from "antd";
+import { CloseCircleOutlined, DownOutlined, MinusOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
 import { Grid } from "@mui/material";
 import Image from "next/image";
 import SkeletonLoader from "../../../components/reuseable/skelenton";
 import Link from "next/link";
 import SortModal from "../../../components/reuseable/shortModel";
+import { Check } from "react-feather";
 const BrandPage = () => {
     const t = useTranslations('Index')
     const setItems = useProductStore((state) => state.setItems)
@@ -184,6 +185,7 @@ const BrandPage = () => {
     }
     const FormItem = Form.Item;
     const [form] = Form.useForm();
+    const { Option } = Select;
     return (
         <div className="relative">
             <Breadcrumbs currentLoc={pathname} />
