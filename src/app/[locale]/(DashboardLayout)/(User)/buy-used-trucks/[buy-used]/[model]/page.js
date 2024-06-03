@@ -7,10 +7,31 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Tooltip } from "antd";
 import Slider from 'react-slick';
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useState, useRef, useEffect } from "react";
+import { CloseCircleOutlined } from "@ant-design/icons";
+function SampleNextArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+        <div
+            className={className}
 
+            style={{ ...style, display: "block", position: "absolute", background: "#a58e8e",bottom:"5px", right:'-5px',borderRadius:"50%" }}
+            onClick={onClick}
+        />
+    );
+}
+function SamplePrevArrow(props) {
+    const { className, style, onClick } = props;
+    return (
+        <div
+            className={className}
+            style={{ ...style, display: "block", position: "absolute", background: "#a58e8e", left: '-5px', zIndex: 1 ,borderRadius:"50%"}}
+            onClick={onClick}
+        />
+    );
+}
 const DetailPage = () => {
     const t = useTranslations();
     const pathname = usePathname();
@@ -18,9 +39,24 @@ const DetailPage = () => {
     const { count, items } = useProductStore();
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const sliderRef = useRef(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const settings = {
-        dots: true,
+        dots: false,
+        nextArrow:<SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        initialSlide: selectedImageIndex,
+        afterChange: (current) => setSelectedImageIndex(current),
+        
+    };
+    const settings1 = {
+        dots: false,
+        nextArrow:false,
+        prevArrow: false,
         infinite: true,
         speed: 500,
         slidesToShow: 1,
@@ -40,37 +76,45 @@ const DetailPage = () => {
             sliderRef.current.slickGoTo(selectedImageIndex);
         }
     }, [selectedImageIndex]);
+
+    const handleSliderClick = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
     console.log(items);
     return (
         <>
             <CustomBreadCrumd breadcrumbs={breadcrumbs} />
-            <div className="sm:flex gap-3 w-full p-3">
+            <div className="sm:flex gap-3 w-full  relative">
                 <div className="sm:w-1/2">
                     <div>
-                        {items.gallery.length > 1?
-                        <Slider ref={sliderRef} {...settings}>
-                            {items.gallery.map((item, index) => (
-                                <div key={index}>
-                                    <img src={item.original} alt="gallery" width={500} height={500} className="lazy" />
-                                </div>
-                            ))}
-                        </Slider>
-                        :
-                        <img src={items.gallery[0].original} alt="gallery" width={500} height={500} className="lazy" />
+                        {items.gallery.length > 1 ?
+                            <Slider ref={sliderRef} {...settings1}  >
+                                {items.gallery.map((item, index) => (
+                                    <div key={index} onClick={handleSliderClick}>
+                                        <img src={item.original} alt="gallery" className="lazy h-auto w-[500px] m-auto object-contain" />
+                                    </div>
+                                ))}
+                            </Slider>
+                            :
+                            <img src={items.gallery[0].original} alt="gallery" className="lazy h-auto w-[500px] m-auto object-contain" />
                         }
                         <div className="flex justify-center mt-4">
 
-                            {items.gallery.length >1 ?
-                            items.gallery.map((item, index) => (
-                                <div 
-                                    key={index} 
-                                    className="mx-2 cursor-pointer" 
-                                    
-                                    onClick={() => handleThumbnailClick(index)}
-                                >
-                                    <img src={item.original} alt="thumbnail" width={80} height={120} />
-                                </div>
-                            )):
+                            {items.gallery.length > 1 ?
+                                items.gallery.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className="mx-2 cursor-pointer"
+
+                                        onClick={() => handleThumbnailClick(index)}
+                                    >
+                                        <img src={item.original} alt="thumbnail" width={80} height={120} />
+                                    </div>
+                                )) :
                                 <img src={items.gallery[0].original} alt="logo" width={80} height={120} />
                             }
                         </div>
@@ -88,6 +132,38 @@ const DetailPage = () => {
                     <p>Selling Price: ₹{items.sale_price} Lakh</p>
                 </div>
             </div>
+                {isModalOpen &&
+                    <div className="absolute top-0 w-full bg-slate-50 flex h-full  justify-between opacity-100 bg-transparent  items-center  " >
+                    <div className="justify-center m-auto bg-slate-50 sm:w-1/2 w-full  h-full p-0 rounded-md items-center ">
+                        <CloseCircleOutlined className="float-end items-end p-2 text-end hover:text-gray-500 font-bold" onClick={()=>{setIsModalOpen(!isModalOpen)}} />
+                        <div className="w-full p-2 flex flex-col ">
+                            
+                            <Slider ref={sliderRef} {...settings}  >
+                                {items.gallery.map((item, index) => (
+                                    <div key={index} onClick={handleSliderClick}>
+                                        <img src={item.original} alt="gallery" className="h-[370px] w-screen m-auto object-contain" />
+                                    </div>
+                                ))}
+                            </Slider>
+                            <div className="flex">
+                            {items.gallery.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className="mx-2 cursor-pointer"
+
+                                        onClick={() => handleThumbnailClick(index)}
+                                    >
+                                        <img src={item.original} alt="thumbnail" width={80} height={120} />
+                                      
+                                    </div>
+                                ))
+                            }
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
         </>
     );
 }
