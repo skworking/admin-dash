@@ -59,8 +59,9 @@ const DetailPage = () => {
                         <img src={items.gallery[0].original} alt="gallery" width={500} height={500} className="lazy" />
                         }
                         <div className="flex justify-center mt-4">
-                            
-                            {items.gallery.map((item, index) => (
+
+                            {items.gallery.length >1 ?
+                            items.gallery.map((item, index) => (
                                 <div 
                                     key={index} 
                                     className="mx-2 cursor-pointer" 
@@ -69,7 +70,9 @@ const DetailPage = () => {
                                 >
                                     <img src={item.original} alt="thumbnail" width={80} height={120} />
                                 </div>
-                            ))}
+                            )):
+                                <img src={items.gallery[0].original} alt="logo" width={80} height={120} />
+                            }
                         </div>
                     </div>
                 </div>
