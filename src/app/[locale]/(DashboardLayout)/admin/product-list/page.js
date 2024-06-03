@@ -301,6 +301,7 @@ console.log(products);
                     <th>Product</th>
                     <th>Slug</th>
                     <th>Brand</th>
+                    <th>product_type</th>
                     <th>Operation</th>
                   </tr>
                 </thead>
@@ -334,6 +335,7 @@ console.log(products);
                       </td>
                       <td>{tdata.slug}</td>
                       <td>{tdata.brand}</td>
+                      <td>{tdata.product_type}</td>
                       <td className='' onClick={()=>{operation? setOperation(false):''}}>
                       <AiOutlineMenu onClick={() => handleOperation(tdata._id)} className='cursor-pointer' />  
                         {operation === tdata._id &&
