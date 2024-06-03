@@ -134,9 +134,9 @@ const DetailPage = () => {
             </div>
                 {isModalOpen &&
                     <div className="absolute top-0 w-full bg-slate-50 flex h-full  justify-between opacity-100 bg-transparent  items-center  " >
-                    <div className="justify-center m-auto bg-slate-50 sm:w-1/2 w-full  h-full p-0 rounded-md items-center ">
+                    <div className="justify-center m-auto  sm:w-1/2 w-full  h-full sm:h-1/2  p-0  rounded-md items-center    ">
                         <CloseCircleOutlined className="float-end items-end p-2 text-end hover:text-gray-500 font-bold" onClick={()=>{setIsModalOpen(!isModalOpen)}} />
-                        <div className="w-full p-2 flex flex-col ">
+                        <div className="w-full p-2 flex flex-col bg-slate-50 ">
                             
                             <Slider ref={sliderRef} {...settings}  >
                                 {items.gallery.map((item, index) => (
