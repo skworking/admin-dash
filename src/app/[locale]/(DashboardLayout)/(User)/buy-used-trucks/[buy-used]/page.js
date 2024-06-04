@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import Breadcrumbs from "../../../components/reuseable/bread";
 import { fetchData } from "@/app/utils/apiUtils";
 import { calculatePriceCounts, getUniqueNameUrlWithCount } from "@/app/utils/utils";
-import { Button, Checkbox, Col,Form,Input, Dropdown,  Menu, Radio, Row, message, Select } from "antd";
+import { Button, Checkbox, Col, Form, Input, Dropdown, Menu, Radio, Row, message, Select } from "antd";
 import { CloseCircleOutlined, DownOutlined, MinusOutlined, PlusOutlined, WarningFilled } from "@ant-design/icons";
 import { Grid } from "@mui/material";
 import Image from "next/image";
@@ -180,7 +180,7 @@ const BrandPage = () => {
 
     const priceCount = calculatePriceCounts(filterProduct)
     const uniqueNameUrlWithCount = getUniqueNameUrlWithCount(filterProduct)
-    const closemodel=()=>{
+    const closemodel = () => {
         setShortModel(!sortmodel)
     }
     const FormItem = Form.Item;
@@ -291,16 +291,16 @@ const BrandPage = () => {
                         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                             {
 
-                                !!filterdata /* && sorted.length === 0 */ ?
+                                !!filterdata ?
                                     filterdata.map((product, index) => {
                                         return (
                                             <>
                                                 <Grid item xs={12} sm={4} md={4} key={index} onClick={() => { handleSetProduct(product) }}>
-                                                    <Link /* href={`/brands/${endpoint}-truck/${product.slug}`} */
-                                                        href={{
-                                                            pathname: `/brands/${endpoint}-truck/${product.slug}`
-                                                            // query: { name: product.name, image: product.image, body: product.body },
-                                                        }}
+                                                    <Link href={`/brands/${endpoint}-truck/${product.slug}`}
+                                                        // href={{
+                                                        //     pathname: `/brands/${endpoint}-truck/${product.slug}`
+                                                        //     // query: { name: product.name, image: product.image, body: product.body },
+                                                        // }}
                                                         className="no-underline text-black">
                                                         <div className="border-2  flex flex-col gap-2 bg-slate-50">
                                                             <img className="object-cover w-full h-[200px]" src={product.gallery[0].original} alt="logo" />
@@ -401,13 +401,7 @@ const BrandPage = () => {
                                                         showSearch
 
                                                     >
-                                                        {/* {filteredCities.length> 0 &&
-                                                        filteredCities.map(city => (
-                                                        <Option key={city} value={city}>
-                                                            {city}
-                                                        </Option>
-                                                    ))
-                                                    } */}
+
                                                         {districts.map(district => (
                                                             district.cities.map(city => (
                                                                 <Option key={`${city}, ${district.name}`} value={`${city}, ${district.name}`}>
@@ -446,7 +440,7 @@ const BrandPage = () => {
             <SortModal
                 isVisible={sortmodel}
                 screenWidth={screenWidth}
-                handleClose={ closemodel}
+                handleClose={closemodel}
                 handleSortBy={handleSortBy}
             />
             {filtermodel & screenWidth < 1024 ? (

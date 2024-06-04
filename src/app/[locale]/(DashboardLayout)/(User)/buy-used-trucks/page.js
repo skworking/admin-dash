@@ -312,7 +312,7 @@ const Product = () => {
     return (
         <div className="relative">
             <Breadcrumbs currentLoc={pathname} />
-            <div className="sm:px-10  sm:mt-5 d-flex w-full relative ">
+            <div className="sm:px-0  sm:mt-5 d-flex w-full relative ">
                 <div className="w-1/5 text-justify lg:flex flex-col hidden outline-1 ">
                     <div className="flex justify-between w-full gap-2 p-2 bg-blue-100 ">
                         <button className="bg-sky-50  hover:bg-blue-500 text-blue-500 m-auto hover:text-white p-2 grow flex border-1 border-blue-500 rounded" onClick={handleReset}>{t('Reset')}</button>

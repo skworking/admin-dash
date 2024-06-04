@@ -138,7 +138,7 @@ const BrandList = () => {
     return (
         <div className="relative  bg-white ">
             <Breadcrumbs currentLoc={pathname} />
-            <div className="sm:px-10 flex flex-col gap-3 my-2  overflow-auto w-full absolute bg-white">
+            <div className="sm:px-0 flex flex-col gap-3 my-2  overflow-auto w-full absolute bg-white">
                 <div className="font-bold"> {t('Top Truck Brands')}
                 <hr className="w-[50px] h-2  bg-blue-500   rounded " style={{ opacity: 1 }}></hr>
                 </div>

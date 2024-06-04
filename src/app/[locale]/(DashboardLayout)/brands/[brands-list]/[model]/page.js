@@ -86,11 +86,11 @@ const DetailPage = () => {
     };
     console.log(items);
     return (
-        <>
+        <div className="relative">
             <CustomBreadCrumd breadcrumbs={breadcrumbs} />
-            <div className="sm:flex gap-3 w-full  relative">
-                <div className="sm:w-1/2">
-                    <div>
+            <div className="px-0  mt-5 sm:flex sm:flex-row flex-col w-full absolute ">
+                <div className="sm:w-1/2 w-full">
+                    <>
                         {items.gallery.length > 1 ?
                             <Slider ref={sliderRef} {...settings1}  >
                                 {items.gallery.map((item, index) => (
@@ -102,7 +102,7 @@ const DetailPage = () => {
                             :
                             <img src={items.gallery[0].original} alt="gallery" className="lazy h-auto w-[500px] m-auto object-contain" />
                         }
-                        <div className="flex justify-center mt-4">
+                        <div className="flex justify-center mt-2">
 
                             {items.gallery.length > 1 ?
                                 items.gallery.map((item, index) => (
@@ -118,9 +118,9 @@ const DetailPage = () => {
                                 <img src={items.gallery[0].original} alt="logo" width={80} height={120} />
                             }
                         </div>
-                    </div>
+                    </>
                 </div>
-                <div className="mt-2 sm:mt-0 flex flex-col gap-2">
+                <div className="sm:w-1/2 w-full mt-2 sm:mt-0 flex flex-col gap-2">
                     <Tooltip title={`${items.brand} ${items.slug} ${items.description}`} placement="bottom">
                         <h3 className="bold font-semibold text-xl">{items.brand} {items.slug}</h3>
                     </Tooltip>
@@ -134,9 +134,9 @@ const DetailPage = () => {
             </div>
                 {isModalOpen &&
                     <div className="absolute top-0 w-full bg-slate-50 flex h-full  justify-between opacity-100 bg-transparent  items-center  " >
-                    <div className="justify-center m-auto  sm:w-1/2 w-full sm:h-1/2 h-full p-0 rounded-md items-center ">
-                        <CloseCircleOutlined className="float-end items-end   p-2 text-end hover:text-gray-500 font-bold" onClick={()=>{setIsModalOpen(!isModalOpen)}} />
-                        <div className="w-full p-2 flex flex-col bg-slate-50">
+                    <div className="justify-center m-auto  sm:w-1/2 w-full  h-full sm:h-1/2  p-0  rounded-md items-center    ">
+                        <CloseCircleOutlined className="float-end items-end p-2 text-end hover:text-gray-500 font-bold" onClick={()=>{setIsModalOpen(!isModalOpen)}} />
+                        <div className="w-full p-2 flex flex-col bg-slate-50 ">
                             
                             <Slider ref={sliderRef} {...settings}  >
                                 {items.gallery.map((item, index) => (
@@ -164,7 +164,7 @@ const DetailPage = () => {
                     </div>
                 </div>
                 }
-        </>
+        </div>
     );
 }
 
