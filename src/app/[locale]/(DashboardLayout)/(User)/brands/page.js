@@ -5,9 +5,9 @@ import { Grid } from "@mui/material";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Breadcrumbs from "../components/reuseable/bread";
+import Breadcrumbs from "../../components/reuseable/bread";
 import { usePathname } from "next/navigation";
-import ProductDisplay from "../components/reuseable/productdisplay";
+import ProductDisplay from "../../components/reuseable/productdisplay";
 import { fetchData } from "@/app/utils/apiUtils";
 import { useTranslations } from "next-intl";
 const FilterList = ({ items, selectedFilter, onFilterChange }) => {
