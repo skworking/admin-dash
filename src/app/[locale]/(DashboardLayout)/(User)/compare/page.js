@@ -1,14 +1,22 @@
 'use client'
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Breadcrumbs from "../../components/reuseable/bread";
-import compare from 'public/images/compare.webp';
+import banner from 'public/images/compare.webp';
 import Image from "next/image";
 import { fetchData } from "@/app/utils/apiUtils";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import Select from "../../components/reuseable/select";
+import { Button } from "antd";
+import useProductStore from "@/store/productStrore";
 
-const Compare = () => {
+
+const ComparePage = () => {
+    // const { setTruck1, setTruck2 } = useProductStore();
+    const setTruck1=useProductStore((state)=> state.setTruck1)
+    const setTruck2=useProductStore((state)=> state.setTruck2)
     const pathname = usePathname();
+    const router=useRouter()
     const [product, setProducts] = useState([]);
     const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
 
@@ -22,7 +30,7 @@ const Compare = () => {
     }, [isAuth]);
 
     const productTypes = [...new Set(product.map(item => item.product_type))];
-    
+
     const [selectedType, setSelectedType] = useState('');
     const [selectedBrand1, setSelectedBrand1] = useState('');
     const [selectedSlug1, setSelectedSlug1] = useState('');
@@ -33,27 +41,33 @@ const Compare = () => {
     const slugs1 = selectedBrand1 ? [...new Set(product.filter(item => item.product_type === selectedType && item.brand === selectedBrand1).map(item => item.slug))] : [];
     const slugs2 = selectedBrand2 ? [...new Set(product.filter(item => item.product_type === selectedType && item.brand === selectedBrand2).map(item => item.slug))] : [];
 
-    const filteredProduct1 = product.find(item => 
+
+    const filteredProduct1 = product.find(item =>
         item.product_type === selectedType &&
         item.brand === selectedBrand1 &&
         item.slug === selectedSlug1
     );
+    const handleCompare=()=>{
+        setTruck1(filteredProduct1);
+        setTruck2(filteredProduct2);
+        router.push(`/compare/${selectedSlug1}-vs-${selectedSlug2}`)
+    }
 
-    const filteredProduct2 = product.find(item => 
+    const filteredProduct2 = product.find(item =>
         item.product_type === selectedType &&
         item.brand === selectedBrand2 &&
         item.slug === selectedSlug2
     );
-
+    console.log(selectedSlug1);
     const t = useTranslations("Index");
-
+  
     return (
         <>
-            <div className="relative">
+            <div className="relative flex flex-col gap-1">
                 {/* Banner component */}
                 <div className="mb-1 relative">
                     <Image
-                        src={compare}
+                        src={banner}
                         className="w-full sm:flex hidden"
                         alt="avatar"
                         width={5000}
@@ -67,8 +81,8 @@ const Compare = () => {
                 {/* Breadcrumbs component */}
                 <Breadcrumbs currentLoc={pathname} />
 
-                <div className="p-10 max-w-7xl m-auto">
-                    <div className="bg-red-300 w-full justify-around flex">
+                <div className="sm:p-10 mt-2 sm:max-w-7xl w-full m-auto flex flex-col gap-3  items-center ">
+                    <div className="bg-blue-400 w-full rounded justify-around flex flex-start overflow-hidden gap-2 flex-wrap">
                         {productTypes.map(type => (
                             <label key={type} className="flex gap-2">
                                 <input
@@ -91,97 +105,72 @@ const Compare = () => {
 
                     {selectedType && (
                         <div className="sm:flex sm:flex-row w-full justify-center text-start gap-8 mt-4">
-                            <div>
-                                <h2>Truck 1</h2>
-                                <div className="mt-4">
-                                    <label htmlFor="brand1">Select Brand:</label>
-                                    <select
-                                        id="brand1"
-                                        value={selectedBrand1}
-                                        onChange={(e) => {
-                                            setSelectedBrand1(e.target.value);
-                                            setSelectedSlug1('');
-                                        }}
-                                    >
-                                        <option value="">--Select a Brand--</option>
-                                        {brands.map(brand => (
-                                            <option key={brand} value={brand}>{brand}</option>
-                                        ))}
-                                    </select>
+                            <div className="border-2 p-2 text-center m-auto sm:w-1/2">
+                                <h2>Add Truck 1</h2>
+                                <div className="w-full flex items-center justify-center">
+                                {!!filteredProduct1 && (
+                                    <img src={filteredProduct1?.images[0].original} alt="logo" className="w-1/2  " width={200} height={100} />
+                                ) }
                                 </div>
+                                <Select
+                                    label="Select Brand"
+                                    options={brands}
+                                    value={selectedBrand1}
+                                    onChange={(e) => {
+                                        setSelectedBrand1(e.target.value);
+                                        setSelectedSlug1('');
+                                    }}
+                                    placeholder="- Select Brand -"
+                                />
 
                                 {selectedBrand1 && (
-                                    <div className="mt-4">
-                                        <label htmlFor="slug1">Select Slug:</label>
-                                        <select
-                                            id="slug1"
-                                            value={selectedSlug1}
-                                            onChange={(e) => setSelectedSlug1(e.target.value)}
-                                        >
-                                            <option value="">--Select a Slug--</option>
-                                            {slugs1.map(slug => (
-                                                <option key={slug} value={slug}>{slug}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                    <Select
+                                        label="Select Slug"
+                                        options={slugs1}
+                                        value={selectedSlug1}
+                                        onChange={(e) => setSelectedSlug1(e.target.value)}
+                                        placeholder="- Select a Slug -"
+                                    />
                                 )}
                             </div>
 
-                            <div>
+                            <div className="border-2 p-2 text-center sm:w-1/2">
                                 <h2>Truck 2</h2>
-                                <div className="mt-4">
-                                    <label htmlFor="brand2">Select Brand:</label>
-                                    <select
-                                        id="brand2"
-                                        value={selectedBrand2}
-                                        onChange={(e) => {
-                                            setSelectedBrand2(e.target.value);
-                                            setSelectedSlug2('');
-                                        }}
-                                    >
-                                        <option value="">--Select a Brand--</option>
-                                        {brands.map(brand => (
-                                            <option key={brand} value={brand}>{brand}</option>
-                                        ))}
-                                    </select>
+                                <div className="w-full flex items-center justify-center">
+                                {!!filteredProduct2 && (
+                                    <img src={filteredProduct2?.images[0].original} alt="logo" className="w-1/2  " width={200} height={100} />
+                                ) }
                                 </div>
+                                <Select
+                                    label="Select Brand"
+                                    options={brands}
+                                    value={selectedBrand2}
+                                    onChange={(e) => {
+                                        setSelectedBrand2(e.target.value);
+                                        setSelectedSlug2('');
+                                    }}
+                                    placeholder="--Select a Brand--"
+                                />
 
                                 {selectedBrand2 && (
-                                    <div className="mt-4">
-                                        <label htmlFor="slug2">Select Slug:</label>
-                                        <select
-                                            id="slug2"
-                                            value={selectedSlug2}
-                                            onChange={(e) => setSelectedSlug2(e.target.value)}
-                                        >
-                                            <option value="">--Select a Slug--</option>
-                                            {slugs2.map(slug => (
-                                                <option key={slug} value={slug}>{slug}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                    <Select
+                                        label="Select Slug"
+                                        options={slugs2}
+                                        value={selectedSlug2}
+                                        onChange={(e) => setSelectedSlug2(e.target.value)}
+                                        placeholder="- Select a Slug -"
+                                    />
                                 )}
                             </div>
                         </div>
                     )}
-
-                    <h2 className="mt-4">Comparison:</h2>
-                    <ul>
-                        {filteredProduct1 && (
-                            <li key={filteredProduct1.slug}>
-                                <strong>Truck 1:</strong> {filteredProduct1.name}
-                            </li>
-                        )}
-                        {filteredProduct2 && (
-                            <li key={filteredProduct2.slug}>
-                                <strong>Truck 2:</strong> {filteredProduct2.name}
-                            </li>
-                        )}
-                    </ul>
+                    <Button type="primary" className="w-1/3 " onClick={handleCompare}  disabled={!filteredProduct1 || !filteredProduct2}> Find Compare </Button>
+                    
+                    
                 </div>
             </div>
         </>
     );
 };
 
-export default Compare;
+export default ComparePage;

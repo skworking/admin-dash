@@ -6,8 +6,13 @@ const useProductStore = create(
   (set) => ({
   items: null, // Assuming items is your state
   count:0,
+  truck1:null,
+  truck2:null,
+
   setItems: (newItems) => set({ items: newItems }),
   increment: () => set(state => ({ count: state.count + 1 })),
+  setTruck1:(truck)=> set({truck1:truck}),
+  setTruck2:(truck)=> set({truck2:truck})
 }),
 {
   name: 'product-store', // Name to identify the store in localStorage
