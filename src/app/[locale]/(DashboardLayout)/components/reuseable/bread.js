@@ -57,7 +57,7 @@ const Breadcrumbs = (props) => {
           </Link>
         </>
       }
-      /&nbsp;{t(`${endpoint}`)}
+      /&nbsp;{t(`${endpoint.replace(/-/g," ")}`)}
     </nav>
 
   );
