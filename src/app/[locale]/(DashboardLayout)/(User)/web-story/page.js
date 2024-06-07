@@ -1,16 +1,39 @@
 'use client'
 import Link from "next/link";
 import Breadcrumbs from "../../components/reuseable/bread";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import AmpStoryOpener from "../../components/reuseable/webstory";
+import storiesData from "../../../../../../public/story";
 
 export default function Home() {
   const pathname=usePathname()
+  const router = useRouter();
+
+  const handleImageClick = (id) => {
+    console.log(id);
+    router.push(`/web-story/${id.replace(/ /g,'-')}`);
+  };
+
   return (
     <>
       <div className="relative">
         <Breadcrumbs currentLoc={pathname} />
-        <div className="flex gap-3 ">
-
+        <div className="sm:flex gap-3 items-center ">
+        {storiesData.map((story) => (
+          <div className="">
+          <img
+            key={story.id}
+            src={story.thumbnail}
+            alt={story.title}
+            onClick={() => handleImageClick(story.title)}
+            style={{ cursor: 'pointer', margin: '10px' }}
+            />
+            <p>{story.title.replace(/ /g,' ')}</p>
+            </div>
+        ))}
+        
+        {/* <AmpStoryOpener stories={stories} /> */}
+{/* 
         <div className="w-[320px]  border-2 overflow-hidden flex-wrap">
         <amp-story-player layout="fixed" width="360" height="420" >
           <Link href="https://www.trucksbuses.com/web-stories/ashok-leynands-sarathi-suraksha-policy">
@@ -30,7 +53,7 @@ export default function Home() {
           </Link>
         </amp-story-player>
 
-        </div>
+        </div> */}
         </div>
       </div>
     </>
