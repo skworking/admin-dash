@@ -4,6 +4,13 @@ const withNextIntl = createNextIntlPlugin();
 
 const nextConfig = {
     reactStrictMode:false,
+    experimental:{
+      amp:{
+        optimizer:{
+          enabled:true,
+        }
+      }
+     },
     // experimental: {
       // appDir: true,
       // serverActions: true,
@@ -45,6 +52,7 @@ const nextConfig = {
         }
       ]
     },
+  
     // redirect 307 issues fix in dynamic routing
     // async redirects() {
     //   return [
