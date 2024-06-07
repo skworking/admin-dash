@@ -1,6 +1,4 @@
 'use client'
-
-export const config = { amp: true };
 import Link from "next/link";
 import Breadcrumbs from "../../components/reuseable/bread";
 import { usePathname } from "next/navigation";

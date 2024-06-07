@@ -2,9 +2,9 @@
 
 import "@/styles/style.scss";
 
-export const config = {
-  amp: true,
-};
+// export const config = {
+//   amp: true,
+// };
 
 
 const RootLayout =async ({
