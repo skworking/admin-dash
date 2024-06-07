@@ -15,7 +15,7 @@ const AmpStoryOpener = ({ stories }) => {
     return (
         <div className='flex gap-2 w-full'>
             {stories.map((story, index) => (
-                <div className='text-center bg-cover'>
+                <div className='text-center bg-cover' key={index}>
                     <img
                         key={index}
                         src={story.thumbnail}
