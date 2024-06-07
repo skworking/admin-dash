@@ -20,16 +20,15 @@ export default function Home() {
         <Breadcrumbs currentLoc={pathname} />
         <div className="sm:flex gap-3 items-center ">
         {storiesData.map((story) => (
-          <>
+          <div key={story.id}>
           <img
-            key={story.id}
             src={story.thumbnail}
             alt={story.title}
             onClick={() => handleImageClick(story.title)}
             style={{ cursor: 'pointer', margin: '10px' }}
             />
             <p>{story.title.replace(/ /g,' ')}</p>
-            </>
+            </div>
         ))}
         
         {/* <AmpStoryOpener stories={stories} /> */}

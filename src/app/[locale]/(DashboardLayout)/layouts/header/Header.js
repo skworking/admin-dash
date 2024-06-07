@@ -80,8 +80,8 @@ const Header = ({ showMobmenu }) => {
       href: '/compare'
     },
     {
-      label: 'Loan',
-      href: '/loan'
+      label: 'web Story',
+      href: '/web-story'
     },
     {
       label: 'Contact Us',
