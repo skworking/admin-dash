@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 const StoryPage = () => {
   // const [selectedStory, setSelectedStory] = useState(null);
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const pathname = usePathname()
   const url=pathname.split('/')
   const title=url[3]
@@ -19,30 +20,39 @@ const StoryPage = () => {
   const closeStory = () => {
     setSelectedStory(null);
 };
+const handlePageChange = (pageIndex) => {
+  setCurrentPageIndex(pageIndex);
+};
 
   return (
     <>
   
-    <div className="amp-story-container">
+    <div className="amp-story-container ">
+     
       <amp-story
         standalone
         title={story.title}
         publisher="The AMP Team"
         publisher-logo-src={story.publisherLogoSrc}
         poster-portrait-src={story.posterPortraitSrc}
+        auto-advance-after="5s"
+        on="end:storyAdvance"
       >
         {story.pages.map((page, index) => (
-          <amp-story-page key={index} id={page.id}>
+          <amp-story-page key={index} id={`page-${index + 1}`} className="flex justify-between " >
             <amp-story-grid-layer template="fill">
-              <amp-img src={page.imgSrc} width="900" height="1600" alt=""></amp-img>
+              <amp-img  amp-fx="fade-in" src={page.imgSrc} style={{width:"720px", height :"1280px"}}  layout="responsive" alt=""></amp-img>
             </amp-story-grid-layer>
             <amp-story-grid-layer template="vertical">
-              <h1>{page.heading}</h1>
+            <h1 className={`animate-text text-xl font-bold  absolute bottom-0 text-white mb-10 text-center `}>{page.heading}</h1>
             </amp-story-grid-layer>
           </amp-story-page>
         ))}
       </amp-story>
+   
+ 
       {/* <button onClick={closeStory}>Close Story</button> */}
+    </div>
       <style jsx>{`
         .amp-story-container {
           position: fixed;
@@ -55,9 +65,22 @@ const StoryPage = () => {
           justify-content: center;
           align-items: center;
         }
+      @keyframes slideIn {
+          0% {
+            opacity: 0;
+            transform: translateX(-100%);
+          }
+          100% {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .animate-text {
+          animation: slideIn 1s forwards;
+        }
        
       `}</style>
-    </div>
 
     </>
   );

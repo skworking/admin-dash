@@ -17,7 +17,8 @@ export default async function RootLayout({ children,params:{locale} }) {
         <Script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.2.js"></Script>
         <Script  async custom-element="amp-video" src="https://cdn.ampproject.org/v0/amp-video-0.1.js"></Script>
         <Script   async custom-element="amp-story-player" src="https://cdn.ampproject.org/v0/amp-story-player-0.1.js"></Script>
-       
+        <Script async custom-element="amp-animation" src="https://cdn.ampproject.org/v0/amp-animation-0.1.js"></Script>
+        <Script async custom-element="amp-consent" src="https://cdn.ampproject.org/v0/amp-consent-0.1.js"></Script>
         <body>
 
          <NextIntlClientProvider messages={messages}>
