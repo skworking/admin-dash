@@ -120,6 +120,18 @@ const navigation = [
     ],
   },
   {
+    title:"WebStory",
+    icon: "bi bi-textarea-resize",
+
+    children: [
+      {
+        title:"Add Web Story",
+        href:"/admin/webstory",
+        icon: "bi bi-textarea-resize",
+      }
+    ],
+  },
+  {
     title: "Brands",
     icon: "bi bi-textarea-resize",
     children: [

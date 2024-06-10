@@ -26,8 +26,8 @@ const Header = ({ showMobmenu }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
-  // const toggle = () => setDropdownOpen((prevState) => !prevState);
-  const toggle = () => setDropdownOpen(!dropdownOpen);
+  const toggle = () => setDropdownOpen((prevState) => !prevState);
+  // const toggle = () => setDropdownOpen(!dropdownOpen);
   const Handletoggle = () => {
     setIsOpen(!isOpen);
   };
@@ -184,7 +184,7 @@ const Header = ({ showMobmenu }) => {
           <SelectLanguage />
         </div> */}
       </Collapse>
-      <Dropdown isOpen={dropdownOpen} /* toggle={toggle} */ className="realtive hidden lg:flex" >
+      <Dropdown isOpen={dropdownOpen} className="realtive hidden lg:flex" >
         <DropdownToggle color="primary" onClick={toggle}>
           <div style={{ lineHeight: "0px" }}>
             <Image
