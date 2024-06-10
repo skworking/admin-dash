@@ -2,6 +2,8 @@
 import { usePathname } from 'next/navigation';
 import storiesData from '../../../../../../../public/story';
 import { useState } from 'react';
+import Bajaj from "public/images/Bajaj.jpg"
+import Image from 'next/image';
 
 const StoryPage = () => {
   // const [selectedStory, setSelectedStory] = useState(null);
@@ -17,29 +19,23 @@ const StoryPage = () => {
     return <p>Story not found</p>;
   }
 
-  const closeStory = () => {
-    setSelectedStory(null);
-};
-const handlePageChange = (pageIndex) => {
-  setCurrentPageIndex(pageIndex);
-};
 
   return (
     <>
   
-    <div className="amp-story-container ">
-     
+    <div className="amp-story-container" >
+    
       <amp-story
         standalone
         title={story.title}
         publisher="The AMP Team"
         publisher-logo-src={story.publisherLogoSrc}
         poster-portrait-src={story.posterPortraitSrc}
-        auto-advance-after="5s"
-        on="end:storyAdvance"
       >
+
+        
         {story.pages.map((page, index) => (
-          <amp-story-page key={index} id={`page-${index + 1}`} className="flex justify-between " >
+          <amp-story-page auto-advance-after="15s" key={index} >
             <amp-story-grid-layer template="fill">
               <amp-img  amp-fx="fade-in" src={page.imgSrc} style={{width:"720px", height :"1280px"}}  layout="responsive" alt=""></amp-img>
             </amp-story-grid-layer>
@@ -49,8 +45,7 @@ const handlePageChange = (pageIndex) => {
           </amp-story-page>
         ))}
       </amp-story>
-   
- 
+      
       {/* <button onClick={closeStory}>Close Story</button> */}
     </div>
       <style jsx>{`
@@ -60,10 +55,8 @@ const handlePageChange = (pageIndex) => {
           left: 0;
           width: 100%;
           height: 100%;
+          z-index: 18;
           background: rgba(0, 0, 0, 0.8);
-          display: flex;
-          justify-content: center;
-          align-items: center;
         }
       @keyframes slideIn {
           0% {
@@ -80,6 +73,7 @@ const handlePageChange = (pageIndex) => {
           animation: slideIn 1s forwards;
         }
        
+        
       `}</style>
 
     </>
