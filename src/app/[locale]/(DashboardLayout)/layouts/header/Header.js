@@ -26,12 +26,14 @@ const Header = ({ showMobmenu }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
-  const toggle = () => setDropdownOpen((prevState) => !prevState);
+  // const toggle = () => setDropdownOpen((prevState) => !prevState);
+  const toggle = () => setDropdownOpen(!dropdownOpen);
   const Handletoggle = () => {
     setIsOpen(!isOpen);
   };
-
+  console.log(dropdownOpen);
   const handleLogout = () => {
+    console.log("call logout");
     sessionStorage.removeItem('jwt');
     // setIsAuth(false); // Update the authentication status when the user logs out
     router.push('/auth/login')
@@ -90,7 +92,7 @@ const Header = ({ showMobmenu }) => {
   ];
   return (
     <>
-    <Navbar color="primary" dark expand="lg" className="sticky top-0  w-full z-10 " >
+    <Navbar color="primary" dark expand="md" className="sticky top-0  w-full z-10 " >
       <div className="d-flex align-items-center ">
         <NavbarBrand href="/" className="d-lg-none">
           <Image src={LogoWhite} alt="logo" />
@@ -99,8 +101,9 @@ const Header = ({ showMobmenu }) => {
           <i className="bi bi-list"></i>
         </Button>
       </div>
-      <Dropdown isOpen={dropdownOpen} toggle={toggle} className="realtive lg:hidden flex">
-        <DropdownToggle color="primary">
+  
+      <Dropdown isOpen={dropdownOpen} /* toggle={toggle} */ className="realtive lg:hidden flex">
+        <DropdownToggle color="primary" onClick={toggle}>
           <div style={{ lineHeight: "0px" }}>
             <Image
               src={user1}
@@ -125,6 +128,7 @@ const Header = ({ showMobmenu }) => {
           <DropdownItem onClick={handleLogout}>{t('Logout')}</DropdownItem>
         </DropdownMenu>
       </Dropdown>
+  
       <div className="flex gap-2">
         <Button
           color="primary"
@@ -180,8 +184,8 @@ const Header = ({ showMobmenu }) => {
           <SelectLanguage />
         </div> */}
       </Collapse>
-      <Dropdown isOpen={dropdownOpen} toggle={toggle} className="realtive hidden lg:flex" >
-        <DropdownToggle color="primary">
+      <Dropdown isOpen={dropdownOpen} /* toggle={toggle} */ className="realtive hidden lg:flex" >
+        <DropdownToggle color="primary" onClick={toggle}>
           <div style={{ lineHeight: "0px" }}>
             <Image
               src={user1}
@@ -213,7 +217,7 @@ const Header = ({ showMobmenu }) => {
      
     </Navbar >
     <>
-        {dropdownOpen &&
+        {dropdownOpen  &&
           <div className="lg:flex flex-col hidden w-[200px] absolute z-10 items-center right-5 bg-white justify-end gap-1 top-[60px]">
             <Button type="primary" className="w-full">
             <Link href="/pages/profile" className="nav-link">
