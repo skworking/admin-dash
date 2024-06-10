@@ -2,7 +2,7 @@
 import { usePathname } from 'next/navigation';
 import storiesData from '../../../../../../../public/story';
 import { useState } from 'react';
-import Bajaj from "public/images/Bajaj.jpg"
+
 import Image from 'next/image';
 
 const StoryPage = () => {
