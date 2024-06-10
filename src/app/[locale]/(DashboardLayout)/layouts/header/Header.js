@@ -68,7 +68,7 @@ const Header = ({ showMobmenu }) => {
       subItems: [
         { label: 'Buy Used Trucks', href: '/buy-used-trucks' },
         { label: 'Sell Used Trucks', href: '/sell-used-trucks' },
-      
+
       ]
     },
     // {
@@ -89,7 +89,8 @@ const Header = ({ showMobmenu }) => {
     }
   ];
   return (
-    <Navbar color="primary" dark expand="md" className="sticky top-0  w-full z-10 " >
+    <>
+    <Navbar color="primary" dark expand="lg" className="sticky top-0  w-full z-10 " >
       <div className="d-flex align-items-center ">
         <NavbarBrand href="/" className="d-lg-none">
           <Image src={LogoWhite} alt="logo" />
@@ -98,11 +99,37 @@ const Header = ({ showMobmenu }) => {
           <i className="bi bi-list"></i>
         </Button>
       </div>
-      <div className="hstack gap-2">
+      <Dropdown isOpen={dropdownOpen} toggle={toggle} className="realtive lg:hidden flex">
+        <DropdownToggle color="primary">
+          <div style={{ lineHeight: "0px" }}>
+            <Image
+              src={user1}
+              alt="profile"
+              className="rounded-circle"
+              width="30"
+              height="30"
+            />
+          </div>
+        </DropdownToggle>
+        <DropdownMenu className="absolute top-0 lg:hidden ">
+          <DropdownItem header>{t('Info')}</DropdownItem>
+          <DropdownItem>
+            <Link href="/pages/profile" className="nav-link">
+              {t('my-account')}
+            </Link>
+          </DropdownItem>
+          <DropdownItem>{t('Edit Profile')}</DropdownItem>
+          <DropdownItem divider />
+          <DropdownItem>{t('My Balance')}</DropdownItem>
+
+          <DropdownItem onClick={handleLogout}>{t('Logout')}</DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+      <div className="flex gap-2">
         <Button
           color="primary"
           size="sm"
-          className="d-sm-block d-md-none"
+          className=" lg:hidden flex items-center"
           onClick={Handletoggle}
         >
           {isOpen ? (
@@ -111,36 +138,18 @@ const Header = ({ showMobmenu }) => {
             <i className="bi bi-three-dots-vertical"></i>
           )}
         </Button>
-        <div className="d-sm-block d-md-none">
+        <div className="sm:hidden flex">
           <SelectLanguage />
         </div>
       </div>
 
-      <Collapse navbar isOpen={isOpen}>
-        <Nav className="me-auto" navbar>
-          {/* <NavItem>
-            <Link href="/" className="nav-link">
-              {`${t("Home")}`}
-            </Link>
-          </NavItem>
-          
-          <NavItem>
-            <Link href="/pages/vahicle" className="nav-link">
-            
-            {t('USED-TRUCK')}
-            </Link>
-          </NavItem>
-          <NavItem>
-            <Link href="/pages/product" className="nav-link">
-              {t('Vahicle')}
-            </Link>
-          </NavItem> */}
+
+      <Collapse navbar isOpen={isOpen} className="lg:flex gap-2 w-full">
+        <Nav navbar>
           <MultiLevelDropdown headerItems={headerItems} />
-          {/* <MultiLevelDropdown /> */}
-         
-        
+
         </Nav>
-        <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+        {/* <Dropdown isOpen={dropdownOpen} toggle={toggle} >
           <DropdownToggle color="primary">
             <div style={{ lineHeight: "0px" }}>
               <Image
@@ -152,7 +161,7 @@ const Header = ({ showMobmenu }) => {
               />
             </div>
           </DropdownToggle>
-          <DropdownMenu>
+          <DropdownMenu >
             <DropdownItem header>{t('Info')}</DropdownItem>
             <DropdownItem>
               <Link href="/pages/profile" className="nav-link">
@@ -165,12 +174,57 @@ const Header = ({ showMobmenu }) => {
             
             <DropdownItem onClick={handleLogout}>{t('Logout')}</DropdownItem>
           </DropdownMenu>
-        </Dropdown>
-        <div className="sm:flex hidden">
+        </Dropdown> */}
+
+        {/* <div className="sm:flex hidden">
           <SelectLanguage />
-        </div>
+        </div> */}
       </Collapse>
-    </Navbar>
+      <Dropdown isOpen={dropdownOpen} toggle={toggle} className="realtive hidden lg:flex" >
+        <DropdownToggle color="primary">
+          <div style={{ lineHeight: "0px" }}>
+            <Image
+              src={user1}
+              alt="profile"
+              className="rounded-circle"
+              width="30"
+              height="30"
+            />
+          </div>
+        </DropdownToggle>
+        {/* <DropdownMenu >
+            <DropdownItem header>{t('Info')}</DropdownItem>
+            <DropdownItem>
+              <Link href="/pages/profile" className="nav-link">
+                {t('my-account')}
+              </Link>
+            </DropdownItem>
+            <DropdownItem>{t('Edit Profile')}</DropdownItem>
+            <DropdownItem divider />
+            <DropdownItem>{t('My Balance')}</DropdownItem>
+            
+            <DropdownItem onClick={handleLogout}>{t('Logout')}</DropdownItem>
+          </DropdownMenu> */}
+      </Dropdown>
+      
+      <div className="md:flex hidden">
+        <SelectLanguage />
+      </div>
+     
+    </Navbar >
+    <>
+        {dropdownOpen &&
+          <div className="lg:flex flex-col hidden w-[200px] absolute z-10 items-center right-5 bg-white justify-end gap-1 top-[60px]">
+            <Button type="primary" className="w-full">
+            <Link href="/pages/profile" className="nav-link">
+              {t('my-account')}
+            </Link>
+            </Button >
+            <Button type="primary"  className="w-full" onClick={handleLogout}>{t('Logout')}</Button>
+          </div>
+        }
+      </>
+    </>
   );
 };
 

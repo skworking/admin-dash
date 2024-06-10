@@ -108,9 +108,9 @@ const MultiLevelDropdown = ({ headerItems }) => {
   };
 
   return (
-    <div className="relative sm:inline-block flex flex-col text-left mt-2 sm:mt-0">
+    <div className="relative md:inline-block flex flex-col text-left mt-2 sm:mt-0">
       {headerItems.map((item, index) => (
-        <div key={index} className="relative inline-block text-left mr-4">
+        <div key={index} className="relative inline-block text-left mr-2">
           {item.subItems ? (
             <>
               <button
@@ -134,7 +134,7 @@ const MultiLevelDropdown = ({ headerItems }) => {
               </button>
 
               {dropdownOpen === index && (
-                <div className="origin-top-right relative sm:absolute right-0 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                <div className="origin-top-right relative sm:absolute right-0 mt-0 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                   <div className="py-1">
                     {item.subItems.map((subItem, subIndex) => (
                       <div key={subIndex} className="relative">
