@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { useParams, redirect  } from 'next/navigation';
 import {Button, message} from 'antd'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const EditStory=()=>{
     const params=useParams();
@@ -13,7 +13,7 @@ const EditStory=()=>{
     // Replace this with your actual fetch logic
     const fetchProduct = async (id) => {
       try {
-        const response = await fetch(`/api/webstorylist/search?_id=${id}`); // Assuming your API endpoint
+        const response = await fetch(`/api/webstory/search?_id=${id}`); // Assuming your API endpoint
         const data = await response.json();
       
         setStory(data.record);
