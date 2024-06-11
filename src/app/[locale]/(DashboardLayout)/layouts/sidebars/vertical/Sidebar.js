@@ -128,6 +128,11 @@ const navigation = [
         title:"Add Web Story",
         href:"/admin/webstory",
         icon: "bi bi-textarea-resize",
+      },
+      {
+        title:"Web Story List",
+        href:"/admin/webstorylist",
+        icon: "bi bi-textarea-resize",
       }
     ],
   },
