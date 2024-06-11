@@ -1,7 +1,7 @@
 'use client'
 import { TextField } from "@mui/material";
-import { Button } from "antd";
-import axios from "axios";
+import { Button, ColorPicker, Space } from "antd";
+import { ChromePicker } from 'react-color';
 import Image from "next/image";
 import { useState } from "react";
 
@@ -15,148 +15,241 @@ const convertToBase64 = (file) => {
 };
 const WebStory = () => {
     const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
+    const [showColorPicker, setShowColorPicker] = useState(false);
+    const [colorPickerIndex, setColorPickerIndex] = useState(null);
     const [story, setStory] = useState({
-        title: '',
-        date: '',
-        thumbnail: '',
-        publisherLogoSrc: '',
-        pages: [
-            { imgSrc: '', heading: '' },
-            { imgSrc: '', heading: '' }
+        name: '',
+        slug: '',
+        meta: '',
+        lineItems: [
+            { imgSrc: '', topHeading: '', bottomHeading: '', bgColor: '', short: '', active: '', navUrl: '' },
         ]
     })
-
+    console.log(isAuth);
     const handleChange = (e, index, field) => {
-        const value = e.target.value;
-        if (index !== undefined) {
-            const pages = [...story.pages];
-            pages[index][field] = value;
-            setStory({ ...story, pages });
-        } else {
-            setStory({ ...story, [field]: value });
+        let value = e.target.value;
+        if (field === 'active') {
+            value = value === 'true'; // Convert to boolean
+        } else if (field === 'inactive') {
+            value = value === 'true';
         }
+        const updatedLineItems = [...story.lineItems];
+        updatedLineItems[index][field] = value;
+        setStory({ ...story, lineItems: updatedLineItems })
+
+    };
+
+    const handleStoryChange = (e) => {
+        const { name, value } = e.target;
+        setStory({ ...story, [name]: value });
     };
 
     const handleFileChange = async (e, index, field) => {
         const file = e.target.files[0];
-        if (file) {
-            const base64 = await convertToBase64(file);
-            if (index !== undefined) {
-                const pages = [...story.pages];
-                pages[index][field] = base64;
-                setStory({ ...story, pages });
-            } else {
-                setStory({ ...story, [field]: base64 });
-            }
+        try {
+            const base64Image = await convertToBase64(file);
+            const updatedLineItems = [...story.lineItems];
+            updatedLineItems[index][field] = base64Image;
+            setStory({ ...story, lineItems: updatedLineItems });
+        } catch (error) {
+            console.error('Error converting image to base64:', error);
         }
+        // const updatedLineItems = [...story.lineItems];
+        // updatedLineItems[index][field] = URL.createObjectURL(e.target.files[0]);
+        // setStory({ ...story, lineItems: updatedLineItems });
     };
 
     const handleAddPage = () => {
-        const newPage = { imgSrc: '', heading: '' };
+        const newPage = { imgSrc: '', topHeading: '', bottomHeading: '', bgColor: '', short: '', active: '', navUrl: '' };
         setStory(prevStory => ({
             ...prevStory,
-            pages: [...prevStory.pages, newPage]
+            lineItems: [...prevStory.lineItems, newPage]
         }));
     };
 
-    const handleRemovePage = (index) => {
-        setStory(prevStory => ({
-            ...prevStory,
-            pages: prevStory.pages.filter((_, i) => i !== index)
-        }));
+    const handleRemoveLineItem = (index) => {
+        const updatedLineItems = story.lineItems.filter((_, i) => i !== index);
+        setStory({ ...story, lineItems: updatedLineItems });
     };
-    const handleSubmit =async (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        await axios.post('/api/webstory',story,{
-            headers:{
-                  'Authorization': `Bearer ${isAuth}`,
-                  'Content-Type': 'multipart/form-data'
-            }
-        })
-        .then((res)=>{
-            console.log(res);
-        })
-        .catch((err)=>{
-            console.log(err);
-        })
 
-        // You can send the data to the backend here if needed
+        try {
+            const response = await fetch('/api/webstory', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${isAuth}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(story)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                // Handle successful response
+            } else {
+                console.error('Failed to submit story');
+                // Handle error response
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    const handleChangeColor = (newColor, index, field) => {
+
+        const updatedLineItems = [...story.lineItems];
+        updatedLineItems[index][field] = newColor; // Get the hexadecimal color value
+        setStory({ ...story, lineItems: updatedLineItems });
+    }
+    // const handleColorChange=(newColor,index, field)=>{
+    //     const updatedLineItems = [...story.lineItems];
+    //     updatedLineItems[index][field] = color.hex; // Get the hexadecimal color value
+    //     setStory({ ...story, lineItems: updatedLineItems });
+    // }
+    console.log(story);
+    const handleToggleColorPicker = (index) => {
+        setShowColorPicker(!showColorPicker);
+        setColorPickerIndex(index);
     };
     return (
         <>
             <div className="bg-white sm:w-2/3  p-1 flex flex-col justify-center  m-auto">
                 <h2 className='text-lg font-semibold p-2 text-center'>Create Web-Story</h2>
-                <form className="flex flex-col gap-2 p-2">
+                <form className="flex flex-col gap-2 p-2" onSubmit={handleSubmit}>
                     <div className="sm:p-5 flex flex-col gap-2">
 
                         <TextField
-                            id="outlined-Title"
-                            label="Enter Title Name"
-                            name={story.title}
+                            id="outlined-name"
+                            label="Enter webstory Name"
+                            name={'name'}
+                            value={story.name}
                             className='w-full '
-                            onChange={(e) => handleChange(e, undefined, 'title')}
+                            onChange={handleStoryChange}
                             InputLabelProps={{
                                 // shrink: true,
                             }}
                         />
-                        <input
+                        <TextField
+                            id="outlined-name"
+                            label="Enter Slug Name"
+                            name="slug"
+                            value={story.slug}
+                            className='w-full '
+                            onChange={handleStoryChange}
+                            InputLabelProps={{
+                                // shrink: true,
+                            }}
+                        />
+                        <TextField
+                            id="outlined-name"
+                            label="Enter Meta Name"
+                            name={'meta'}
+                            className='w-full '
+                            value={story.meta}
+                            onChange={handleStoryChange}
+                            InputLabelProps={{
+                                // shrink: true,
+                            }}
+                        />
+                        {/* <input
                             className="w-full p-2 border-2 "
                             type="date"
                             placeholder="Date"
                             value={story.date}
                             onChange={(e) => handleChange(e, undefined, 'date')}
-                        />
-                        <div className="flex">
+                        /> */}
+                        {/* <div className="flex">
                             <input accept="image/*" name={story?.thumbnail}  type="file" onChange={(e) => handleFileChange(e, undefined, 'thumbnail')} />
                             {story?.thumbnail ?
                             <Image src={story.thumbnail} width={35} height={50} alt='logo' />
                             :
                             <label> Thumbnail Logo Add</label>
                             }
-                        </div>
+                        </div> */}
 
-                        <div className=" flex">
-                            <input accept="image/*" name={story?.publisherLogoSrc} type="file" onChange={(e) => handleFileChange(e, undefined, 'publisherLogoSrc')} />
-                            {story?.publisherLogoSrc?
-                            <Image src={story.publisherLogoSrc} width={35} height={50} alt='logo' />
-                            :
-                            <label>publisherLogoSrc Image</label>
-                            }
-                        </div>
 
-                        {story.pages.map((page, index) => (
+                        {story.lineItems.map((item, index) => (
                             <div key={index} className="flex flex-col gap-2">
-                                <h2>Web-story {index + 1}</h2>
+                                <h2>Web-story Attributes {index + 1}</h2>
                                 <div className=" flex">
                                     <input
                                         type="file"
                                         accept="image/*"
                                         onChange={(e) => handleFileChange(e, index, 'imgSrc')}
                                     />
-                                    {page?.imgSrc ?
-                                    <Image src={page.imgSrc} width={35} height={50} alt='logo' />
-                                    :
-                                    <label>web-story Image Add</label>
+                                    {item?.imgSrc ?
+                                        <Image src={item.imgSrc} width={135} height={50} alt='logo' />
+                                        :
+                                        <label className="text-xl font-medium">Web-Story Image Add</label>
                                     }
                                 </div>
                                 <TextField
-                                    id="outlined-heading"
-                                    label="Enter webStory Heading"
-                                    name={page.heading}
+                                    id={`outlined-topHeading-${index}`}
+                                    label="Enter webStory topHeading"
+                                    name={item.topHeading}
                                     className='w-full '
-                                    onChange={(e) => handleChange(e, index, 'heading')}
+                                    onChange={(e) => handleChange(e, index, 'topHeading')}
                                     InputLabelProps={{
                                         // shrink: true,
                                     }}
                                 />
-                                {story.pages.length > 1 && (
-                                    <button type="button" onClick={() => handleRemovePage(index)}>Remove Page</button>
+                                <TextField
+                                    id={`outlined-bottomHeading-${index}`}
+                                    label="Enter webStory bottomHeading"
+                                    name={item.bottomHeading}
+                                    className='w-full '
+                                    onChange={(e) => handleChange(e, index, 'bottomHeading')}
+                                    InputLabelProps={{
+                                        // shrink: true,
+                                    }}
+                                />
+                              
+                                {item.bgColor ? (
+                                    <Button onClick={() => handleToggleColorPicker(index)}>Change Color</Button>
+                                ) : (
+                                    <Button onClick={() => handleToggleColorPicker(index)}>Select Color</Button>
+                                )}
+                                {showColorPicker && colorPickerIndex === index && (
+                                    <ChromePicker
+                                        color={item?.bgColor} // Set the current color from state
+                                        onChange={(newColor) => handleChangeColor(newColor.hex, index, 'bgColor')} // Handle color change
+                                        className="w-full"
+                                    />
+                                )}
+                               
+
+                                <TextField
+                                    id={`outlined-short-${index}`}
+                                    label="Enter Short Description"
+                                    value={item.short}
+                                    className="w-full"
+                                    onChange={(e) => handleChange(e, index, 'short')}
+                                />
+                                <select
+                                    className="w-full p-2 border-2 "
+                                    value={item.active ? 'true' : 'false'}
+                                    onChange={(e) => handleChange(e, index, 'active')}
+                                >
+                                    <option value="true">Active</option>
+                                    <option value="false">Inactive</option>
+                                </select>
+                                <TextField
+                                    id={`outlined-navUrl-${index}`}
+                                    label="Enter Navigation URL"
+                                    value={item.navUrl}
+                                    className="w-full"
+                                    onChange={(e) => handleChange(e, index, 'navUrl')}
+                                />
+                                {story.lineItems.length > 1 && (
+                                    <button type="button" onClick={() => handleRemoveLineItem(index)}>Remove Page</button>
                                 )}
                             </div>
                         ))}
-                        <Button type="primary" className="w-1/3 "  onClick={handleAddPage}>Add Page</Button>
+                        <Button type="primary" className="w-1/3 " onClick={handleAddPage}>Add Page</Button>
                     </div>
-                    <Button type="primary" onClick={handleSubmit} className="w-1/2  items-center m-auto">Submit</Button>
+                    <button type="submit" className="w-1/2 bg-blue-300  items-center m-auto">Submit</button>
                 </form>
             </div>
         </>

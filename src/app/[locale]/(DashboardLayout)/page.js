@@ -11,6 +11,7 @@ import bg2 from "public/images/bg/bg2.jpg";
 import bg3 from "public/images/bg/bg3.jpg";
 import bg4 from "public/images/bg/bg4.jpg";
 
+
 const BlogData = [
   {
     image: bg1,
@@ -57,6 +58,7 @@ export default function Home() {
       </Head>
       <div>
         {/***Top Cards***/}
+      
         <Row>
           <Col sm="6" lg="3">
             <TopCards
