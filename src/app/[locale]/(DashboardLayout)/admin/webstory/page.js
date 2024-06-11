@@ -4,6 +4,7 @@ import { Button, ColorPicker, Space } from "antd";
 import { ChromePicker } from 'react-color';
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -14,6 +15,7 @@ const convertToBase64 = (file) => {
     });
 };
 const WebStory = () => {
+    const router=useRouter();
     const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
     const [showColorPicker, setShowColorPicker] = useState(false);
     const [colorPickerIndex, setColorPickerIndex] = useState(null);
@@ -88,6 +90,7 @@ const WebStory = () => {
             if (response.ok) {
                 const data = await response.json();
                 console.log(data);
+                router.push('/admin/webstory')
                 // Handle successful response
             } else {
                 console.error('Failed to submit story');

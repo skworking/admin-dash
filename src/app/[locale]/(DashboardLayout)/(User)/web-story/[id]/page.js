@@ -2,30 +2,33 @@
 import { usePathname } from 'next/navigation';
 import storiesData from '../../../../../../../public/story';
 import { useState } from 'react';
-
+import useProductStore from "@/store/productStrore";
 import Image from 'next/image';
+import Link from 'next/link';
 
 const StoryPage = () => {
   // const [selectedStory, setSelectedStory] = useState(null);
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
-  const pathname = usePathname()
-  const url=pathname.split('/')
-  const title=url[3]
+
+  // const [currentPageIndex, setCurrentPageIndex] = useState(0);
+  // const pathname = usePathname()
+  // const url=pathname.split('/')
+  // const title=url[3]
 
 
-  const story = storiesData.find(story => story.title === title.replace(/-/g,' '));
+  // const story = storiesData.find(story => story.title === title.replace(/-/g,' '));
 
-  if (!story) {
-    return <p>Story not found</p>;
-  }
-
+  // if (!story) {
+  //   return <p>Story not found</p>;
+  // }
+  const {webStory}=useProductStore();
+  console.log(webStory);
 
   return (
     <>
   
     <div className="amp-story-container" >
     
-      <amp-story
+      {/* <amp-story
         standalone
         title={story.title}
         publisher="The AMP Team"
@@ -44,8 +47,33 @@ const StoryPage = () => {
             </amp-story-grid-layer>
           </amp-story-page>
         ))}
-      </amp-story>
+      </amp-story> */}
       
+      <amp-story
+        standalone
+        title={webStory.name}
+        // publisher="The AMP Team"
+        // publisher-logo-src={story.publisherLogoSrc}
+        // poster-portrait-src={story.posterPortraitSrc}
+      >
+        {webStory.lineItems.map((page, index) => (
+          <amp-story-page auto-advance-after="15s" key={index} >
+            <amp-story-grid-layer template="fill">
+              <amp-img  amp-fx="fade-in" src={page.imgSrc} style={{width:"720px", height :"1280px"}}  layout="responsive" alt=""></amp-img>
+            </amp-story-grid-layer>
+            <amp-story-grid-layer template="vertical">
+            <h1 className={`animate-text text-xl z-20  font-bold absolute top-14  transition-opacity opacity-50 bg-black text-white text-center `}>{page.topHeading}</h1>
+            </amp-story-grid-layer>
+            <amp-story-grid-layer template="vertical">
+            <h1 className={`animate-text text-xl font-bold  absolute bottom-10 text-white mb-10 text-center `}>{page.bottomHeading}</h1>
+            </amp-story-grid-layer>
+            <amp-story-page-outlink layout="nodisplay">
+            <Link href={page?.navUrl}>Discover More</Link>
+          </amp-story-page-outlink>
+          </amp-story-page>
+        ))}
+      </amp-story>
+
       {/* <button onClick={closeStory}>Close Story</button> */}
     </div>
       <style jsx>{`

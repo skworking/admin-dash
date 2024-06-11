@@ -30,13 +30,36 @@ function authenticateToken(req) {
 export async function POST(request) {
     await mongoose.connect(process.env.MONGODB)
     try {
-        // await authenticateToken(request)
+        await authenticateToken(request)
         const payload = await request.json();
         console.log("data", payload);
         let story = new Story(payload)
         const result = await story.save();
         return NextResponse.json({ result, success: true })
     } catch (error) {
+        console.error('Error:', error);
+        return NextResponse.json({ error: error.message }, { status: error.status || 500 });
+    }
+}
+
+export async function GET(request) {
+    try {
+        await authenticateToken(request)
+        let data = []
+        try {
+
+            const res = await mongoose.connect(process.env.MONGODB, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            })
+            data = await Story.find();
+        } catch (err) {
+            console.log(err);
+            data = { Success: false, err }
+        }
+
+    return NextResponse.json({ result: data, success: true })
+    }catch(error){
         console.error('Error:', error);
         return NextResponse.json({ error: error.message }, { status: error.status || 500 });
     }
