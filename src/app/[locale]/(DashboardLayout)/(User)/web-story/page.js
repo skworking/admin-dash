@@ -69,13 +69,16 @@ export default function Home() {
               return(
                 <Grid item xs={6} sm={2} md={3} key={list._id} onClick={()=>handledata(list)}>
                   <div className="h-full border-2 text-start cursor-pointer">
-                    {list?.lineItems?.map((item)=>{
+                    {/* {list?.lineItems?.map((item)=>{
+                      console.log(item);
                       return(
                         <div key={item._id}>
                           <Image src={item.imgSrc} alt="logo" width={100} height={96} className="w-full h-96 object-fill" />
                         </div>
                       )
-                    })}
+                    })} */}
+                  <Image src={list?.lineItems?.[0].imgSrc} alt="logo" width={100} height={96} className="w-full h-96 object-fill" />
+                        
                    <p className="p-2">{list.name}</p> 
                   </div>
                 </Grid>
