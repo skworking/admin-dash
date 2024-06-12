@@ -47,3 +47,18 @@ export async function GET(request) {
         return NextResponse.json({error, message: "Internal server error", status: '500', success: false })
     }
 }
+
+export async function PUT(request,{params}){
+    try{
+        await authenticateToken(request)
+        const userId=params.productid;
+        const filter={_id:userId}
+        const payload=await request.json();
+        await mongoose.connect(process.env.MONGODB)
+        const result=await Product.findOneAndUpdate(filter,payload,{ new: true });
+        return NextResponse.json({result,success:true})
+   
+    }catch(error){
+        return NextResponse.json({error:error.message},{status:error.status || 500})
+    }
+}
