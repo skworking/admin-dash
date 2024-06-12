@@ -1,7 +1,7 @@
 'use client'
 import axios from 'axios';
 import { TextField } from "@mui/material";
-import { useParams, redirect } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { ChromePicker } from 'react-color';
 import { Button, message } from 'antd'
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ const convertToBase64 = (file) => {
 };
 const EditStory = () => {
   const params = useParams();
-
+  const router=useRouter();
   const [item, setItem] = useState(null);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [colorPickerIndex, setColorPickerIndex] = useState(null);
@@ -104,18 +104,20 @@ const EditStory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`/api/webstory/${params.id}`, story,{
-        headers:{
-            "Authorization": `Bearer ${isAuth}`,
-            "Content-Type": "application/json"
+      const response = await axios.put(`/api/webstory/${params.id}`, story, {
+        headers: {
+          "Authorization": `Bearer ${isAuth}`,
+          "Content-Type": "application/json"
         }
       });
-      if (response.status === 200) {
+   
+      if (response) {
         message.success('Story updated successfully!');
-    } else {
+        router.push('/admin/webstorylist')
+      } else {
         message.error('Failed to update story.');
-    }
-      // router.push('/stories'); // Redirect to stories list or wherever appropriate
+      }
+    
     } catch (error) {
       console.error('Error updating story:', error);
       message.error('Failed to update story.');
@@ -202,9 +204,9 @@ const EditStory = () => {
                   value={item.topHeading}
                   className='w-full '
                   onChange={(e) => handleChange(e, index, 'topHeading')}
-                  // InputLabelProps={{
-                    // shrink: true,
-                  // }}
+                // InputLabelProps={{
+                // shrink: true,
+                // }}
                 />
                 <TextField
                   id={`outlined-bottomHeading-${index}`}
@@ -213,9 +215,9 @@ const EditStory = () => {
                   value={item.bottomHeading}
                   className='w-full '
                   onChange={(e) => handleChange(e, index, 'bottomHeading')}
-                  // InputLabelProps={{
-                  //   shrink: true,
-                  // }}
+                // InputLabelProps={{
+                //   shrink: true,
+                // }}
                 />
 
                 {item.bgColor ? (
@@ -231,14 +233,22 @@ const EditStory = () => {
                   />
                 )}
 
-
+{/* 
                 <TextField
                   id={`outlined-short-${index}`}
                   label="Enter Short Description"
                   value={item.short}
                   className="w-full"
                   onChange={(e) => handleChange(e, index, 'short')}
-                />
+                /> */}
+                <select
+                  className="w-full p-2 border-2 "
+                  value={item.short === 'asc'? 'asc' : 'desc'}
+                  onChange={(e) => handleChange(e, index, 'short')}
+                >
+                  <option value="asc">Accending</option>
+                  <option value="desc">Decending</option>
+                </select>
                 <select
                   className="w-full p-2 border-2 "
                   value={item.active ? 'true' : 'false'}

@@ -87,7 +87,7 @@ const WebStory = () => {
                 body: JSON.stringify(story)
             });
 
-            if (response.ok) {
+            if (response.success) {
                 const data = await response.json();
                 console.log(data);
                 router.push('/admin/webstory')
@@ -223,13 +223,22 @@ const WebStory = () => {
                                 )}
                                
 
-                                <TextField
+                                {/* <TextField
                                     id={`outlined-short-${index}`}
                                     label="Enter Short Description"
                                     value={item.short}
                                     className="w-full"
                                     onChange={(e) => handleChange(e, index, 'short')}
-                                />
+                                /> */}
+                                <select
+                                    className="w-full p-2 border-2 "
+                                    value={item.short === 'asc' ? 'asc' : 'desc'}
+                                    onChange={(e) => handleChange(e, index, 'short')}
+                                >
+                                    <option value="asc">Accending</option>
+                                    <option value="desc">Desending</option>
+                                </select>
+
                                 <select
                                     className="w-full p-2 border-2 "
                                     value={item.active ? 'true' : 'false'}
