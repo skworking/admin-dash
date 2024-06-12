@@ -1,6 +1,6 @@
 'use client'
 import { TextField } from "@mui/material";
-import { Button, ColorPicker, Space } from "antd";
+import { Button} from "antd";
 import { ChromePicker } from 'react-color';
 import Image from "next/image";
 import { useState } from "react";
