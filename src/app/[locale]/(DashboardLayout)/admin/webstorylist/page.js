@@ -9,12 +9,14 @@ import { useRouter } from "next/navigation";
 
 const WebStoryList = () => {
     const [isAuth, setIsAuth] = useState(typeof window !== 'undefined' && sessionStorage.getItem('jwt'));
+    const [loading,setLoading]=useState(true)
     const [product, setProduct] = useState([]);
     const router = useRouter()
     const fetchData = async () => {
         await axios.get('/api/webstory', { headers: { 'Authorization': `token ${isAuth}` } })
             .then((res) => {
                 setProduct(res.data.result);
+                setLoading(!loading)
             }).catch((err) => {
                 console.log(err);
             })
@@ -22,7 +24,10 @@ const WebStoryList = () => {
     useEffect(() => {
         fetchData()
     }, [])
-    
+
+    if(loading){
+        return <>...loading</>
+    }
     const handleDelete = async (id) => {
         try {
           const res = await axios.delete(`/api/webstory/${id}`, {

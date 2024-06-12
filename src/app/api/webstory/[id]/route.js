@@ -64,3 +64,16 @@ export async function PUT(request,{params}){
         return NextResponse.json({error:error.message},{status:error.status || 500})
     }
 }
+
+export async function DELETE(request,content){
+    try{
+        await authenticateToken(request)
+        const Id=content.params.id;
+        const record={_id:Id}
+        await mongoose.connect(process.env.MONGODB)
+        const result=await Story.deleteOne(record);
+        return NextResponse.json({result,success:true,message:"Record deleted Successful!"})
+    }catch(error){
+        return NextResponse.json({ error: error.message }, { status: error.status || 500 });
+    }
+}
