@@ -51,7 +51,9 @@ export async function GET(request) {
 export async function PUT(request,{params}){
     try{
         await authenticateToken(request)
-        const userId=params.productid;
+        console.log({params});
+        const userId=params.id;
+        console.log(userId);
         const filter={_id:userId}
         const payload=await request.json();
         await mongoose.connect(process.env.MONGODB)
