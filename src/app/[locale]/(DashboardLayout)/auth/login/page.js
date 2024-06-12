@@ -61,7 +61,7 @@ const SignIn = () => {
     setEmail(e.target.value)
   }
   return (
-    <div className="flex justify-center item-center flex-col w-full h-full  absolute sm:p-20 m-auto">
+    <div className="flex  item-center flex-col w-full h-full  absolute sm:p-20 m-auto">
       <div className="bg-white sm:p-20">
         <Breadcrumb pageName="Sign In" />
         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
