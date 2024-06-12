@@ -102,15 +102,19 @@ const EditStory = () => {
     }
   };
   const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.put(`/api/webstory/${params.id}`, story,{
         headers:{
-            Authorization: `Bearer ${isAuth}`
+            "Authorization": `Bearer ${isAuth}`,
+            "Content-Type": "application/json"
         }
       });
-      if(response.success){
+      if (response.status === 200) {
         message.success('Story updated successfully!');
-      }
+    } else {
+        message.error('Failed to update story.');
+    }
       // router.push('/stories'); // Redirect to stories list or wherever appropriate
     } catch (error) {
       console.error('Error updating story:', error);
