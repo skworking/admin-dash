@@ -65,7 +65,7 @@ export default function Home() {
                 </div>
               </Grid>
             ))} */}
-            {webstory?.map((list)=>{
+            {webstory?.filter((story)=>story.lineItems.some(item=> item.active)).map((list)=>{
               return(
                 <Grid item xs={6} sm={2} md={3} key={list._id} onClick={()=>handledata(list)}>
                   <div className="h-full border-2 text-start cursor-pointer">
