@@ -9,7 +9,8 @@ const nextConfig = {
         optimizer:{
           enabled:true,
         }
-      }
+      },
+      serverActions:true
      },
     // experimental: {
       // appDir: true,
